@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="borderRadius" format="dimension" />
+    <attr name="type">
+        <enum name="circle" value="0" />
+        <enum name="round" value="1" />
+    </attr>
+    <declare-styleable name="RoundImageViewByXfermode">
+        <attr name="borderRadius" />
+        <attr name="type" />
+    </declare-styleable>
+    <declare-styleable name="RoundImageView">
+        <attr name="borderRadius" />
+        <attr name="type" />
+    </declare-styleable>
+
+    <string-array name="functionTitles">
+        <item>@string/app_name</item>
+        <item>@string/app_name</item>
+        <item>@string/app_name</item>
+        <item>@string/app_name</item>
+        <item>@string/app_name</item>
+        <item>@string/app_name</item>
+        <item>@string/app_name</item>
+        <item>@string/app_name</item>
+        <item>@string/app_name</item>
+        <item>@string/app_name</item>
+    </string-array>
+
+    <array name="functionIcons">
+        <item>@mipmap/job_main_icon_1</item>
+        <item>@mipmap/job_main_icon_1</item>
+        <item>@mipmap/job_main_icon_1</item>
+        <item>@mipmap/job_main_icon_1</item>
+        <item>@mipmap/job_main_icon_1</item>
+        <item>@mipmap/job_main_icon_1</item>
+        <item>@mipmap/job_main_icon_1</item>
+        <item>@mipmap/job_main_icon_1</item>
+        <item>@mipmap/job_main_icon_1</item>
+        <item>@mipmap/job_main_icon_1</item>
+    </array>
+
+</resources>
