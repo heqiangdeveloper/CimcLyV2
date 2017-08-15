@@ -318,58 +318,60 @@ public class OrderContractDetailActivity extends BaseActivity {
                             @Override
                             public void onResponse(String response, int id) {
                                 orderStandardDetailVo = GjsonUtil.parseJsonWithGson(response, OrderStandardDetailVo.class);
-                                if(orderStandardDetailVo!=null)
-                                if (orderStandardDetailVo.isSuccess()) {
-                                    //底盘属性list
-                                    if (orderStandardDetailVo.getData().size() > 0)
-                                        for (int i = 0; i < orderStandardDetailVo.getData().size(); i++)
-                                            if (orderStandardDetailVo.getData().get(i).getViewLabel().equals("QP09"))
-                                                chassisModels = orderStandardDetailVo.getData().get(i)
-                                                        .getModelFeatureDetailList();
+                                if (orderStandardDetailVo != null)
+                                    if (orderStandardDetailVo.isSuccess()) {
+                                        //底盘属性list
+                                        if (orderStandardDetailVo.getData().size() > 0)
+                                            for (int i = 0; i < orderStandardDetailVo.getData().size(); i++)
+                                                if (orderStandardDetailVo.getData().get(i).getViewLabel().equals("QP09"))
+                                                    chassisModels = orderStandardDetailVo.getData().get(i)
+                                                            .getModelFeatureDetailList();
 
-                                    //图案要求list
-                                    if (orderStandardDetailVo.getData().size() > 0)
-                                        for (int i = 0; i < orderStandardDetailVo.getData().size(); i++)
-                                            if (orderStandardDetailVo.getData().get(i).getViewLabel().equals("QP08"))
-                                                patternModels = orderStandardDetailVo.getData().get(i)
-                                                        .getModelFeatureDetailList();
+                                        //图案要求list
+                                        if (orderStandardDetailVo.getData().size() > 0)
+                                            for (int i = 0; i < orderStandardDetailVo.getData().size(); i++)
+                                                if (orderStandardDetailVo.getData().get(i).getViewLabel().equals("QP08"))
+                                                    patternModels = orderStandardDetailVo.getData().get(i)
+                                                            .getModelFeatureDetailList();
 
-                                    //选装配置list
-                                    if (orderStandardDetailVo.getData().size() > 0)
-                                        for (int i = 0; i < orderStandardDetailVo.getData().size(); i++)
-                                            if (orderStandardDetailVo.getData().get(i).getViewLabel().equals("QP05"))
-                                                optionalModels = orderStandardDetailVo.getData().get(i)
-                                                        .getModelFeatureDetailList();
+                                        //选装配置list
+                                        if (orderStandardDetailVo.getData().size() > 0)
+                                            for (int i = 0; i < orderStandardDetailVo.getData().size(); i++)
+                                                if (orderStandardDetailVo.getData().get(i).getViewLabel().equals("QP05"))
+                                                    optionalModels = orderStandardDetailVo.getData().get(i)
+                                                            .getModelFeatureDetailList();
 
-                                    //特殊要求list
-                                    if (orderStandardDetailVo.getData().size() > 0)
-                                        for (int i = 0; i < orderStandardDetailVo.getData().size(); i++)
-                                            if (orderStandardDetailVo.getData().get(i).getViewLabel().equals("QP06"))
-                                                specialModels = orderStandardDetailVo.getData().get(i)
-                                                        .getModelFeatureDetailList();
+                                        //特殊要求list
+                                        if (orderStandardDetailVo.getData().size() > 0)
+                                            for (int i = 0; i < orderStandardDetailVo.getData().size(); i++)
+                                                if (orderStandardDetailVo.getData().get(i).getViewLabel().equals("QP06"))
+                                                    specialModels = orderStandardDetailVo.getData().get(i)
+                                                            .getModelFeatureDetailList();
 
-                                    optionalAdapter = new OrderContractDetailAdapter(OrderContractDetailActivity.this,
-                                            optionalModels);
-                                    chassisAdapter = new OrderContractDetailAdapter(OrderContractDetailActivity.this,
-                                            chassisModels);
-                                    patternAdapter = new OrderContractDetailAdapter(OrderContractDetailActivity.this,
-                                            patternModels);
-                                    specialAdapter = new OrderContractDetailAdapter(OrderContractDetailActivity.this,
-                                            specialModels);
+                                        optionalAdapter = new OrderContractDetailAdapter(OrderContractDetailActivity.this,
+                                                optionalModels);
+                                        chassisAdapter = new OrderContractDetailAdapter(OrderContractDetailActivity.this,
+                                                chassisModels);
+                                        patternAdapter = new OrderContractDetailAdapter(OrderContractDetailActivity.this,
+                                                patternModels);
+                                        specialAdapter = new OrderContractDetailAdapter(OrderContractDetailActivity.this,
+                                                specialModels);
 
-                                    listContent1.setAdapter(chassisAdapter);
-                                    listContent2.setAdapter(patternAdapter);
-                                    listContent3.setAdapter(optionalAdapter);
-                                    listContent4.setAdapter(specialAdapter);
+                                        listContent1.setAdapter(chassisAdapter);
+                                        listContent2.setAdapter(patternAdapter);
+                                        listContent3.setAdapter(optionalAdapter);
+                                        listContent4.setAdapter(specialAdapter);
 
-                                    listContent1.setVisibility(View.VISIBLE);
-                                }
+                                        listContent1.setVisibility(View.VISIBLE);
+                                    }
                             }
                         }
                 );
     }
 
     private void initViewData() {
+        final double boudle;
+        final double deposit;
         OrderContractDetailVo.DataBean data = detailVo.getData();
         if (data.getFstate().equals("FS01") && data.getIscommit().equals("N")) {
             bottomLayout.setVisibility(View.VISIBLE);
@@ -379,8 +381,14 @@ public class OrderContractDetailActivity extends BaseActivity {
         ownerTv.setText(data.getOwnerName());
         ordernoTv.setText(data.getOrderno());
         fstateTv.setText(data.getfStateName());
-        final double boudle = data.getTotalprice() / data.getCount();//合同金额/上装数量
-        final double deposit = data.getDeposit() / data.getCount();//定金金额/上装数量
+
+        if (data.getCount() == 0) {
+            boudle = data.getTotalprice() / 1;//合同金额/上装数量
+            deposit = data.getDeposit() / 1;//定金金额/上装数量
+        } else {
+            boudle = data.getTotalprice() / data.getCount();//合同金额/上装数量
+            deposit = data.getDeposit() / data.getCount();//定金金额/上装数量
+        }
         custNameTv.setText(data.getCustName() != null ? "客户名称：" + data.getCustName() : "客户名称：");
         signdateTv.setText(data.getSigndate() > 0 ? "签订日期：" + DateTool.getDateStr(data.getSigndate()) : "签订日期：");
         custtypeTv.setText(data.getCustTypeDesc() != null ? "客户类型：" + data.getCustTypeDesc() : "客户类型：");
