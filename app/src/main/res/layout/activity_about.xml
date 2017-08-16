@@ -36,6 +36,7 @@
         android:src="@mipmap/login_app_icon" />
 
     <TextView
+        android:id="@+id/check_version_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dip"

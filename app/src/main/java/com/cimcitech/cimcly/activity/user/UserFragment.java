@@ -26,11 +26,14 @@ import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
 import com.cimcitech.cimcly.activity.main.LoginActivity;
+import com.cimcitech.cimcly.bean.ApkUpdateVo;
 import com.cimcitech.cimcly.bean.ListPagers;
 import com.cimcitech.cimcly.bean.Result;
 import com.cimcitech.cimcly.bean.client.Customer;
 import com.cimcitech.cimcly.bean.client.MyClientReq;
+import com.cimcitech.cimcly.utils.ApkUpdateUtil;
 import com.cimcitech.cimcly.utils.Config;
+import com.cimcitech.cimcly.utils.GjsonUtil;
 import com.cimcitech.cimcly.utils.ToastUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -74,7 +77,6 @@ public class UserFragment extends Fragment {
     public ProgressDialog pd;
     public int MAXSIZE = 0;
     public int TOTALSIZE = 0;
-    public boolean isNewVersion = false;//是否是最新版本
     public final int UPDATE_APK = 1;
     public final int TIMEOUT = 2;
     public final int DOWNLOAD_ERROR = 3;
@@ -82,6 +84,7 @@ public class UserFragment extends Fragment {
     public final int MAX_PRO_LENGTH = 5;
     public final int UPDATEPROGRESS = 6;
     private SharedPreferences sp;
+    private ApkUpdateVo apkUpdateVo;
 
     private void getUserInfo() {
         if (sp.getString("user_name", "") != "") {
@@ -130,6 +133,20 @@ public class UserFragment extends Fragment {
         return view;
     }
 
+    public boolean checkApkVersion() {
+        if (apkUpdateVo != null)
+            if (apkUpdateVo.isSuccess()) {
+                int versionCode = Integer.parseInt(
+                        ApkUpdateUtil.getVersionCode(getActivity()));
+                int webVersionCode = apkUpdateVo.getData().getVersioncode();
+                if (webVersionCode > versionCode) {
+                    return true;
+                } else
+                    return false;
+            }
+        return false;
+    }
+
     @OnClick({R.id.about_tv, R.id.check_version_tv, R.id.out_login})
     public void onclick(View view) {
         switch (view.getId()) {
@@ -137,7 +154,7 @@ public class UserFragment extends Fragment {
                 startActivity(new Intent(getActivity(), AboutActivity.class));
                 break;
             case R.id.check_version_tv:
-                if (isNewVersion) {
+                if (!checkApkVersion()) {
                     Toast.makeText(getActivity(), "已经是最新版本！", Toast.LENGTH_SHORT).show();
                 } else {
                     if (!isNetworkAvalible(getActivity())) {
@@ -151,7 +168,7 @@ public class UserFragment extends Fragment {
 
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                       // startToDownload();
+                                        startToDownload();
                                     }
                                 })
                                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -173,32 +190,26 @@ public class UserFragment extends Fragment {
     public void startToDownload() {
         String filePath = Environment.getExternalStorageDirectory() + "/newversion.apk";
         Log.d("heqiang", filePath);
-        File file = new File(filePath);
-        if (file.exists()) {
-            Toast.makeText(getActivity(), "你已经下载最新的版本，请安装！", Toast.LENGTH_SHORT).show();
-            installApk(file);
-        } else {
-            pd = new ProgressDialog(getActivity());
-            pd.setTitle("正在下载");
-            pd.setIndeterminate(false);
-            pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pd.setCancelable(false);
-            pd.show();
+        pd = new ProgressDialog(getActivity());
+        pd.setTitle("正在下载");
+        pd.setIndeterminate(false);
+        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pd.setCancelable(false);
+        pd.show();
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        mFile = getFileFromServer(Config.updateApkUrl, getActivity());
-                        Thread.sleep(1000);
-                        pd.dismiss();
-                        sendMsg(DOWNLOAD_SUCCESS);
-                    } catch (Exception e) {
-                        sendMsg(DOWNLOAD_ERROR);
-                    }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mFile = getFileFromServer(apkUpdateVo.getData().getApkurl(), getActivity());
+                    Thread.sleep(1000);
+                    pd.dismiss();
+                    sendMsg(DOWNLOAD_SUCCESS);
+                } catch (Exception e) {
+                    sendMsg(DOWNLOAD_ERROR);
                 }
-            }).start();
-        }
+            }
+        }).start();
     }
 
     public File getFileFromServer(String path, Context context) throws Exception {
@@ -295,6 +306,7 @@ public class UserFragment extends Fragment {
                             @Override
                             public void onResponse(String response, int id) {
                                 //ToastUtil.showToast(response);
+                                apkUpdateVo = GjsonUtil.parseJsonWithGson(response, ApkUpdateVo.class);
                             }
                         }
                 );

@@ -33,13 +33,11 @@ public class Config {
     public static boolean isQuotedPrice = false;
     public static int type = 1; //周报类型  1.今天 2.本周 3.历史
 
-    //public static final String IP = "http://test.lingyu.com:8081/ly";  //测试
+    public static final String IP = "http://test.lingyu.com:8081/ly";  //测试
 
     //public static final String IP = "http://zh.lingyu.com:8081/ly";  //正式
 
-    public static final String IP = "http://10.133.3.29:8080/ly";
-
-    public static final String updateApkUrl = "";
+    //public static final String IP = "http://10.133.3.29:8080/ly";
 
     public static final String custVisit = IP + "/custVisit/pageList"; //拜访记录
 
