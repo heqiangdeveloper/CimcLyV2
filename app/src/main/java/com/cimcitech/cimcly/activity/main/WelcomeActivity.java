@@ -234,7 +234,11 @@ public class WelcomeActivity extends AppCompatActivity {
                                                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                                             @Override
                                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                                finish();
+                                                                new Handler().postDelayed(new Runnable() {
+                                                                    public void run() {
+                                                                        handler.sendEmptyMessage(1001);
+                                                                    }
+                                                                }, 2500);
                                                             }
                                                         }).create().show();
                                             }

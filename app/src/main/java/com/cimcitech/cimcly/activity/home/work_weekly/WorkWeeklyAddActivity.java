@@ -326,6 +326,8 @@ public class WorkWeeklyAddActivity extends BaseActivity {
                                 // ToastUtil.showToast(response);
                                 try {
                                     reportTypeVo = GjsonUtil.parseJsonWithGson(response, ReportTypeVo.class);
+                                    if (pois.size() > 0)    //设置默认显示的签到地址，set定位中的第一条
+                                        locationTv.setText(pois.get(0).getName());
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -390,8 +392,6 @@ public class WorkWeeklyAddActivity extends BaseActivity {
                         pois.add(poi);
                         sb.append(poi.getName() + ";");
                     }
-                    if (pois.size() > 0)    //设置默认显示的签到地址，set定位中的第一条
-                        locationTv.setText(pois.get(0).getName());
                 }
                 if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
                     sb.append("gps定位成功");

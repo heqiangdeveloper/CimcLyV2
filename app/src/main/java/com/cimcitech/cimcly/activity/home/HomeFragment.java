@@ -26,6 +26,7 @@ import com.cimcitech.cimcly.activity.home.my_client.MyClientActivity;
 import com.cimcitech.cimcly.activity.home.order_contract.OrderContractActivity;
 import com.cimcitech.cimcly.activity.home.production_progress.productionProgressActivity;
 import com.cimcitech.cimcly.activity.home.quoted_price.QuotedPriceActivity;
+import com.cimcitech.cimcly.activity.home.report.ReportActivity;
 import com.cimcitech.cimcly.activity.home.work_weekly.WorkWeeklyActivity;
 import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackActivity;
 import com.cimcitech.cimcly.adapter.HomeGridAdapter;
@@ -124,6 +125,10 @@ public class HomeFragment extends Fragment {
                 if (position == 9) { //生产进度
                    // startActivity(new Intent(getActivity(), productionProgressActivity.class));
                     ToastUtil.showToast("开发中...");
+                }
+                if (position == 10) { //生产进度
+                     startActivity(new Intent(getActivity(), ReportActivity.class));
+                    //ToastUtil.showToast("开发中...");
                 }
             }
         });
