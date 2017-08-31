@@ -84,7 +84,7 @@ public class CustomerVisitActivity extends AppCompatActivity {
     private Handler handler = new Handler();
     private final int INIT_DATA = 1003;
     private Result<ListPagers<CustomerVisit>> status;
-    private boolean myData = true;
+    public static boolean myData = true;
 
 
     @Override
@@ -92,6 +92,7 @@ public class CustomerVisitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_visit);
         ButterKnife.bind(this);
+        myData = true;
         initHandler();
         initViewData();
         getData();
@@ -106,6 +107,7 @@ public class CustomerVisitActivity extends AppCompatActivity {
             }
         });
         //清除数据
+        adapter.notifyDataSetChanged();
         this.data.clear();
         pageNum = 1;
         if (myData)
@@ -167,6 +169,7 @@ public class CustomerVisitActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         //下拉刷新
+                        adapter.notifyDataSetChanged();
                         data.clear(); //清除数据
                         pageNum = 1;
                         isLoading = false;
@@ -190,13 +193,23 @@ public class CustomerVisitActivity extends AppCompatActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                /*int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                 if (lastVisibleItemPosition + 1 == adapter.getItemCount()) {
                     boolean isRefreshing = swipeRefreshLayout.isRefreshing();
                     if (isRefreshing) {
                         adapter.notifyItemRemoved(adapter.getItemCount());
                         return;
+                    }*/
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0)
+                        ? 0 : recyclerView.getChildAt(0).getTop();
+                if (topRowVerticalPosition > 0) {
+                    swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    boolean isRefreshing = swipeRefreshLayout.isRefreshing();
+                    if (isRefreshing) {
+                        return;
                     }
+
                     if (!isLoading) {
                         isLoading = true;
                         handler.postDelayed(new Runnable() {
@@ -271,6 +284,7 @@ public class CustomerVisitActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
+                                Log.d("heqcus","my cust response is: " + response);
                                 Type userlistType = new TypeToken<Result<ListPagers<CustomerVisit>>>() {
                                 }.getType();
                                 status = new Gson().fromJson(response, userlistType);
@@ -320,6 +334,7 @@ public class CustomerVisitActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
+                                Log.d("heqcus","sub cust response is: " + response);
                                 Type userlistType = new TypeToken<Result<ListPagers<CustomerVisit>>>() {
                                 }.getType();
                                 status = new Gson().fromJson(response, userlistType);

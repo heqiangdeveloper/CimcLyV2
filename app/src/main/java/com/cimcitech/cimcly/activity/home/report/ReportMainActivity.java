@@ -1,51 +1,48 @@
 package com.cimcitech.cimcly.activity.home.report;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.cimcitech.cimcly.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ReportActivity extends AppCompatActivity {
+public class ReportMainActivity extends AppCompatActivity {
 
     @Bind(R.id.back_rl)
-    RelativeLayout backRl;
-    @Bind(R.id.my_tv)
-    TextView myTv;
-    @Bind(R.id.xs_tv)
-    TextView xsTv;
-    @Bind(R.id.my_view)
-    View myView;
-    @Bind(R.id.xs_view)
-    View xsView;
+    RelativeLayout back_RL;
+    @Bind(R.id.area_tv)
+    TextView area_Tv;
+    @Bind(R.id.product_tv)
+    TextView product_Tv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_report);
+        setContentView(R.layout.activity_report_main);
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.back_rl, R.id.my_tv, R.id.xs_tv})
+    @OnClick({R.id.back_rl,R.id.area_tv,R.id.product_tv})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back_rl:
                 finish();
                 break;
-            case R.id.my_tv:
-                myView.setVisibility(View.VISIBLE);
-                xsView.setVisibility(View.INVISIBLE);
-                break;
-            case R.id.xs_tv:
-                myView.setVisibility(View.INVISIBLE);
-                xsView.setVisibility(View.VISIBLE);
-                break;
-
+            case R.id.area_tv:
+                startActivity(new Intent(ReportMainActivity.this,AreaReportActivity.class));
+            break;
+            case R.id.product_tv:
+                startActivity(new Intent(ReportMainActivity.this,ProductReportActivity.class));
+            break;
         }
     }
 }

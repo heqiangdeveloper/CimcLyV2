@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,8 +42,11 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
@@ -66,12 +70,16 @@ public class UserFragment extends Fragment {
     RelativeLayout backRl;
     @Bind(R.id.about_tv)
     TextView aboutTv;
+    @Bind(R.id.clear_cache_linear)
+    LinearLayout clearCacheLinear;
     @Bind(R.id.check_version_tv)
     TextView checkVersionTv;
     @Bind(R.id.out_login)
     TextView outLogin;
     @Bind(R.id.user_name_tv)
     TextView userNameTv;
+    @Bind(R.id.clear_cache_tv)
+    TextView clearCacheTv;
 
     public File mFile = null;
     public ProgressDialog pd;
@@ -86,15 +94,7 @@ public class UserFragment extends Fragment {
     private SharedPreferences sp;
     private ApkUpdateVo apkUpdateVo;
 
-    private void getUserInfo() {
-        if (sp.getString("user_name", "") != "") {
-            String name = sp.getString("user_name", "");
-            String pwd = sp.getString("password", "");
-            System.out.println(name + pwd);
-            userNameTv.setText(sp.getString("user_name", ""));
-        }
-    }
-
+    public DataCleanManager manager = null;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -123,6 +123,17 @@ public class UserFragment extends Fragment {
         }
     };
 
+    private void getUserInfo() {
+        userNameTv.setText(Config.userName);
+        if (sp.getString("user_name", "") != "") {
+            //String name = sp.getString("user_name", "");
+            String pwd = sp.getString("password", "");
+            //System.out.println(name + pwd);
+            //userNameTv.setText(sp.getString("user_name", ""));
+
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_user, container, false);
@@ -130,6 +141,35 @@ public class UserFragment extends Fragment {
         sp = getActivity().getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);
         getUserInfo();
         getData();
+
+        //add for cache
+        manager = new DataCleanManager();
+        File file = getActivity().getCacheDir() ;
+        //这部分用作缓存的测试
+        /*File file2=new File(file,"my.txt");
+        if (!file2.exists()) {
+            try {
+                file2.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        FileWriter fileWriter;
+        try {
+            fileWriter = new FileWriter(file2.getPath());
+            BufferedWriter bufferedWriter=new BufferedWriter(fileWriter);
+            bufferedWriter.write("this is a.txt");
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        Log.d("hqlog",file.getPath());
+        try{
+            clearCacheTv.setText(manager.getTotalCacheSize(getActivity()));
+        }catch(Exception e){
+            clearCacheTv.setText("0.0KB");
+            Log.d("hqlog","get total cache tell a exception:" + e);
+        }
         return view;
     }
 
@@ -147,9 +187,30 @@ public class UserFragment extends Fragment {
         return false;
     }
 
-    @OnClick({R.id.about_tv, R.id.check_version_tv, R.id.out_login})
+    @OnClick({R.id.about_tv, R.id.check_version_tv, R.id.out_login,R.id.clear_cache_linear})
     public void onclick(View view) {
         switch (view.getId()) {
+            case R.id.clear_cache_linear:
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("提示")
+                        .setMessage("是否要清除缓存？")
+                        .setCancelable(true)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                manager.clearAllCache(getActivity());
+                                clearCacheTv.setText("0.0KB");
+                                Toast.makeText(getActivity(),"缓存已清理完毕！",Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).create().show();
+                break;
             case R.id.about_tv:
                 startActivity(new Intent(getActivity(), AboutActivity.class));
                 break;

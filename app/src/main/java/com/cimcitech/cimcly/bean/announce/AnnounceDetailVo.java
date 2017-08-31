@@ -50,8 +50,8 @@ public class AnnounceDetailVo {
          * anntype : CZ01
          * annurl : null
          * createdate : 1496223835000
-         * creator : 2
          * looktimes : 35
+         * creator : 2
          * modifiedby : -1
          * ts : 1499671977000
          */

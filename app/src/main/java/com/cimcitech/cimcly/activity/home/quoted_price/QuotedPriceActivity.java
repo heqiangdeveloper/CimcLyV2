@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -117,6 +118,7 @@ public class QuotedPriceActivity extends AppCompatActivity {
             }
         });
         //清除数据
+        adapter.notifyDataSetChanged();
         this.data.clear();
         pageNum = 1;
         if (myData)
@@ -213,6 +215,7 @@ public class QuotedPriceActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         //下拉刷新
+                        adapter.notifyDataSetChanged();
                         data.clear(); //清除数据
                         pageNum = 1;
                         isLoading = false;
@@ -236,13 +239,23 @@ public class QuotedPriceActivity extends AppCompatActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                /*int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                 if (lastVisibleItemPosition + 1 == adapter.getItemCount()) {
                     boolean isRefreshing = swipeRefreshLayout.isRefreshing();
                     if (isRefreshing) {
                         adapter.notifyItemRemoved(adapter.getItemCount());
                         return;
+                    }*/
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0)
+                        ? 0 : recyclerView.getChildAt(0).getTop();
+                if (topRowVerticalPosition > 0) {
+                    swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    boolean isRefreshing = swipeRefreshLayout.isRefreshing();
+                    if (isRefreshing) {
+                        return;
                     }
+
                     if (!isLoading) {
                         isLoading = true;
                         handler.postDelayed(new Runnable() {
@@ -301,7 +314,7 @@ public class QuotedPriceActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
+                                Log.d("heqquo","repose is: " + response);
                                 status = GjsonUtil.parseJsonWithGson(response, QuotedPriceVo.class);
                                 if (status != null) {
                                     if (status.isSuccess()) {

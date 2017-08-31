@@ -55,6 +55,15 @@ public class CustomerVisit implements Serializable{
     private Object visitbegintime;
     private Object visitendtime;
     private Object visitsummary;
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public Object getContpersonid() {
         return contpersonid;

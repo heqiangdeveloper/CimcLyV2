@@ -5,9 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitActivity;
 import com.cimcitech.cimcly.bean.CustomerVisit;
 import com.cimcitech.cimcly.utils.DateTool;
 
@@ -101,6 +103,16 @@ public class CustomerVisitAdapter extends RecyclerView.Adapter<RecyclerView.View
                     DateTool.getDateStrNoTime(item.getCreatedate()) : "");
             ((ItemViewHolder) holder).content_tv.setText(item.getVisitsummary() != null && !item.getVisitsummary().equals("") ?
                     item.getVisitsummary() + "" : "");
+
+            if(!CustomerVisitActivity.myData){
+                ((ItemViewHolder) holder).div_line.setVisibility(View.VISIBLE);
+                ((ItemViewHolder) holder).salesman_tv.setVisibility(View.VISIBLE);
+                ((ItemViewHolder) holder).salesman_tv.setText(item.getUserName() != null && !item
+                        .getUserName().equals("") ? "业务员: " + item.getUserName() + "" : "业务员: ");
+            }else {
+                ((ItemViewHolder) holder).div_line.setVisibility(View.GONE);
+                ((ItemViewHolder) holder).salesman_tv.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -122,13 +134,15 @@ public class CustomerVisitAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView user_name_tv, time_tv, content_tv;
-
+        TextView user_name_tv, time_tv, content_tv,salesman_tv;
+        ImageView div_line;
         public ItemViewHolder(View view) {
             super(view);
             user_name_tv = view.findViewById(R.id.user_name_tv);
             time_tv = view.findViewById(R.id.time_tv);
             content_tv = view.findViewById(R.id.content_tv);
+            salesman_tv = view.findViewById(R.id.salesman_tv);
+            div_line = view.findViewById(R.id.div_line);
         }
     }
 

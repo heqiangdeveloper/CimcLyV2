@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#f2f2f2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@drawable/bg_layout"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/client_name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dip"
+            android:text="客户名称"
+            android:textColor="@color/black_33" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0.1dip"
+            android:background="@color/alpha30"
+            android:padding="5dip" />
+
+        <TextView
+            android:id="@+id/total_price_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:padding="5dip"
+            android:text="总价"
+            android:textColor="@color/black_33" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:background="#fff"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/depositAmount_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:padding="5dip"
+                android:text="银行入账定金"
+                android:textColor="@color/black_33" />
+            <TextView
+                android:id="@+id/residualAmount_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:padding="5dip"
+                android:text="银行入账尾款"
+                android:textColor="@color/black_33" />
+
+            <TextView
+                android:id="@+id/strikeMoney_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:padding="5dip"
+                android:text="采购抵充"
+                android:textColor="@color/black_33" />
+            <TextView
+                android:id="@+id/paymentarrears_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:padding="5dip"
+                android:text="三方协议抵充"
+                android:textColor="@color/black_33" />
+
+            <TextView
+                android:id="@+id/handoffMoney_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:padding="5dip"
+                android:text="手工充账"
+                android:textColor="@color/black_33" />
+
+            </LinearLayout>
+        <TextView
+            android:id="@+id/residual_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:padding="5dip"
+            android:textColor="#f00"
+            android:text="欠款总数" />
+    </LinearLayout>
+
+</LinearLayout>

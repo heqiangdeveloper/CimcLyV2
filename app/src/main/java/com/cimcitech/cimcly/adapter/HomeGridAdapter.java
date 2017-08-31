@@ -28,8 +28,7 @@ public class HomeGridAdapter extends BaseAdapter {
             R.mipmap.v3_crm_refund_analysis_customer,
             R.mipmap.v2__apps_ic__task,
             R.mipmap.v2__apps_ic__salesopp,
-            R.mipmap.v3__mine_setting_company,
-            R.mipmap.v2__apps_ic__crm_order
+            R.mipmap.v3__mine_setting_company
     };
 
     private String[] texts = {
@@ -42,9 +41,7 @@ public class HomeGridAdapter extends BaseAdapter {
             "联系人",
             "问题反馈",
             "回款跟踪",
-            "生产进度",
-            "报表"
-
+            "生产进度"
     };
 
 

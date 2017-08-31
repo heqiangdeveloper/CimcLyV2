@@ -1,11 +1,23 @@
 package com.cimcitech.cimcly.activity.home.work_weekly;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.Telephony;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.Address;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.Poi;
@@ -52,6 +65,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.MediaType;
+
+import static android.R.id.list;
 
 public class WorkWeeklyAddActivity extends BaseActivity {
 
@@ -91,6 +106,50 @@ public class WorkWeeklyAddActivity extends BaseActivity {
     private ArrayList<Poi> pois = new ArrayList<>(); //获取到的定位位置的对象
     private LocationService locationService;
     private int intValue = 0;
+    private StringBuffer locSb ;
+    private StringBuffer sb ;
+    private List<String> list;
+
+    public int INFO = 1;
+    private ProgressDialog dialog = null;
+    private static final int STARTTOLOCATING = 1;
+    private static final int ENDTOLOCATING = 2;
+    private static final int LOCATESUCCESS = 3;
+    private static final int LOCATEFAIL = 4;
+
+    private static final int requestLocTime = 5000;
+    private boolean isFinishlocating = false;
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case STARTTOLOCATING:
+                    isFinishlocating = false;
+                    dialog = new ProgressDialog(WorkWeeklyAddActivity.this);
+                    dialog.setMessage("定位中…");
+                    dialog.setCancelable(true);
+                    dialog.show();
+                    break;
+                case LOCATESUCCESS:
+                    isFinishlocating = true;
+                    if(dialog.isShowing())
+                        dialog.dismiss();
+                    if(locSb != null && locSb.length() != 0){
+                        locationTv.setText(locSb.toString());
+                    }
+                    break;
+                case LOCATEFAIL:
+                    isFinishlocating = true;
+                    if(dialog.isShowing())
+                        dialog.dismiss();
+                    Toast.makeText(WorkWeeklyAddActivity.this,"定位失败！请检查网络或GPS",Toast
+                            .LENGTH_SHORT).show();
+                    break;
+            }
+            //Toast.makeText(WorkWeeklyAddActivity.this,sb.toString(),Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,11 +163,35 @@ public class WorkWeeklyAddActivity extends BaseActivity {
         mMonth = ca.get(Calendar.MONTH);
         mDay = ca.get(Calendar.DAY_OF_MONTH);
         getReportType();
+
+        locationService = ((ApkApplication) getApplication()).locationService;
+        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
+        locationService.registerListener(mListener);
+
+        List<String> permissionList = new ArrayList<>();
+        if(ContextCompat.checkSelfPermission(WorkWeeklyAddActivity.this,Manifest.permission
+                .ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if(ContextCompat.checkSelfPermission(WorkWeeklyAddActivity.this,Manifest.permission
+                .READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED){
+            permissionList.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if(ContextCompat.checkSelfPermission(WorkWeeklyAddActivity.this,Manifest.permission
+                .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if(!permissionList.isEmpty()){
+            String [] permissions = permissionList.toArray(new String[permissionList.size()]);
+            ActivityCompat.requestPermissions(WorkWeeklyAddActivity.this,permissions,1);
+        }else {
+            getLocation();
+        }
     }
 
     @OnClick({R.id.back_rl, R.id.add_bt, R.id.start_time_tv, R.id.end_time_tv, R.id.work_type_tv, R.id.location_tv})
     public void onclick(View view) {
-        List<String> list;
+
         switch (view.getId()) {
             case R.id.back_rl:
                 finish();
@@ -135,13 +218,66 @@ public class WorkWeeklyAddActivity extends BaseActivity {
                 }
                 break;
             case R.id.location_tv:
+
                 intValue = 1;
-                if (pois != null) {
-                    list = new ArrayList<>();
-                    for (int i = 0; i < pois.size(); i++)
-                        list.add(pois.get(i).getName());
-                    showContactUsPopWin(WorkWeeklyAddActivity.this, "选择汇报地址", list);
-                    pop.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+                //if (locSb != null && locSb.length() != 0) {
+                if(locationTv.getText().toString().trim().equals("")){
+                    getLocation();
+                }
+                break;
+        }
+    }
+
+    public void getLocation(){
+        //added by heqiang
+        //locationService = ((ApkApplication) getApplication()).locationService;
+        //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
+        //locationService.registerListener(mListener);
+        //注册监听
+        int type = getIntent().getIntExtra("from", 0);
+        if (type == 0) {
+            locationService.setLocationOption(locationService.getDefaultLocationClientOption());
+        } else if (type == 1) {
+            locationService.setLocationOption(locationService.getOption());
+        }
+        locationService.start();// 定位SDK
+        isFinishlocating = false;
+        sendMsg(STARTTOLOCATING);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(requestLocTime);
+                    if(!isFinishlocating)
+                        sendMsg(LOCATEFAIL);
+                }catch (Exception e){
+
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case 1:
+                if(grantResults.length > 0){
+                    for(int result : grantResults){
+                        if(result != PackageManager.PERMISSION_GRANTED){
+                            Toast.makeText(WorkWeeklyAddActivity.this,"必须同意所有的权限才能使用定位",Toast.LENGTH_SHORT
+                            ).show();
+                            finish();
+                            return;
+                        }
+                    }
+                    getLocation();
+                }else {
+                    Toast.makeText(WorkWeeklyAddActivity.this,"发送未知错误",Toast.LENGTH_SHORT
+                    ).show();
                 }
                 break;
         }
@@ -180,8 +316,11 @@ public class WorkWeeklyAddActivity extends BaseActivity {
                     workTypeTv.setText(itemType.getCodevalue());
                 }
                 if (intValue == 1) {
-                    Poi poi = pois.get(position);
-                    locationTv.setText(poi.getName());
+                    //Poi poi = pois.get(position);
+                    //locationTv.setText(poi.getName());
+                    /*if(locList != null && locList.size() != 0){
+                        locationTv.setText(locList.get(0));
+                    }*/
                 }
                 pop.dismiss();
             }
@@ -326,8 +465,11 @@ public class WorkWeeklyAddActivity extends BaseActivity {
                                 // ToastUtil.showToast(response);
                                 try {
                                     reportTypeVo = GjsonUtil.parseJsonWithGson(response, ReportTypeVo.class);
-                                    if (pois.size() > 0)    //设置默认显示的签到地址，set定位中的第一条
-                                        locationTv.setText(pois.get(0).getName());
+                                    /*if (pois.size() > 0)    //设置默认显示的签到地址，set定位中的第一条
+                                        locationTv.setText(pois.get(0).getName());*/
+                                    /*if(locList != null && locList.size() != 0){
+                                        locationTv.setText(locList.get(0));
+                                    }*/
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -354,7 +496,7 @@ public class WorkWeeklyAddActivity extends BaseActivity {
         // TODO Auto-generated method stub
         super.onStart();
         // -----------location config ------------
-        locationService = ((ApkApplication) getApplication()).locationService;
+        /*locationService = ((ApkApplication) getApplication()).locationService;
         //获取locationservice实例，建议应用中只初始化1个location实例，然后使用，可以参考其他示例的activity，都是通过此种方式获取locationservice实例的
         locationService.registerListener(mListener);
         //注册监听
@@ -365,6 +507,7 @@ public class WorkWeeklyAddActivity extends BaseActivity {
             locationService.setLocationOption(locationService.getOption());
         }
         locationService.start();// 定位SDK
+        */
     }
 
     /*****
@@ -378,22 +521,29 @@ public class WorkWeeklyAddActivity extends BaseActivity {
         public void onReceiveLocation(BDLocation location) {
             // TODO Auto-generated method stub
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-                StringBuffer sb = new StringBuffer(256);
-                sb.append("\nlatitude : ");// 纬度
-                sb.append(location.getLatitude());
-                sb.append("\nlontitude : ");// 经度
-                sb.append(location.getLongitude());
+                sb = new StringBuffer(256);
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
-                if (location.getPoiList() != null && !location.getPoiList().isEmpty()) {
-                    pois.clear();
-                    for (int i = 0; i < location.getPoiList().size(); i++) {
-                        Poi poi = (Poi) location.getPoiList().get(i);
-                        pois.add(poi);
-                        sb.append(poi.getName() + ";");
-                    }
+                /*Address addr = location.getAddress();
+                locStr = new StringBuffer();
+                locStr.append(addr.city);
+                locStr.append(addr.district);
+                if(!addr.street.equals("")){
+                    locStr.append(addr.street);
                 }
-                if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
+                if(!addr.streetNumber.equals("") ){
+                    locStr.append(addr.streetNumber);
+                }*/
+                //locStr = new StringBuffer();
+                if(location.getAddress() != null){
+                    locSb = new StringBuffer();
+                    locSb.append(location.getCity());
+                    locSb.append(location.getDistrict());
+                    locSb.append(location.getStreet());
+                    locSb.append(location.getStreetNumber());
+                }
+                sendMsg(LOCATESUCCESS);
+                /*if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
                     sb.append("gps定位成功");
                 } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {// 网络定位结果
                     // 运营商信息
@@ -414,7 +564,10 @@ public class WorkWeeklyAddActivity extends BaseActivity {
                 } else if (location.getLocType() == BDLocation.TypeCriteriaException) {
                     sb.append("\ndescribe : ");
                     sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
-                }
+                }*/
+                //sendMsg(INFO);
+            }else{
+                sendMsg(LOCATEFAIL);
             }
         }
 
@@ -423,4 +576,10 @@ public class WorkWeeklyAddActivity extends BaseActivity {
     };
 
     /***********地图定位相关end************/
+
+    public void sendMsg(int flag){
+        Message msg = new Message();
+        msg.what = flag;
+        handler.sendMessage(msg);
+    }
 }

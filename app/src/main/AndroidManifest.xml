@@ -20,6 +20,8 @@
     <!-- SD卡读取权限，用户写入离线定位数据 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
     <application
         android:name=".ApkApplication"
         android:allowBackup="true"
@@ -35,7 +37,11 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="a4SCRQ8tDKYWYkchdQzjoOgY6XLopu6e" />
+            android:value="jls2b98uIYqpMyrvM5lLXTnYQjvzZoj1" />
+
+        <!--<meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="kQxe5vR7igsK0ZTZUuSizbcQKt1q1eur" />-->
 
         <activity android:name=".activity.main.WelcomeActivity">
             <intent-filter>
@@ -163,11 +169,19 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home.back_money.BackMoneyActivity"
+            android:name=".activity.home.payment.PaymentActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home.production_progress.productionProgressActivity"
+            android:name=".activity.home.payment.PaymentDetailActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.production.ProductionActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.production.ProductionDetailActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
@@ -175,7 +189,23 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home.report.ReportActivity"
+            android:name=".activity.home.report.AreaReportActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.report.ProductReportActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.report.ReportMainActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.report.ProductReportDetailActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.report.AreaReportDetailActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
     </application>

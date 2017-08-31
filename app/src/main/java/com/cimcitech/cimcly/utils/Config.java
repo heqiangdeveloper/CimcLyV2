@@ -14,6 +14,10 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class Config {
 
+    public static  String  userName = "";
+
+    public static  boolean isLeader = false;
+
     public static boolean isLogin = false;
 
     public static Loginback loginback;
@@ -24,6 +28,7 @@ public class Config {
 
     public static Context context;
 
+    public static boolean isSubordinate = false;
     public static boolean isAddMyClient = false;
     public static boolean isAddVisit = false;
     public static boolean isAddPerson = false;
@@ -33,11 +38,13 @@ public class Config {
     public static boolean isQuotedPrice = false;
     public static int type = 1; //周报类型  1.今天 2.本周 3.历史
 
-    public static final String IP = "http://test.lingyu.com:8081/ly";  //测试
+    //public static final String IP = "http://test.lingyu.com:8081/ly";  //测试
 
     //public static final String IP = "http://zh.lingyu.com:8081/ly";  //正式
 
-    //public static final String IP = "http://10.133.3.29:8080/ly";
+    public static final String IP = "http://10.33.155.51:8080/ly";//本机
+
+    //public static final String IP = "http://10.33.155.19:8080/ly";
 
     public static final String custVisit = IP + "/custVisit/pageList"; //拜访记录
 
@@ -152,5 +159,31 @@ public class Config {
     public static final String getCurrStageSelect = IP + "/codeValue/getCurrStageSelect"; //获取意向跟踪状态缺省值
 
     public static final String getContStatus = IP + "/codeValue/getContStatus"; //获取合同状态缺省值
+
+    public static final String PaymentUrl = IP + "/sContOrder/queryOrderDelivery"; //回款跟踪
+
+    public static final String PaymentDetailUrl = IP + "/recon/getListByOrderId";
+    //回款跟踪详情
+
+    public static final String subPaymentUrl = IP + "/sContOrder/querySubOrderDelivery";
+    //我下属的回款跟踪
+
+    public static final String productionUrl = IP + "/prodOrder/pageList";//生产进度
+
+    public static final String subProductionUrl = IP + "/prodOrder/subPageList";//我的下属的生产进度
+
+    public static final String productionDetailUrl = IP + "/prodOrder/getCurrInfo";//生产进度详情
+
+    public static final String getDiffAreaOrder = IP + "/opportUnit/rptRegionOpportCount";
+    //获取不同区域的意向订单
+
+    public static final String getDiffProductOrder = IP + "/opportUnit/rptProdOpportCount";
+    //获取不同产品的意向订单
+
+    public static final String rptOpportUnitList = IP + "/opportUnit/rptPageList"; //不同区域/产品的意向订单详细
+
+    public static final String closeOpportUnit = IP + "/opportUnit/close";
+    //“意向跟踪”中，关闭记录
+
 
 }

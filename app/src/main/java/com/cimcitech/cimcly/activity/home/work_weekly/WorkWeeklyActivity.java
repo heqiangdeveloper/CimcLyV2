@@ -81,13 +81,14 @@ public class WorkWeeklyActivity extends AppCompatActivity {
     private Handler handler = new Handler();
     private final int INIT_DATA = 1003;
     private boolean isLoading;
-    private boolean isMy = true;
+    public static boolean isMy = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_weekly);
         ButterKnife.bind(this);
+        isMy = true;
         initViewData();
         getData();
     }
@@ -151,6 +152,7 @@ public class WorkWeeklyActivity extends AppCompatActivity {
             }
         });
         //清除数据
+        adapter.notifyDataSetChanged();
         this.data.clear();
         pageNum = 1;
         if (isMy)
@@ -184,6 +186,7 @@ public class WorkWeeklyActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         //下拉刷新
+                        adapter.notifyDataSetChanged();
                         data.clear(); //清除数据
                         pageNum = 1;
                         isLoading = false;
@@ -207,13 +210,23 @@ public class WorkWeeklyActivity extends AppCompatActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                /*int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                 if (lastVisibleItemPosition + 1 == adapter.getItemCount()) {
                     boolean isRefreshing = swipeRefreshLayout.isRefreshing();
                     if (isRefreshing) {
                         adapter.notifyItemRemoved(adapter.getItemCount());
                         return;
+                    }*/
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0)
+                        ? 0 : recyclerView.getChildAt(0).getTop();
+                if (topRowVerticalPosition > 0) {
+                    swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    boolean isRefreshing = swipeRefreshLayout.isRefreshing();
+                    if (isRefreshing) {
+                        return;
                     }
+
                     if (!isLoading) {
                         isLoading = true;
                         handler.postDelayed(new Runnable() {

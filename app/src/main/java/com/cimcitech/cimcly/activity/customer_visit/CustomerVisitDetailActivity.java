@@ -106,6 +106,7 @@ public class CustomerVisitDetailActivity extends BaseActivity {
         clientAddressTv.setText(info.getData().getCustaddress());
         checkInTv.setText(info.getData().getSigninaddress());
         visitSummaryTv.setText(info.getData().getVisitsummary());
+        visitSummaryTv.setSelection(visitSummaryTv.getText().length());
     }
 
     public void getData() {

@@ -55,7 +55,6 @@ public class IntentionTrackAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
-
     }
 
     @Override
@@ -106,7 +105,6 @@ public class IntentionTrackAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ((ItemViewHolder) holder).deliver_time_tv.setText("需求交付：" + DateTool.getDateStr(item.getPlansigndate()));
             ((ItemViewHolder) holder).product_model_tv.setText("产品型号：" + item.getProductid());
             ((ItemViewHolder) holder).user_name_tv.setText("业务员：" + item.getUserName());
-
         }
     }
 

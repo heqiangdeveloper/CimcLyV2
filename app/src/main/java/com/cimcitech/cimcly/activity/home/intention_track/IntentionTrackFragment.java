@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -93,6 +94,8 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
     Button searchBt;
     @Bind(R.id.search_bar)
     LinearLayout searchBar;
+    @Bind(R.id.back_img)
+    ImageView back_Img;
 
     private PopupWindow pop;
     private int pageNum = 1;
@@ -113,6 +116,7 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
         View view = inflater.inflate(R.layout.activity_intention_track, container, false);
         ButterKnife.bind(this, view);
         //initHandler();
+        back_Img.setVisibility(View.INVISIBLE);
         initViewData();
         getData();
         getCurrStageSelect();
@@ -128,6 +132,7 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
             }
         });
         //清除数据
+        adapter.notifyDataSetChanged();
         this.data.clear();
         pageNum = 1;
         if (myDate)
@@ -164,7 +169,7 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
                 startActivity(new Intent(getActivity(), IntentionTrackAddActivity.class));
                 break;
             case R.id.back_rl:
-                getActivity().finish();
+                //getActivity().finish();
                 break;
             case R.id.status_bt:
                 List<String> list = new ArrayList<>();
@@ -242,6 +247,7 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
                     @Override
                     public void run() {
                         //下拉刷新
+                        adapter.notifyDataSetChanged();
                         data.clear(); //清除数据
                         pageNum = 1;
                         isLoading = false;
@@ -265,13 +271,23 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                /*int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                 if (lastVisibleItemPosition + 1 == adapter.getItemCount()) {
                     boolean isRefreshing = swipeRefreshLayout.isRefreshing();
                     if (isRefreshing) {
                         adapter.notifyItemRemoved(adapter.getItemCount());
                         return;
+                    }*/
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0)
+                        ? 0 : recyclerView.getChildAt(0).getTop();
+                if (topRowVerticalPosition > 0) {
+                    swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    boolean isRefreshing = swipeRefreshLayout.isRefreshing();
+                    if (isRefreshing) {
+                        return;
                     }
+
                     if (!isLoading) {
                         isLoading = true;
                         handler.postDelayed(new Runnable() {

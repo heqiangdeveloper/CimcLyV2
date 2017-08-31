@@ -24,9 +24,10 @@ import com.cimcitech.cimcly.activity.home.contact_person.ContactPersonActivity;
 import com.cimcitech.cimcly.activity.home.feed_back.FeedBackActivity;
 import com.cimcitech.cimcly.activity.home.my_client.MyClientActivity;
 import com.cimcitech.cimcly.activity.home.order_contract.OrderContractActivity;
-import com.cimcitech.cimcly.activity.home.production_progress.productionProgressActivity;
+import com.cimcitech.cimcly.activity.home.payment.PaymentActivity;
+import com.cimcitech.cimcly.activity.home.production.ProductionActivity;
 import com.cimcitech.cimcly.activity.home.quoted_price.QuotedPriceActivity;
-import com.cimcitech.cimcly.activity.home.report.ReportActivity;
+import com.cimcitech.cimcly.activity.home.report.ReportMainActivity;
 import com.cimcitech.cimcly.activity.home.work_weekly.WorkWeeklyActivity;
 import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackActivity;
 import com.cimcitech.cimcly.adapter.HomeGridAdapter;
@@ -106,13 +107,7 @@ public class HomeFragment extends Fragment {
                 if (position == 3) { //订单合同
                     startActivity(new Intent(getActivity(), OrderContractActivity.class));
                 }
-                if (position == 8) {//回款跟踪
-                    //startActivity(new Intent(getActivity(), BackMoneyActivity.class));
-                    ToastUtil.showToast("开发中...");
-                }
-                if (position == 7) {//问题反馈
-                    startActivity(new Intent(getActivity(), FeedBackActivity.class));
-                }
+
                 if (position == 4) {//工作周报
                     startActivity(new Intent(getActivity(), WorkWeeklyActivity.class));
                 }
@@ -122,14 +117,21 @@ public class HomeFragment extends Fragment {
                 if (position == 6) { //联系人
                     startActivity(new Intent(getActivity(), ContactPersonActivity.class));
                 }
-                if (position == 9) { //生产进度
-                   // startActivity(new Intent(getActivity(), productionProgressActivity.class));
-                    ToastUtil.showToast("开发中...");
+                if (position == 7) {//问题反馈
+                    startActivity(new Intent(getActivity(), FeedBackActivity.class));
                 }
-                if (position == 10) { //生产进度
-                     startActivity(new Intent(getActivity(), ReportActivity.class));
+                if (position == 8) {//回款跟踪
+                    startActivity(new Intent(getActivity(), PaymentActivity.class));
                     //ToastUtil.showToast("开发中...");
                 }
+                if (position == 9) { //生产进度
+                    startActivity(new Intent(getActivity(), ProductionActivity.class));
+                    //ToastUtil.showToast("开发中...");
+                }
+                /*if (position == 10) { //报表
+                     startActivity(new Intent(getActivity(), ReportMainActivity.class));
+                    //ToastUtil.showToast("开发中...");
+                }*/
             }
         });
     }

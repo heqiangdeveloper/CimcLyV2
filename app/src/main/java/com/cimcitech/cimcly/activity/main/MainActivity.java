@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.activity.user.DataCleanManager;
 import com.cimcitech.cimcly.bean.AreaVo;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.GjsonUtil;
@@ -17,6 +20,9 @@ import com.cimcitech.cimcly.utils.ToastUtil;
 import com.cimcitech.cimcly.widget.DataGenerator;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.Call;
 
@@ -26,14 +32,35 @@ public class MainActivity extends AppCompatActivity {
     private Fragment[] mFragments;
     private RadioButton mRadioButtonHome;
 
+    private String appAuthString = "";
+    private static boolean mBackKeyPressed = false;//记录是否有首次按键
+    private long firstTime = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mFragments = DataGenerator.getFragments();
         // 将activity设置为全屏显示
+
+        //appAuthString = this.getIntent().getStringExtra("AuthString");
         initView();
         getAreaData();
+
+        //达到缓存的上限，就清理缓存
+        Runtime rt = Runtime.getRuntime();
+        long maxMemory = rt.maxMemory();//该手机分配给每个APP的最大内存
+        Log.i("heqmom", Long.toString(maxMemory / (1024 * 1024)));
+        DataCleanManager manager = new DataCleanManager();
+        long maxCache = maxMemory / 8;//缓存的上限
+        try {
+            long currentCache = manager.getFolderSize(getApplication().getCacheDir());
+            if (currentCache >= maxCache) {
+                manager.clearAllCache(getApplication());
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     private void initView() {
@@ -46,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
                     case R.id.radio_button_home:
-                        mFragment = mFragments[0];
+                        mFragment = Config.isLeader ? mFragments[4] : mFragments[0];
+                        //mFragment = mFragments[0];
                         break;
                     case R.id.radio_button_customer_visit:
                         mFragment = mFragments[1];
@@ -70,10 +98,13 @@ public class MainActivity extends AppCompatActivity {
      * 获取省市级联的省市信息
      */
     public void getAreaData() {
+        /*if( Config.loginback == null){
+            Config.loginback.setToken("2FD08ED0-E53B-48B1-B8E6-E6B4290A2770");
+        }*/
         OkHttpUtils
                 .post()
                 .url(Config.getProviceAndCity)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
+                //.addHeader("checkTokenKey", Config.loginback.getToken())
                 .addHeader("sessionKey", Config.loginback.getUserId() + "")
                 .build()
                 .execute(
@@ -94,5 +125,20 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                 );
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            long secondTime = System.currentTimeMillis();
+            if (secondTime - firstTime > 2000) {
+                Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                firstTime = secondTime;
+                return true;
+            } else {
+                System.exit(0);
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

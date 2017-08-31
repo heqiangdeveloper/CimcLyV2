@@ -1,5 +1,6 @@
 package com.cimcitech.cimcly.bean.opport_unit;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -364,7 +365,7 @@ public class OpportUnitVo {
                 private Object ordersource;
                 private Object orgid;
                 private String paymentmethod;
-                private int planmoney;
+                private BigDecimal planmoney;
                 private long plansigndate;
                 private String possibility;
                 private String possibilityValue;
@@ -548,11 +549,11 @@ public class OpportUnitVo {
                     this.paymentmethod = paymentmethod;
                 }
 
-                public int getPlanmoney() {
+                public BigDecimal getPlanmoney() {
                     return planmoney;
                 }
 
-                public void setPlanmoney(int planmoney) {
+                public void setPlanmoney(BigDecimal planmoney) {
                     this.planmoney = planmoney;
                 }
 

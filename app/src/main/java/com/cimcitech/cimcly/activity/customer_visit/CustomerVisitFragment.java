@@ -16,13 +16,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.ApkApplication;
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.adapter.CustomerVisitAdapter;
+import com.cimcitech.cimcly.adapter.CustomerVisitFragmentAdapter;
 import com.cimcitech.cimcly.bean.CustomerVisit;
 import com.cimcitech.cimcly.bean.ListPagers;
 import com.cimcitech.cimcly.bean.RequestBean.RuquMyVisit;
@@ -76,22 +77,26 @@ public class CustomerVisitFragment extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.recycler_view_layout)
     CoordinatorLayout recyclerViewLayout;
+    @Bind(R.id.back_img)
+    ImageView back_Img;
 
     private int pageNum = 1;
-    private CustomerVisitAdapter adapter;
+    private CustomerVisitFragmentAdapter adapter;
     private boolean isLoading;
     private List<CustomerVisit> data = new ArrayList<>();
     private Handler uiHandler = null;
     private Handler handler = new Handler();
     private final int INIT_DATA = 1003;
     private Result<ListPagers<CustomerVisit>> status;
-    private boolean myData = true;
+    public static boolean myData = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_customer_visit, container, false);
         ButterKnife.bind(this, view);
         initHandler();
+        myData = true;
+        back_Img.setVisibility(View.INVISIBLE);
         initViewData();
         getData();
         return view;
@@ -106,6 +111,7 @@ public class CustomerVisitFragment extends Fragment {
             }
         });
         //清除数据
+        adapter.notifyDataSetChanged();
         this.data.clear();
         pageNum = 1;
         if (myData)
@@ -127,7 +133,7 @@ public class CustomerVisitFragment extends Fragment {
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back_rl:
-                getActivity().finish();
+                //getActivity().finish();
                 break;
             case R.id.my_tv:
                 myData = true;
@@ -152,7 +158,7 @@ public class CustomerVisitFragment extends Fragment {
     }
 
     public void initViewData() {
-        adapter = new CustomerVisitAdapter(getActivity(), data);
+        adapter = new CustomerVisitFragmentAdapter(getActivity(), data);
         swipeRefreshLayout.setColorSchemeResources(R.color.blueStatus);
         swipeRefreshLayout.post(new Runnable() {
             @Override
@@ -167,6 +173,7 @@ public class CustomerVisitFragment extends Fragment {
                     @Override
                     public void run() {
                         //下拉刷新
+                        adapter.notifyDataSetChanged();
                         data.clear(); //清除数据
                         pageNum = 1;
                         isLoading = false;
@@ -190,13 +197,23 @@ public class CustomerVisitFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                /*int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                 if (lastVisibleItemPosition + 1 == adapter.getItemCount()) {
                     boolean isRefreshing = swipeRefreshLayout.isRefreshing();
                     if (isRefreshing) {
                         adapter.notifyItemRemoved(adapter.getItemCount());
                         return;
+                    }*/
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0)
+                        ? 0 : recyclerView.getChildAt(0).getTop();
+                if (topRowVerticalPosition > 0) {
+                    swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    boolean isRefreshing = swipeRefreshLayout.isRefreshing();
+                    if (isRefreshing) {
+                        return;
                     }
+
                     if (!isLoading) {
                         isLoading = true;
                         handler.postDelayed(new Runnable() {
@@ -218,7 +235,7 @@ public class CustomerVisitFragment extends Fragment {
             }
         });
         //给List添加点击事件
-        adapter.setOnItemClickListener(new CustomerVisitAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new CustomerVisitFragmentAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 CustomerVisit customerVisit = (CustomerVisit) adapter.getAll().get(position);

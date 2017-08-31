@@ -449,7 +449,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="税种："
+                    android:text="客户分区："
                     android:textColor="@color/black_33"
                     android:textSize="14sp" />
 
@@ -459,7 +459,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="8dip"
-                    android:text="请选择税种"
+                    android:text="请选择分区"
                     android:textColor="@color/alpha30"
                     android:textSize="14sp" />
 

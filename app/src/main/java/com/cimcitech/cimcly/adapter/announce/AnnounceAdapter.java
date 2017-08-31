@@ -2,6 +2,7 @@ package com.cimcitech.cimcly.adapter.announce;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;

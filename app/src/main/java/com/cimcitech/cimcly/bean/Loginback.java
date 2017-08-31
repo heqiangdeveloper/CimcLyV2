@@ -10,11 +10,28 @@ public class Loginback {
          * userId : 2
          * token : 2FD08ED0-E53B-48B1-B8E6-E6B4290A2770
          */
+    private int userId;
+    private String userName;
+    private String token = "";
+    private String appAuth;
 
-        private int userId;
-        private String token;
+    public String getUserName() {
+        return userName;
+    }
 
-        public int getUserId() {
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getAppAuth() {
+        return appAuth;
+    }
+
+    public void setAppAuth(String appAuth) {
+        this.appAuth = appAuth;
+    }
+
+    public int getUserId() {
             return userId;
         }
 

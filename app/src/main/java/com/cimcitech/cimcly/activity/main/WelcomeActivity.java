@@ -65,7 +65,9 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
-        getData();
+        //getData();
+        startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+        finish();
     }
 
     Handler handler = new Handler() {

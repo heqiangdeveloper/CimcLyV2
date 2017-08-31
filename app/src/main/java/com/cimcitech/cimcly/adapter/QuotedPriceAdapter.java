@@ -98,6 +98,7 @@ public class QuotedPriceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((ItemViewHolder) holder).order_number_tv.setText(item.getQuoteid()+"");
             ((ItemViewHolder) holder).status_tv.setText(item.getQuoteStatusValue());
             ((ItemViewHolder) holder).order_money_tv.setText(item.getQuoteCarType() + "");
+            ((ItemViewHolder) holder).count_Tv.setText(item.getProductCount() + "");
             ((ItemViewHolder) holder).client_name_tv.setText(item.getCustName() != null ? "客户：" + item.getCustName() : "客户：");
         }
     }
@@ -120,7 +121,7 @@ public class QuotedPriceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView client_name_tv, time_tv, status_tv, order_number_tv, order_money_tv;
+        TextView client_name_tv, time_tv, status_tv, order_number_tv, order_money_tv,count_Tv;
 
         public ItemViewHolder(View view) {
             super(view);
@@ -129,6 +130,7 @@ public class QuotedPriceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             status_tv = view.findViewById(R.id.status_tv);
             order_number_tv = view.findViewById(R.id.order_number_tv);
             order_money_tv = view.findViewById(R.id.order_money_tv);
+            count_Tv = view.findViewById(R.id.count_tv);
         }
     }
 

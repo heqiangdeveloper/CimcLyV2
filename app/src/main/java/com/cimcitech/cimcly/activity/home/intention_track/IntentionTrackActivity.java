@@ -1,5 +1,6 @@
 package com.cimcitech.cimcly.activity.home.intention_track;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +48,8 @@ import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.MediaType;
 
-public class IntentionTrackActivity extends AppCompatActivity implements View.OnClickListener {
+public class IntentionTrackActivity extends AppCompatActivity implements View
+        .OnClickListener {
 
     @Bind(R.id.back_rl)
     RelativeLayout backRl;
@@ -109,6 +112,8 @@ public class IntentionTrackActivity extends AppCompatActivity implements View.On
         getCurrStageSelect();
     }
 
+
+
     //刷新数据
     private void updateData() {
         swipeRefreshLayout.post(new Runnable() {
@@ -118,6 +123,7 @@ public class IntentionTrackActivity extends AppCompatActivity implements View.On
             }
         });
         //清除数据
+        adapter.notifyDataSetChanged();
         this.data.clear();
         pageNum = 1;
         if (myDate)
@@ -232,6 +238,7 @@ public class IntentionTrackActivity extends AppCompatActivity implements View.On
                     @Override
                     public void run() {
                         //下拉刷新
+                        adapter.notifyDataSetChanged();
                         data.clear(); //清除数据
                         pageNum = 1;
                         isLoading = false;
@@ -255,13 +262,23 @@ public class IntentionTrackActivity extends AppCompatActivity implements View.On
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                /*int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                 if (lastVisibleItemPosition + 1 == adapter.getItemCount()) {
                     boolean isRefreshing = swipeRefreshLayout.isRefreshing();
                     if (isRefreshing) {
                         adapter.notifyItemRemoved(adapter.getItemCount());
                         return;
+                    }*/
+                int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0)
+                        ? 0 : recyclerView.getChildAt(0).getTop();
+                if (topRowVerticalPosition > 0) {
+                    swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    boolean isRefreshing = swipeRefreshLayout.isRefreshing();
+                    if (isRefreshing) {
+                        return;
                     }
+
                     if (!isLoading) {
                         isLoading = true;
                         handler.postDelayed(new Runnable() {
@@ -303,6 +320,7 @@ public class IntentionTrackActivity extends AppCompatActivity implements View.On
                 new OpportUnitReq.OpportUnityBean(Config.loginback.getUserId(),
                         searchEt.getText().toString().trim()
                         , quotestatus)));
+        Log.d("heqint","request json is: " + json);
         OkHttpUtils
                 .postString()
                 .url(Config.opportUnitList)
@@ -315,12 +333,14 @@ public class IntentionTrackActivity extends AppCompatActivity implements View.On
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                swipeRefreshLayout.setRefreshing(false);
                                 ToastUtil.showNetError();
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
                                 //ToastUtil.showToast(response);
+                                Log.d("heqint","response is: " + response);
                                 opportUnitVo = GjsonUtil.parseJsonWithGson(response, OpportUnitVo.class);
                                 if (opportUnitVo != null) {
                                     if (opportUnitVo.isSuccess()) {
@@ -371,6 +391,7 @@ public class IntentionTrackActivity extends AppCompatActivity implements View.On
                             @Override
                             public void onResponse(String response, int id) {
                                 //ToastUtil.showToast(response);
+                                Log.d("heqsubint","response is: " + response);
                                 opportUnitVo = GjsonUtil.parseJsonWithGson(response, OpportUnitVo.class);
                                 if (opportUnitVo != null) {
                                     if (opportUnitVo.isSuccess()) {

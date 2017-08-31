@@ -187,7 +187,7 @@ public class MyClientUpdateActivity extends BaseActivity {
                     for (int i = 0; i < custSelectVo.getData().getWeb().size(); i++) {
                         list.add(custSelectVo.getData().getWeb().get(i).getCodevalue());
                     }
-                    showContactUsPopWin(MyClientUpdateActivity.this, "选择税种", list);
+                    showContactUsPopWin(MyClientUpdateActivity.this, "选择客户分区", list);
                     pop.showAtLocation(view, Gravity.CENTER, 0, 0);
                 }
                 break;

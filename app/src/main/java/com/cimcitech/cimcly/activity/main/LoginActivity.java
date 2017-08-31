@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitActivity;
+import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitDetailActivity;
 import com.cimcitech.cimcly.bean.LoginVo;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.GjsonUtil;
@@ -89,13 +92,22 @@ public class LoginActivity extends BaseActivity {
                                 //ToastUtil.showToast(response);
                                 try {
                                     loginVo = GjsonUtil.parseJsonWithGson(response, LoginVo.class);
+                                    Log.d("heqlogin",response);
                                     if (loginVo != null) {
                                         if (loginVo.isSuccess()) {
                                             Config.isLogin = true;
                                             Config.loginback = loginVo.getData();
                                             saveUserInfo();
                                             Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                                            Config.isLeader = loginVo.getData().getAppAuth()
+                                                    .equals("Y")? true:false;
+                                            Config.userName = loginVo.getData().getUserName();
+                                            //Config.isLeader = true;
+                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            //String s = loginVo.getData().getAppAuth();
+                                            //intent.putExtra("AppAuth", s);
+                                            startActivity(intent);
                                             finish();
                                         }
                                     } else {

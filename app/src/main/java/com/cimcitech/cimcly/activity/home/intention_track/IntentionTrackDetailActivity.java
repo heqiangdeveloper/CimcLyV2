@@ -1,5 +1,8 @@
 package com.cimcitech.cimcly.activity.home.intention_track;
 
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -78,7 +81,7 @@ public class IntentionTrackDetailActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.back_rl, R.id.quoted_price_bt, R.id.follow_up_bt, R.id.record_bt})
+    @OnClick({R.id.back_rl, R.id.quoted_price_bt, R.id.follow_up_bt, R.id.record_bt,R.id.close_bt})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back_rl:
@@ -93,7 +96,7 @@ public class IntentionTrackDetailActivity extends AppCompatActivity {
                         intent.putExtra("infoVo", infoVo);
                     startActivity(intent);
                 } else {
-                    ToastUtil.showToast("此状态意向订单不可编辑");
+                    ToastUtil.showToast("此状态意向订单不可报价");
                 }
 
                 break;
@@ -106,7 +109,7 @@ public class IntentionTrackDetailActivity extends AppCompatActivity {
                         intent.putExtra("infoVo", infoVo);
                     startActivity(intent);
                 } else {
-                    ToastUtil.showToast("此状态意向订单不可编辑");
+                    ToastUtil.showToast("此状态意向订单不可跟进");
                 }
                 break;
             case R.id.record_bt:
@@ -114,6 +117,62 @@ public class IntentionTrackDetailActivity extends AppCompatActivity {
                 intent.putExtra("opportId", opportId);
                 startActivity(intent);
                 break;
+            case R.id.close_bt:
+                new AlertDialog.Builder(this)
+                        .setTitle("提示")
+                        .setMessage("    关闭之后不能针对此意向进行报价，是否关闭此意向？")
+                        .setCancelable(true)
+                        .setPositiveButton("是", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                CloseRecord();
+                            }
+                        })
+                        .setNegativeButton("否", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).create().show();
+                break;
+        }
+    }
+
+    public void CloseRecord(){
+        if (("ST01".equals(infoVo.getData().getStage()) || "ST02".equals(infoVo.getData().getStage())
+                || "ST06".equals(infoVo.getData().getStage())) && !("CS05".equals(infoVo.getData().getCurrentstage()) ||
+                "CS04".equals(infoVo.getData().getCurrentstage()))) {
+            OkHttpUtils
+                    .post()
+                    .url(Config.closeOpportUnit)
+                    .addHeader("checkTokenKey", Config.loginback.getToken())
+                    .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                    .addParams("opportId", opportId + "")
+                    .build()
+                    .execute(
+                            new StringCallback() {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
+                                    ToastUtil.showNetError();
+                                }
+
+                                @Override
+                                public void onResponse(String response, int id) {
+                                    //sendBroadcast(new Intent("com.cimcitech.cimcly" +
+                                    // ".refreshIntentionTrackActivity"));
+                                    ToastUtil.showToast("此意向订单已关闭!");
+                                    Intent intent = new Intent
+                                            (IntentionTrackDetailActivity.this, IntentionTrackActivity
+                                                    .class);
+                                    Config.isAddTrack = true;
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                    );
+        } else {
+            ToastUtil.showToast("此状态意向订单不可关闭或者已关闭");
         }
     }
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.activity.home.work_weekly.WorkWeeklyActivity;
 import com.cimcitech.cimcly.bean.work_weekly.WorkWeeklyVo;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.DateTool;
@@ -97,7 +98,13 @@ public class WorkWeeklyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 });
             }
             final WorkWeeklyVo.DataBean.ListBean item = data.get(position);
-            ((ItemViewHolder) holder).name_tv.setText(item.getUserName());
+            if(!WorkWeeklyActivity.isMy){
+                ((ItemViewHolder) holder).name_tv.setVisibility(View.VISIBLE);
+                ((ItemViewHolder) holder).name_tv.setText(item.getUserName());
+            }else {
+                ((ItemViewHolder) holder).name_tv.setVisibility(View.GONE);
+            }
+
             ((ItemViewHolder) holder).time_tv.setText(DateTool.getDateStr(item.getCreatedate()));
             ((ItemViewHolder) holder).content_tv.setText(DateTool.getDateStr(
                     item.getCreatedate()).equals(DateTool.getDateStr(item.getBegintime())) ?
