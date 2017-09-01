@@ -167,7 +167,7 @@ public class QuotedPriceAddActivity extends BaseActivity {
                 break;
             case R.id.isbring_chassis_tv:
                 //才可以点击
-                if (getChassisVo.isSuccess()) {
+                if (null != getChassisVo && getChassisVo.isSuccess()) {
                     List<String> list = new ArrayList<>();
                     for (int i = 0; i < getChassisVo.getData().size(); i++) {
                         list.add(getChassisVo.getData().get(i).getChassisDesc());

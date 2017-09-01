@@ -180,7 +180,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                 break;
             case R.id.isbring_chassis_tv:
                 //才可以点击
-                if (quotedPriceDetailVo.isSuccess())
+                if (null != quotedPriceDetailVo && quotedPriceDetailVo.isSuccess())
                     if (quotedPriceDetailVo.getData().getQuotestatus().equals("DS1")
                             || quotedPriceDetailVo.getData().getQuotestatus().equals("DS4")) {
                         if (getChassisVo.isSuccess()) {
