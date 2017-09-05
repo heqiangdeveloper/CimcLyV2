@@ -66,8 +66,8 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
         ButterKnife.bind(this);
         getData();
-        startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
-        finish();
+        //startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+        //finish();
     }
 
     Handler handler = new Handler() {
@@ -82,9 +82,11 @@ public class WelcomeActivity extends AppCompatActivity {
                             .show();
                     break;
                 case DOWNLOAD_ERROR:
+                    finish();
                     break;
                 case DOWNLOAD_SUCCESS:
                     installApk(mFile);
+                    finish();
                     break;
                 case MAX_PRO_LENGTH:
                     if (MAXSIZE != 0) {
@@ -240,7 +242,7 @@ public class WelcomeActivity extends AppCompatActivity {
                                                                     public void run() {
                                                                         handler.sendEmptyMessage(1001);
                                                                     }
-                                                                }, 2500);
+                                                                }, 3000);
                                                             }
                                                         }).create().show();
                                             }
@@ -249,7 +251,7 @@ public class WelcomeActivity extends AppCompatActivity {
                                                 public void run() {
                                                     handler.sendEmptyMessage(1001);
                                                 }
-                                            }, 2500);
+                                            }, 3000);
                                         }
                                     }
                             }

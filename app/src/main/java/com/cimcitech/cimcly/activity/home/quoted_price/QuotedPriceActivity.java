@@ -77,6 +77,8 @@ public class QuotedPriceActivity extends AppCompatActivity {
     EditText searchEt;
     @Bind(R.id.search_bt)
     Button searchBt;
+    @Bind(R.id.status_bt_sanjiao)
+    Button searchBtSanjiao;
 
     private int pageNum = 1;
     private QuotedPriceVo status;
@@ -127,7 +129,7 @@ public class QuotedPriceActivity extends AppCompatActivity {
             getSubData();
     }
 
-    @OnClick({R.id.back_rl, R.id.my_tv, R.id.xs_tv, R.id.search_bt, R.id.status_bt})
+    @OnClick({R.id.back_rl, R.id.my_tv, R.id.xs_tv, R.id.search_bt, R.id.status_bt,R.id.status_bt_sanjiao})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back_rl:
@@ -159,6 +161,10 @@ public class QuotedPriceActivity extends AppCompatActivity {
                 updateData();
                 ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
+            /*case R.id.status_bt_sanjiao:
+                updateData();
+                ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                break;*/
         }
     }
 

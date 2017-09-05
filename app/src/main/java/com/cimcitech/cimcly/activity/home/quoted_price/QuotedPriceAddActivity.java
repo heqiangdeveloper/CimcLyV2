@@ -194,6 +194,7 @@ public class QuotedPriceAddActivity extends BaseActivity {
                     if (model.getIsrequired().equals("T"))
                         if (chassisAdapter.text[i] == null) {
                             ToastUtil.showToast("请输入底盘特性必输项");
+                            if(mLoading.isShowing()) mLoading.dismiss();
                             return;
                         }
                     QuotedPriceDetailReq.QuoteDetailListBean bean = new QuotedPriceDetailReq.QuoteDetailListBean();
@@ -209,6 +210,7 @@ public class QuotedPriceAddActivity extends BaseActivity {
                     if (model.getIsrequired().equals("T"))
                         if (patternAdapter.text[i] == null) {
                             ToastUtil.showToast("请输入图案要求必输项");
+                            if(mLoading.isShowing()) mLoading.dismiss();
                             return;
                         }
                     QuotedPriceDetailReq.QuoteDetailListBean bean = new QuotedPriceDetailReq.QuoteDetailListBean();
@@ -224,6 +226,7 @@ public class QuotedPriceAddActivity extends BaseActivity {
                     if (model.getIsrequired().equals("T"))
                         if (optionalAdapter.text[i] == null) {
                             ToastUtil.showToast("请输入选配装置必输项");
+                            if(mLoading.isShowing()) mLoading.dismiss();
                             return;
                         }
                     QuotedPriceDetailReq.QuoteDetailListBean bean = new QuotedPriceDetailReq.QuoteDetailListBean();
@@ -240,6 +243,7 @@ public class QuotedPriceAddActivity extends BaseActivity {
                     if (model.getIsrequired().equals("T"))
                         if (specialAdapter.text[i] == null) {
                             ToastUtil.showToast("请输入特殊要求必输项");
+                            if(mLoading.isShowing()) mLoading.dismiss();
                             return;
                         }
                     QuotedPriceDetailReq.QuoteDetailListBean bean = new QuotedPriceDetailReq.QuoteDetailListBean();
@@ -249,12 +253,15 @@ public class QuotedPriceAddActivity extends BaseActivity {
                 }
                 if (chassisModelTv.getText().toString().trim().equals("")) {
                     ToastUtil.showToast("请输入底盘型号");
+                    if(mLoading.isShowing()) mLoading.dismiss();
                     return;
                 }
                 if (protocolPriceTv.getText().toString().trim().equals("")) {
                     ToastUtil.showToast("请输入建议价格");
+                    if(mLoading.isShowing()) mLoading.dismiss();
                     return;
                 }
+                if(mLoading.isShowing()) mLoading.dismiss();
                 submitIntentionTrackData();
                 break;
         }
@@ -595,7 +602,7 @@ public class QuotedPriceAddActivity extends BaseActivity {
 
                 if (item.getQuoteValue() != null) {
                     for (int i = 0; i < item.getPriceFeatureDetailList().size(); i++) {
-                        if (item.getQuoteValue().equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
+                        if (text[position] != null && this.text[position].equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
                             /**这里给默认的文本框value 因为给了默认的显示值**/
                             viewHolder.quoteValueTvTv.setText(item.getPriceFeatureDetailList().get(i).getEnumerationdesc());
                             this.text[position] = item.getPriceFeatureDetailList().get(i).getEnumerationvalues();
@@ -842,7 +849,8 @@ public class QuotedPriceAddActivity extends BaseActivity {
 
                 if (item.getQuoteValue() != null) {
                     for (int i = 0; i < item.getPriceFeatureDetailList().size(); i++) {
-                        if (item.getQuoteValue().equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
+                        if (text[position] != null && text[position].equals(item
+                                .getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
                             /**这里给默认的文本框value 因为给了默认的显示值**/
                             viewHolder.quoteValueTvTv.setText(item.getPriceFeatureDetailList().get(i).getEnumerationdesc());
                             text[position] = item.getPriceFeatureDetailList().get(i).getEnumerationvalues();
@@ -1090,7 +1098,8 @@ public class QuotedPriceAddActivity extends BaseActivity {
 
                 if (item.getQuoteValue() != null) {
                     for (int i = 0; i < item.getPriceFeatureDetailList().size(); i++) {
-                        if (item.getQuoteValue().equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
+                        if (text[position] != null && this.text[position].equals(item
+                                .getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
                             /**这里给默认的文本框value 因为给了默认的显示值**/
                             viewHolder.quoteValueTvTv.setText(item.getPriceFeatureDetailList().get(i).getEnumerationdesc());
                             text[position] = item.getPriceFeatureDetailList().get(i).getEnumerationvalues();
@@ -1338,7 +1347,7 @@ public class QuotedPriceAddActivity extends BaseActivity {
 
                 if (item.getQuoteValue() != null) {
                     for (int i = 0; i < item.getPriceFeatureDetailList().size(); i++) {
-                        if (item.getQuoteValue().equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
+                        if (text[position] != null && this.text[position].equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
                             /**这里给默认的文本框value 因为给了默认的显示值**/
                             viewHolder.quoteValueTvTv.setText(item.getPriceFeatureDetailList().get(i).getEnumerationdesc());
                             text[position] = item.getPriceFeatureDetailList().get(i).getEnumerationvalues();

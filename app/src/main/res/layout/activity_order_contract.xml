@@ -98,14 +98,27 @@
         android:focusableInTouchMode="true"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/status_bt"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="30dip"
-            android:layout_marginRight="5dip"
-            android:background="@color/white"
-            android:text="合同状态"
-            android:textColor="@color/colorPrimaryDark" />
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/status_bt_sanjiao"
+                android:layout_width="12dp"
+                android:layout_height="30dip"
+                android:background="@color/white"
+                android:text="▼"
+                android:textColor="@color/colorPrimaryDark" />
+            <Button
+                android:id="@+id/status_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="30dip"
+                android:layout_marginRight="5dip"
+                android:background="@color/white"
+                android:text="合同状态"
+                android:textColor="@color/colorPrimaryDark" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/search_et"

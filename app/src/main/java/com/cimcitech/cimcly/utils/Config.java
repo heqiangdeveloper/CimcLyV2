@@ -40,9 +40,9 @@ public class Config {
 
     //public static final String IP = "http://test.lingyu.com:8081/ly";  //测试
 
-    //public static final String IP = "http://zh.lingyu.com:8081/ly";  //正式
+    public static final String IP = "http://zh.lingyu.com:8081/ly";  //正式
 
-    public static final String IP = "http://10.33.155.51:8080/ly";//本机
+    //public static final String IP = "http://10.33.155.51:8080/ly";//本机
 
     //public static final String IP = "http://10.33.155.19:8080/ly";
 

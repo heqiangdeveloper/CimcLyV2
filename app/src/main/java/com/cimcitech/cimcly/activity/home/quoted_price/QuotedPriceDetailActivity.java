@@ -105,6 +105,8 @@ public class QuotedPriceDetailActivity extends BaseActivity {
     @Bind(R.id.bottom_layout)
     LinearLayout bottomLayout;
 
+    //private boolean isClicked = false;
+
     private int quoteid; //报价单list传过来的ID 用来查询详情
 
     private OpportUnitInfoVo infoVo; //意向详情传过来的
@@ -152,6 +154,8 @@ public class QuotedPriceDetailActivity extends BaseActivity {
         protocolPriceTv.setFocusableInTouchMode(false);
         chassisModelTv.setFocusable(false);
         chassisModelTv.setFocusableInTouchMode(false);
+
+        //isClicked = false;
         getData();
     }
 
@@ -200,6 +204,16 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                 updateData();
                 break;
             case R.id.submit_bt:
+                /*if(!isClicked){
+                    isClicked = true;
+                    if (!inputAndSelector()) {
+                        isClicked = false;
+                        return;
+                    }
+                    isSubmit = true;
+                    mLoading.show();
+                    updateData();
+                }*/
                 if (!inputAndSelector()) return;
                 isSubmit = true;
                 mLoading.show();
@@ -321,83 +335,83 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                             public void onResponse(String response, int id) {
                                 try {
                                     quotedPriceDetailVo = GjsonUtil.parseJsonWithGson(response, QuotedPriceDetailVo.class);
-                                    if(quotedPriceDetailVo!=null)
-                                    if (quotedPriceDetailVo.isSuccess()) {
-                                        custNameTv.setText(quotedPriceDetailVo.getData().getCustName() != null ?
-                                                quotedPriceDetailVo.getData().getCustName() : "");
-                                        quoteCarTypeTv.setText(quotedPriceDetailVo.getData().getQuoteCarType() != null ?
-                                                quotedPriceDetailVo.getData().getQuoteCarType() : "");
-                                        quoteStandPriceTv.setText(quotedPriceDetailVo.getData().getQuotestandprice() != null ?
-                                                quotedPriceDetailVo.getData().getQuotestandprice() : "");
-                                        quotePriceTv.setText(quotedPriceDetailVo.getData().getQuoteprice() != null ?
-                                                quotedPriceDetailVo.getData().getQuoteprice() : "");
-                                        protocolPriceTv.setText(quotedPriceDetailVo.getData().getProtocolprice() != null ?
-                                                quotedPriceDetailVo.getData().getProtocolprice() : "");
-                                        chassisModelTv.setText(quotedPriceDetailVo.getData().getChassismodel() != null ?
-                                                quotedPriceDetailVo.getData().getChassismodel() + "" : "");
-                                        if (quotedPriceDetailVo.getData().getIsbringchassis().equals("Y")) {
-                                            isbringChassisTv.setText("客户自带");
-                                            depositTv.setText("20000");
-                                            isbringchassis = "Y";
-                                        } else {
-                                            isbringChassisTv.setText("公司采购");
-                                            depositTv.setText("40000");
-                                            isbringchassis = "N";
-                                        }
-                                        //底盘属性list
-                                        if (quotedPriceDetailVo.getData().getViewLabelList().size() > 0)
-                                            for (int i = 0; i < quotedPriceDetailVo.getData().getViewLabelList().size(); i++)
-                                                if (quotedPriceDetailVo.getData().getViewLabelList().get(i).getViewLabel().equals("QP09"))
-                                                    chassisModels = quotedPriceDetailVo.getData().getViewLabelList().get(i)
-                                                            .getModelFeatureDetailList();
-
-                                        //图案要求list
-                                        if (quotedPriceDetailVo.getData().getViewLabelList().size() > 0)
-                                            for (int i = 0; i < quotedPriceDetailVo.getData().getViewLabelList().size(); i++)
-                                                if (quotedPriceDetailVo.getData().getViewLabelList().get(i).getViewLabel().equals("QP08"))
-                                                    patternModels = quotedPriceDetailVo.getData().getViewLabelList().get(i)
-                                                            .getModelFeatureDetailList();
-
-                                        //选装配置list
-                                        if (quotedPriceDetailVo.getData().getViewLabelList().size() > 0)
-                                            for (int i = 0; i < quotedPriceDetailVo.getData().getViewLabelList().size(); i++)
-                                                if (quotedPriceDetailVo.getData().getViewLabelList().get(i).getViewLabel().equals("QP05"))
-                                                    optionalModels = quotedPriceDetailVo.getData().getViewLabelList().get(i)
-                                                            .getModelFeatureDetailList();
-
-                                        //特殊要求list
-                                        if (quotedPriceDetailVo.getData().getViewLabelList().size() > 0)
-                                            for (int i = 0; i < quotedPriceDetailVo.getData().getViewLabelList().size(); i++)
-                                                if (quotedPriceDetailVo.getData().getViewLabelList().get(i).getViewLabel().equals("QP06"))
-                                                    specialModels = quotedPriceDetailVo.getData().getViewLabelList().get(i)
-                                                            .getModelFeatureDetailList();
-
-                                        optionalAdapter = new OptionalConfigurationAdapter(QuotedPriceDetailActivity.this,
-                                                optionalModels);
-                                        chassisAdapter = new ChassisCharacteristicsAdapter(QuotedPriceDetailActivity.this,
-                                                chassisModels);
-                                        patternAdapter = new PatternRequirementsAdapter(QuotedPriceDetailActivity.this,
-                                                patternModels);
-                                        specialAdapter = new SpecialRequirementsAdapter(QuotedPriceDetailActivity.this,
-                                                specialModels);
-
-                                        listContent1.setAdapter(chassisAdapter);
-                                        listContent2.setAdapter(patternAdapter);
-                                        listContent3.setAdapter(optionalAdapter);
-                                        listContent4.setAdapter(specialAdapter);
-
-                                        listContent1.setVisibility(View.VISIBLE);
-                                        //才可以编辑  DS1
-                                        if (quotedPriceDetailVo.getData().getQuotestatus() != null)
-                                            if (quotedPriceDetailVo.getData().getQuotestatus().equals("DS1")
-                                                    || quotedPriceDetailVo.getData().getQuotestatus().equals("DS4")) {
-                                                showView();
+                                    if (quotedPriceDetailVo != null)
+                                        if (quotedPriceDetailVo.isSuccess()) {
+                                            custNameTv.setText(quotedPriceDetailVo.getData().getCustName() != null ?
+                                                    quotedPriceDetailVo.getData().getCustName() : "");
+                                            quoteCarTypeTv.setText(quotedPriceDetailVo.getData().getQuoteCarType() != null ?
+                                                    quotedPriceDetailVo.getData().getQuoteCarType() : "");
+                                            quoteStandPriceTv.setText(quotedPriceDetailVo.getData().getQuotestandprice() != null ?
+                                                    quotedPriceDetailVo.getData().getQuotestandprice() : "");
+                                            quotePriceTv.setText(quotedPriceDetailVo.getData().getQuoteprice() != null ?
+                                                    quotedPriceDetailVo.getData().getQuoteprice() : "");
+                                            protocolPriceTv.setText(quotedPriceDetailVo.getData().getProtocolprice() != null ?
+                                                    quotedPriceDetailVo.getData().getProtocolprice() : "");
+                                            chassisModelTv.setText(quotedPriceDetailVo.getData().getChassismodel() != null ?
+                                                    quotedPriceDetailVo.getData().getChassismodel() + "" : "");
+                                            if (quotedPriceDetailVo.getData().getIsbringchassis().equals("Y")) {
+                                                isbringChassisTv.setText("客户自带");
+                                                depositTv.setText("20000");
+                                                isbringchassis = "Y";
+                                            } else {
+                                                isbringChassisTv.setText("公司采购");
+                                                depositTv.setText("40000");
+                                                isbringchassis = "N";
                                             }
-                                        //获取底盘来源筛选值
-                                        getChassisData();
-                                    } else {
-                                        ToastUtil.showToast("不存在该车型的报价单模板");
-                                    }
+                                            //底盘属性list
+                                            if (quotedPriceDetailVo.getData().getViewLabelList().size() > 0)
+                                                for (int i = 0; i < quotedPriceDetailVo.getData().getViewLabelList().size(); i++)
+                                                    if (quotedPriceDetailVo.getData().getViewLabelList().get(i).getViewLabel().equals("QP09"))
+                                                        chassisModels = quotedPriceDetailVo.getData().getViewLabelList().get(i)
+                                                                .getModelFeatureDetailList();
+
+                                            //图案要求list
+                                            if (quotedPriceDetailVo.getData().getViewLabelList().size() > 0)
+                                                for (int i = 0; i < quotedPriceDetailVo.getData().getViewLabelList().size(); i++)
+                                                    if (quotedPriceDetailVo.getData().getViewLabelList().get(i).getViewLabel().equals("QP08"))
+                                                        patternModels = quotedPriceDetailVo.getData().getViewLabelList().get(i)
+                                                                .getModelFeatureDetailList();
+
+                                            //选装配置list
+                                            if (quotedPriceDetailVo.getData().getViewLabelList().size() > 0)
+                                                for (int i = 0; i < quotedPriceDetailVo.getData().getViewLabelList().size(); i++)
+                                                    if (quotedPriceDetailVo.getData().getViewLabelList().get(i).getViewLabel().equals("QP05"))
+                                                        optionalModels = quotedPriceDetailVo.getData().getViewLabelList().get(i)
+                                                                .getModelFeatureDetailList();
+
+                                            //特殊要求list
+                                            if (quotedPriceDetailVo.getData().getViewLabelList().size() > 0)
+                                                for (int i = 0; i < quotedPriceDetailVo.getData().getViewLabelList().size(); i++)
+                                                    if (quotedPriceDetailVo.getData().getViewLabelList().get(i).getViewLabel().equals("QP06"))
+                                                        specialModels = quotedPriceDetailVo.getData().getViewLabelList().get(i)
+                                                                .getModelFeatureDetailList();
+
+                                            optionalAdapter = new OptionalConfigurationAdapter(QuotedPriceDetailActivity.this,
+                                                    optionalModels);
+                                            chassisAdapter = new ChassisCharacteristicsAdapter(QuotedPriceDetailActivity.this,
+                                                    chassisModels);
+                                            patternAdapter = new PatternRequirementsAdapter(QuotedPriceDetailActivity.this,
+                                                    patternModels);
+                                            specialAdapter = new SpecialRequirementsAdapter(QuotedPriceDetailActivity.this,
+                                                    specialModels);
+
+                                            listContent1.setAdapter(chassisAdapter);
+                                            listContent2.setAdapter(patternAdapter);
+                                            listContent3.setAdapter(optionalAdapter);
+                                            listContent4.setAdapter(specialAdapter);
+
+                                            listContent1.setVisibility(View.VISIBLE);
+                                            //才可以编辑  DS1
+                                            if (quotedPriceDetailVo.getData().getQuotestatus() != null)
+                                                if (quotedPriceDetailVo.getData().getQuotestatus().equals("DS1")
+                                                        || quotedPriceDetailVo.getData().getQuotestatus().equals("DS4")) {
+                                                    showView();
+                                                }
+                                            //获取底盘来源筛选值
+                                            getChassisData();
+                                        } else {
+                                            ToastUtil.showToast("不存在该车型的报价单模板");
+                                        }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -407,6 +421,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
     }
 
     public void submitData() {
+        if(!mLoading.isShowing()) mLoading.show();
         OkHttpUtils
                 .post()
                 .url(Config.quoteBaseSumbit)
@@ -432,16 +447,19 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                                         ToastUtil.showToast("提交成功");
                                         Config.isQuotedPrice = true;
                                         finish();
-                                    }else{
+                                    } else {
+                                        Log.d("hqw","submit fail...");
                                         ToastUtil.showToast("提交失败");
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                mLoading.dismiss();
+                                if(mLoading.isShowing()) mLoading.dismiss();
                             }
                         }
                 );
+
+        //isClicked = false;
     }
 
     public void updateData() {
@@ -508,10 +526,13 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                                         if (isSubmit) {
                                             submitData();
                                         } else {
+                                            Log.d("hqw","save success...");
                                             Config.isQuotedPrice = true;
                                             ToastUtil.showToast("保存成功");
+                                            finish();
                                         }
                                     } else {
+                                        Log.d("hqw","save fail...");
                                         if (isSubmit)
                                             ToastUtil.showToast("保存失败，无法提交");
                                         else
@@ -684,7 +705,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
 
                 if (item.getQuoteValue() != null) {
                     for (int i = 0; i < item.getPriceFeatureDetailList().size(); i++) {
-                        if (item.getQuoteValue().equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
+                        if (text[position] != null && this.text[position].equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
                             /**这里给默认的文本框value 因为给了默认的显示值**/
                             viewHolder.quoteValueTvTv.setText(item.getPriceFeatureDetailList().get(i).getEnumerationdesc());
                             this.text[position] = item.getPriceFeatureDetailList().get(i).getEnumerationvalues();
@@ -969,7 +990,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
 
                 if (item.getQuoteValue() != null) {
                     for (int i = 0; i < item.getPriceFeatureDetailList().size(); i++) {
-                        if (item.getQuoteValue().equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
+                        if (text[position] != null && this.text[position].equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
                             /**这里给默认的文本框value 因为给了默认的显示值**/
                             viewHolder.quoteValueTvTv.setText(item.getPriceFeatureDetailList().get(i).getEnumerationdesc());
                             text[position] = item.getPriceFeatureDetailList().get(i).getEnumerationvalues();
@@ -1259,7 +1280,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
 
                 if (item.getQuoteValue() != null) {
                     for (int i = 0; i < item.getPriceFeatureDetailList().size(); i++) {
-                        if (item.getQuoteValue().equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
+                        if (text[position] != null && text[position].equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
                             /**这里给默认的文本框value 因为给了默认的显示值**/
                             viewHolder.quoteValueTvTv.setText(item.getPriceFeatureDetailList().get(i).getEnumerationdesc());
                             text[position] = item.getPriceFeatureDetailList().get(i).getEnumerationvalues();
@@ -1546,7 +1567,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
 
                 if (item.getQuoteValue() != null) {
                     for (int i = 0; i < item.getPriceFeatureDetailList().size(); i++) {
-                        if (item.getQuoteValue().equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
+                        if (text[position] != null && this.text[position].equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues())) {
                             /**这里给默认的文本框value 因为给了默认的显示值**/
                             viewHolder.quoteValueTvTv.setText(item.getPriceFeatureDetailList().get(i).getEnumerationdesc());
                             text[position] = item.getPriceFeatureDetailList().get(i).getEnumerationvalues();
