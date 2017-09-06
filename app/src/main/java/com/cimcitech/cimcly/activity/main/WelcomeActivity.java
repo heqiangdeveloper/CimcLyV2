@@ -210,6 +210,7 @@ public class WelcomeActivity extends AppCompatActivity {
                             @Override
                             public void onError(Call call, Exception e, int id) {
                                 ToastUtil.showNetError();
+                                handler.sendEmptyMessage(1001);
                             }
 
                             @Override
@@ -223,6 +224,7 @@ public class WelcomeActivity extends AppCompatActivity {
                                         if (apkUpdateVo.getData().getVersioncode() > versionCode) {
                                             if (!isNetworkAvalible(WelcomeActivity.this)) {
                                                 Toast.makeText(WelcomeActivity.this, "无法连接网络，请检查网络！", Toast.LENGTH_SHORT).show();
+                                                handler.sendEmptyMessage(1001);
                                             } else {
                                                 new AlertDialog.Builder(WelcomeActivity.this)
                                                         .setTitle("提示")

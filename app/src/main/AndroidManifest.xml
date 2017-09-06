@@ -43,7 +43,8 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="kQxe5vR7igsK0ZTZUuSizbcQKt1q1eur" />-->
 
-        <activity android:name=".activity.main.WelcomeActivity">
+        <activity android:name=".activity.main.WelcomeActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -77,7 +77,8 @@ public class OrderContractDetailAdapter extends BaseAdapter {
         if (item.getIntype().equals("2")) {
             viewHolder.descriptionTvTv.setText(item.getDescription() + "：");
             for (int i = 0; i < item.getPriceFeatureDetailList().size(); i++)
-                if (item.getQuoteValue().equals(item.getPriceFeatureDetailList().get(i).getEnumerationvalues()))
+                if (null != item.getQuoteValue() && item.getQuoteValue().equals(item
+                    .getPriceFeatureDetailList().get(i).getEnumerationvalues()))
                     viewHolder.quoteValueTvTv.setText(item.getPriceFeatureDetailList().get(i).getEnumerationdesc());
             //viewHolder.quoteValueTvTv.setOnClickListener(new onClick(position));
         } else { //没有下拉值的

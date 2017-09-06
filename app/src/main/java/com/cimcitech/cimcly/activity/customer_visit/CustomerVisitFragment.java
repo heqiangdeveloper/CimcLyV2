@@ -107,7 +107,8 @@ public class CustomerVisitFragment extends Fragment {
         swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                swipeRefreshLayout.setRefreshing(true);
+                if(null != swipeRefreshLayout)
+                   swipeRefreshLayout.setRefreshing(true);
             }
         });
         //清除数据
@@ -163,7 +164,8 @@ public class CustomerVisitFragment extends Fragment {
         swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                swipeRefreshLayout.setRefreshing(true);
+                if(null != swipeRefreshLayout)
+                   swipeRefreshLayout.setRefreshing(true);
             }
         });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -207,7 +209,8 @@ public class CustomerVisitFragment extends Fragment {
                 int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0)
                         ? 0 : recyclerView.getChildAt(0).getTop();
                 if (topRowVerticalPosition > 0) {
-                    swipeRefreshLayout.setRefreshing(false);
+                    if(null != swipeRefreshLayout)
+                        swipeRefreshLayout.setRefreshing(false);
                 } else {
                     boolean isRefreshing = swipeRefreshLayout.isRefreshing();
                     if (isRefreshing) {
@@ -257,7 +260,8 @@ public class CustomerVisitFragment extends Fragment {
                 switch (msg.what) {
                     case INIT_DATA:
                         adapter.notifyDataSetChanged();
-                        swipeRefreshLayout.setRefreshing(false);
+                        if(null != swipeRefreshLayout)
+                            swipeRefreshLayout.setRefreshing(false);
                         adapter.notifyItemRemoved(adapter.getItemCount());
                         break;
                 }
@@ -266,54 +270,58 @@ public class CustomerVisitFragment extends Fragment {
     }
 
     public void getData() {
-        String json = new Gson().toJson(new RuquMyVisit(pageNum, 10, "",
-                new RuquMyVisit.CustomerVisitBean(Config.loginback.getUserId(),
-                        searchEt.getText().toString().trim())));
+        if(null != searchEt){//防止快速切换Fragment导致的FC
+            String json = new Gson().toJson(new RuquMyVisit(pageNum, 10, "",
+                    new RuquMyVisit.CustomerVisitBean(Config.loginback.getUserId(),
+                            searchEt.getText().toString().trim())));
 
-        Log.e("CustomerVisitActivity", json);
-        OkHttpUtils
-                .postString()
-                .url(Config.custVisit)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
-                .content(json)
-                .mediaType(MediaType.parse("application/json; charset=utf-8"))
-                .build()
-                .execute(
-                        new StringCallback() {
-                            @Override
-                            public void onError(Call call, Exception e, int id) {
-                                ToastUtil.showNetError();
-                            }
+            Log.e("CustomerVisitActivity", json);
+            OkHttpUtils
+                    .postString()
+                    .url(Config.custVisit)
+                    .addHeader("checkTokenKey", Config.loginback.getToken())
+                    .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                    .content(json)
+                    .mediaType(MediaType.parse("application/json; charset=utf-8"))
+                    .build()
+                    .execute(
+                            new StringCallback() {
+                                @Override
+                                public void onError(Call call, Exception e, int id) {
+                                    ToastUtil.showNetError();
+                                }
 
-                            @Override
-                            public void onResponse(String response, int id) {
-                                Type userlistType = new TypeToken<Result<ListPagers<CustomerVisit>>>() {
-                                }.getType();
-                                status = new Gson().fromJson(response, userlistType);
-                                if (status != null) {
-                                    if (status.isSuccess()) {
-                                        if (status.getData().getList() != null && status.getData().getList().size() > 0) {
-                                            for (int i = 0; i < status.getData().getList().size(); i++) {
-                                                data.add(status.getData().getList().get(i));
+                                @Override
+                                public void onResponse(String response, int id) {
+                                    Type userlistType = new TypeToken<Result<ListPagers<CustomerVisit>>>() {
+                                    }.getType();
+                                    status = new Gson().fromJson(response, userlistType);
+                                    if (status != null) {
+                                        if (status.isSuccess()) {
+                                            if (status.getData().getList() != null && status.getData().getList().size() > 0) {
+                                                for (int i = 0; i < status.getData().getList().size(); i++) {
+                                                    data.add(status.getData().getList().get(i));
+                                                }
                                             }
+                                            if (status.getData().isHasNextPage()) {
+                                                adapter.setNotMoreData(false);
+                                            } else {
+                                                adapter.setNotMoreData(true);
+                                            }
+                                            adapter.notifyDataSetChanged();
+                                            if(null != swipeRefreshLayout)
+                                                swipeRefreshLayout.setRefreshing(false);
+                                            adapter.notifyItemRemoved(adapter.getItemCount());
                                         }
-                                        if (status.getData().isHasNextPage()) {
-                                            adapter.setNotMoreData(false);
-                                        } else {
-                                            adapter.setNotMoreData(true);
-                                        }
+                                    } else {
                                         adapter.notifyDataSetChanged();
-                                        swipeRefreshLayout.setRefreshing(false);
-                                        adapter.notifyItemRemoved(adapter.getItemCount());
+                                        if(null != swipeRefreshLayout)
+                                            swipeRefreshLayout.setRefreshing(false);
                                     }
-                                } else {
-                                    adapter.notifyDataSetChanged();
-                                    swipeRefreshLayout.setRefreshing(false);
                                 }
                             }
-                        }
-                );
+                    );
+        }
     }
 
     public void getSubData() {
@@ -353,12 +361,14 @@ public class CustomerVisitFragment extends Fragment {
                                             adapter.setNotMoreData(true);
                                         }
                                         adapter.notifyDataSetChanged();
-                                        swipeRefreshLayout.setRefreshing(false);
+                                        if(null != swipeRefreshLayout)
+                                             swipeRefreshLayout.setRefreshing(false);
                                         adapter.notifyItemRemoved(adapter.getItemCount());
                                     }
                                 } else {
                                     adapter.notifyDataSetChanged();
-                                    swipeRefreshLayout.setRefreshing(false);
+                                    if(null != swipeRefreshLayout)
+                                         swipeRefreshLayout.setRefreshing(false);
                                 }
                             }
                         }

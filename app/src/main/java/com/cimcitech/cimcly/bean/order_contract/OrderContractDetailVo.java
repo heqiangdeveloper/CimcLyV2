@@ -160,7 +160,7 @@ public class OrderContractDetailVo {
         private Object afftercantilever;
         private Object allquality;
         private Object areaid;
-        private Object arrivaldate;
+        private long arrivaldate;
         private Object axisnumber;
         private Object bodytype;
         private Object braketype;
@@ -295,11 +295,11 @@ public class OrderContractDetailVo {
             this.areaid = areaid;
         }
 
-        public Object getArrivaldate() {
+        public long getArrivaldate() {
             return arrivaldate;
         }
 
-        public void setArrivaldate(Object arrivaldate) {
+        public void setArrivaldate(long arrivaldate) {
             this.arrivaldate = arrivaldate;
         }
 

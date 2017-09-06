@@ -46,6 +46,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.MediaType;
 
@@ -55,6 +56,8 @@ public class ProductReportDetailActivity extends AppCompatActivity implements Vi
     RelativeLayout backRl;
     @Bind(R.id.status_bt)
     Button statusBt;
+    @Bind(R.id.status_bt_sanjiao)
+    Button statusBtSanjiao;
     @Bind(R.id.search_et)
     EditText searchEt;
     @Bind(R.id.search_bt)
@@ -133,12 +136,13 @@ public class ProductReportDetailActivity extends AppCompatActivity implements Vi
         }
     }
 
-    @Override
+    @OnClick({R.id.back_rl,R.id.status_bt_sanjiao,R.id.status_bt,R.id.search_bt})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back_rl:
                 finish();
                 break;
+            case R.id.status_bt_sanjiao:
             case R.id.status_bt:
                 List<String> list = new ArrayList<>();
                 if (getCurrStageSelect != null) {

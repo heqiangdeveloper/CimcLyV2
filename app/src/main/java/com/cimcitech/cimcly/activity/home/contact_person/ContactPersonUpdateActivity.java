@@ -70,6 +70,7 @@ public class ContactPersonUpdateActivity extends BaseActivity {
     @Bind(R.id.add_bt)
     Button addBt;
 
+    private AreaVo areaVo;
     private ContactInfoVo contactInfoVo;
     private PopupWindow pop, popupWindow;
     private AreaVo.Province userProvince;
@@ -85,6 +86,7 @@ public class ContactPersonUpdateActivity extends BaseActivity {
         ButterKnife.bind(this);
         contactInfoVo = (ContactInfoVo) this.getIntent().getSerializableExtra("contactInfoVo");
         getClientData();
+        initViewData();
     }
 
     private void initViewData() {
@@ -95,8 +97,13 @@ public class ContactPersonUpdateActivity extends BaseActivity {
             mobileEt.setText(contactInfoVo.getData().getConttel() != null ?
                     contactInfoVo.getData().getConttel() + "" : "");
             phoneEt.setText(contactInfoVo.getData().getContmobile());
-            areaTv.setText(contactInfoVo.getData().getFamilyarea() + " " +
-                    contactInfoVo.getData().getFamilycity());
+            String prov = contactInfoVo.getData().getFamilyarea();
+            String city = contactInfoVo.getData().getFamilycity();
+            if(prov != null && city != null){
+                areaTv.setText(prov + " " + city);
+            }else{
+                areaTv.setText("");
+            }
             addressTv.setText(contactInfoVo.getData().getFamilyaddress());
             timeTv.setText(DateTool.getDateStr(contactInfoVo.getData().getCreatedate()));
         }
@@ -113,7 +120,7 @@ public class ContactPersonUpdateActivity extends BaseActivity {
                     if (Config.areaVo.isSuccess()) {
                         List<String> list = new ArrayList<>();
                         for (int i = 0; i < Config.areaVo.getData().size(); i++) {
-                            list.add(Config.areaVo.getData().get(i).getCategoryname());
+                            list.add(Config.areaVo.getData().get(i).getCategoryname());//省份名称
                         }
                         String[] args = new String[list.size()];
                         list.toArray(args);
@@ -279,7 +286,7 @@ public class ContactPersonUpdateActivity extends BaseActivity {
                                 //ToastUtil.showToast(response);
                                 try {
                                     clientVo = GjsonUtil.parseJsonWithGson(response, ClientNameVo.class);
-                                    initViewData();
+                                    //initViewData();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -290,20 +297,31 @@ public class ContactPersonUpdateActivity extends BaseActivity {
     }
 
     public void updateData() {
-        if (userProvince == null && userCity == null)
+        if (userProvince == null && userCity == null
+                && null != contactInfoVo.getData().getFamilyarea()
+                && null != contactInfoVo.getData().getFamilycity()) {
             if (Config.areaVo != null)
-                for (int i = 0; i < Config.areaVo.getData().size(); i++) {
-                    if (contactInfoVo.getData().getFamilyarea()
-                            .equals(Config.areaVo.getData().get(i).getCategoryname())) {
+                a:for (int i = 0; i < Config.areaVo.getData().size(); i++) {
+                    if (contactInfoVo.getData().getFamilyarea().equals(Config.areaVo.getData().get(i).getCategoryname())) {
                         userProvince = Config.areaVo.getData().get(i);
                         for (int j = 0; j < userProvince.getCateList().size(); j++)
-                            if (contactInfoVo.getData().getFamilycity()
-                                    .equals(userProvince.getCateList().get(j).getCategoryname()))
+                            if (contactInfoVo.getData().getFamilycity().equals(userProvince.getCateList().get(j).getCategoryname())) {
                                 userCity = userProvince.getCateList().get(j);
+                                break a;
+                            }
                     }
                 }
-        String familyarea = userProvince.getCategoryno();
-        String familycity = userCity.getCategoryno();
+        }
+        String familyarea = "";
+        String familycity = "";
+        if(null == userProvince || null == userCity){
+            if(mLoading.isShowing()) mLoading.dismiss();
+            Toast.makeText(ContactPersonUpdateActivity.this,"请填写省市信息！",Toast.LENGTH_SHORT).show();
+            return;
+        }else{
+            familyarea = userProvince.getCategoryno();//防止FC
+            familycity = userCity.getCategoryno();
+        }
         Long getCustid = item == null ? Long.parseLong(contactInfoVo.getData().getCustid())
                 : item.getCustid();
         int contpersonid = contactInfoVo.getData().getContpersonid();

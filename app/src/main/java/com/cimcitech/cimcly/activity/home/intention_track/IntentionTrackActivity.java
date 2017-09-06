@@ -45,6 +45,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.MediaType;
 
@@ -65,6 +66,8 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
     View xsView;
     @Bind(R.id.status_bt)
     Button statusBt;
+    @Bind(R.id.status_bt_sanjiao)
+    Button statusBtSanjiao;
     @Bind(R.id.search_et)
     EditText searchEt;
     @Bind(R.id.search_bt)
@@ -141,7 +144,8 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
         }
     }
 
-    @Override
+    @OnClick({R.id.my_tv,R.id.xs_tv,R.id.add_bt,R.id.back_rl,R.id.status_bt,R.id
+            .status_bt_sanjiao,R.id.search_bt})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.my_tv:
@@ -163,6 +167,7 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
                 finish();
                 break;
             case R.id.status_bt:
+            case R.id.status_bt_sanjiao:
                 List<String> list = new ArrayList<>();
                 if (getCurrStageSelect != null) {
                     for (int i = 0; i < getCurrStageSelect.getData().size(); i++) {

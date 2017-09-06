@@ -103,6 +103,8 @@ public class PaymentDetailActivity extends AppCompatActivity {
                         pageNum = 1;
                         isLoading = false;
                         getData(); //获取数据*/
+                        swipeRefreshLayout.setRefreshing(false);
+                        isLoading = false;
                     }
                 }, 1000);
             }

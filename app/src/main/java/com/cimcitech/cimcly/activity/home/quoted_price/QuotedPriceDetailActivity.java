@@ -1,9 +1,12 @@
 package com.cimcitech.cimcly.activity.home.quoted_price;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -105,7 +108,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
     @Bind(R.id.bottom_layout)
     LinearLayout bottomLayout;
 
-    //private boolean isClicked = false;
+    private boolean isClicked = false;
 
     private int quoteid; //报价单list传过来的ID 用来查询详情
 
@@ -143,6 +146,27 @@ public class QuotedPriceDetailActivity extends BaseActivity {
     private List<QuotedPriceDetailVo.DataBean.ViewLabelListBean.ModelFeatureDetailListBean>
             specialModels = new ArrayList<>();
 
+    private ProgressDialog dialog = null;
+    private  static final int submitData = 1001;
+    private  static final int submitData_hide = 1002;
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case submitData:
+                    dialog = new ProgressDialog(QuotedPriceDetailActivity.this);
+                    dialog.setMessage("数据提交中…");
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    break;
+                case submitData_hide:
+                    if(dialog.isShowing())
+                        dialog.dismiss();
+                    break;
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,7 +179,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
         chassisModelTv.setFocusable(false);
         chassisModelTv.setFocusableInTouchMode(false);
 
-        //isClicked = false;
+        isClicked = false;
         getData();
     }
 
@@ -204,6 +228,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                 updateData();
                 break;
             case R.id.submit_bt:
+                Log.d("TAg","");
                 /*if(!isClicked){
                     isClicked = true;
                     if (!inputAndSelector()) {
@@ -214,13 +239,23 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                     mLoading.show();
                     updateData();
                 }*/
-                if (!inputAndSelector()) return;
+
+                if (!inputAndSelector()) {
+                    return;
+                }
                 isSubmit = true;
-                mLoading.show();
+                //mLoading.show();
+                sendMsg(submitData);
                 updateData();
                 break;
         }
     }
+    public void sendMsg(int flag){
+        Message msg = new Message();
+        msg.what = flag;
+        handler.sendMessage(msg);
+    }
+
 
     public boolean inputAndSelector() {
         quoteDetailListBeen.clear();
@@ -421,7 +456,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
     }
 
     public void submitData() {
-        if(!mLoading.isShowing()) mLoading.show();
+        //if(!mLoading.isShowing()) mLoading.show();
         OkHttpUtils
                 .post()
                 .url(Config.quoteBaseSumbit)
@@ -436,11 +471,13 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                             public void onError(Call call, Exception e, int id) {
                                 ToastUtil.showNetError();
                                 mLoading.dismiss();
+                                sendMsg(submitData_hide);
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
                                 //ToastUtil.showToast(response);
+                                sendMsg(submitData_hide);
                                 try {
                                     JSONObject json = new JSONObject(response);
                                     if (json.getBoolean("success")) {
@@ -454,12 +491,13 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                if(mLoading.isShowing()) mLoading.dismiss();
+
                             }
                         }
                 );
 
-        //isClicked = false;
+        //if(mLoading.isShowing()) mLoading.dismiss();
+        isClicked = false;
     }
 
     public void updateData() {
@@ -470,7 +508,8 @@ public class QuotedPriceDetailActivity extends BaseActivity {
         //意向ID
         String quoteopport = quotedPriceDetailVo.getData().getQuoteopport();
         //标配价格
-        double quotestandprice = Double.parseDouble(quoteStandPriceTv.getText().toString().trim());
+        double quotestandprice = Double.parseDouble(quoteStandPriceTv.getText() != "" ?
+                quoteStandPriceTv.getText().toString().trim() : "0.0");
         //销售员建议价格
         double protocolprice = !protocolPriceTv.getText().toString().trim().equals("") ?
                 Double.parseDouble(protocolPriceTv.getText().toString().trim()) : 0;
@@ -515,6 +554,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                             public void onError(Call call, Exception e, int id) {
                                 ToastUtil.showNetError();
                                 mLoading.dismiss();
+                                sendMsg(submitData_hide);
                             }
 
                             @Override
@@ -526,12 +566,14 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                                         if (isSubmit) {
                                             submitData();
                                         } else {
+                                            mLoading.dismiss();
                                             Log.d("hqw","save success...");
                                             Config.isQuotedPrice = true;
                                             ToastUtil.showToast("保存成功");
                                             finish();
                                         }
                                     } else {
+                                        mLoading.dismiss();
                                         Log.d("hqw","save fail...");
                                         if (isSubmit)
                                             ToastUtil.showToast("保存失败，无法提交");
@@ -539,9 +581,10 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                                             ToastUtil.showToast("保存失败");
                                     }
                                 } catch (Exception e) {
+                                    mLoading.dismiss();
                                     e.printStackTrace();
                                 }
-                                mLoading.dismiss();
+                                //mLoading.dismiss();
                             }
                         }
                 );

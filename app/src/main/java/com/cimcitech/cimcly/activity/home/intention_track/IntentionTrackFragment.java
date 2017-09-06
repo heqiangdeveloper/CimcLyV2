@@ -128,7 +128,8 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
         swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                swipeRefreshLayout.setRefreshing(true);
+                if(null != swipeRefreshLayout)
+                    swipeRefreshLayout.setRefreshing(true);
             }
         });
         //清除数据
@@ -237,7 +238,8 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
         swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
-                swipeRefreshLayout.setRefreshing(true);
+                if(null != swipeRefreshLayout)
+                    swipeRefreshLayout.setRefreshing(true);
             }
         });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -281,7 +283,8 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
                 int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0)
                         ? 0 : recyclerView.getChildAt(0).getTop();
                 if (topRowVerticalPosition > 0) {
-                    swipeRefreshLayout.setRefreshing(false);
+                    if(null != swipeRefreshLayout)
+                        swipeRefreshLayout.setRefreshing(false);
                 } else {
                     boolean isRefreshing = swipeRefreshLayout.isRefreshing();
                     if (isRefreshing) {
@@ -362,12 +365,14 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
                                             adapter.setNotMoreData(true);
                                         }
                                         adapter.notifyDataSetChanged();
-                                        swipeRefreshLayout.setRefreshing(false);
+                                        if(null != swipeRefreshLayout)
+                                            swipeRefreshLayout.setRefreshing(false);
                                         adapter.notifyItemRemoved(adapter.getItemCount());
                                     }
                                 } else {
                                     adapter.notifyDataSetChanged();
-                                    swipeRefreshLayout.setRefreshing(false);
+                                    if(null != swipeRefreshLayout)
+                                         swipeRefreshLayout.setRefreshing(false);
                                 }
                             }
                         }
@@ -419,12 +424,14 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
                                             adapter.setNotMoreData(true);
                                         }
                                         adapter.notifyDataSetChanged();
-                                        swipeRefreshLayout.setRefreshing(false);
+                                        if(null != swipeRefreshLayout)
+                                            swipeRefreshLayout.setRefreshing(false);
                                         adapter.notifyItemRemoved(adapter.getItemCount());
                                     }
                                 } else {
                                     adapter.notifyDataSetChanged();
-                                    swipeRefreshLayout.setRefreshing(false);
+                                    if(null != swipeRefreshLayout)
+                                        swipeRefreshLayout.setRefreshing(false);
                                 }
                             }
                         }
@@ -456,7 +463,8 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
                                     if (getCurrStageSelect.isSuccess())
                                         if (getCurrStageSelect.getData().size() > 0) {
                                             quotestatus = getCurrStageSelect.getData().get(0).getCodeid();
-                                            statusBt.setText(getCurrStageSelect.getData().get(0).getCodevalue());
+                                            if(null != statusBt)
+                                                statusBt.setText(getCurrStageSelect.getData().get(0).getCodevalue());
                                         }
 
                                 }

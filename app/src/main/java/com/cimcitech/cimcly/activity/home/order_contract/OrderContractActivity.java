@@ -80,6 +80,8 @@ public class OrderContractActivity extends AppCompatActivity {
     CoordinatorLayout recyclerViewLayout;
     @Bind(R.id.status_bt)
     Button statusBt;
+    @Bind(R.id.status_bt_sanjiao)
+    Button statusBtSanjiao;
 
     private int pageNum = 1;
     private OrderContractVo orderContractVo;
@@ -121,7 +123,8 @@ public class OrderContractActivity extends AppCompatActivity {
             getSubData();
     }
 
-    @OnClick({R.id.back_rl, R.id.my_tv, R.id.xs_tv, R.id.search_bt, R.id.status_bt})
+    @OnClick({R.id.back_rl, R.id.my_tv, R.id.xs_tv, R.id.search_bt, R.id.status_bt,
+            R.id.status_bt_sanjiao})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back_rl:
@@ -143,6 +146,7 @@ public class OrderContractActivity extends AppCompatActivity {
                 updateData();
                 ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
+            case R.id.status_bt_sanjiao:
             case R.id.status_bt:
                 List<String> list = new ArrayList<>();
                 if (getContStatu != null) {

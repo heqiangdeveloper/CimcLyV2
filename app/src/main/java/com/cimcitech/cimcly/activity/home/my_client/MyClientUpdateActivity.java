@@ -1,10 +1,13 @@
 package com.cimcitech.cimcly.activity.home.my_client;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,6 +27,7 @@ import com.cimcitech.cimcly.R;
 import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitAddActivity;
 import com.cimcitech.cimcly.activity.home.contact_person.ContactPersonActivity;
 import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackAddActivity;
+import com.cimcitech.cimcly.activity.home.quoted_price.QuotedPriceDetailActivity;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.bean.CustSelectVo;
 import com.cimcitech.cimcly.bean.client.AddMyClientReq;
@@ -108,6 +112,27 @@ public class MyClientUpdateActivity extends BaseActivity {
     private CustSelectVo.Data.Region.CateList.City city; //城市
     private CustSelectVo.Data.Web web; //税种
 
+    private ProgressDialog dialog = null;
+    private  static final int SAVEDATA = 1001;
+    private  static final int SAVEDATA_HIDE = 1002;
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case SAVEDATA:
+                    dialog = new ProgressDialog(MyClientUpdateActivity.this);
+                    dialog.setMessage("数据保存中…");
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    break;
+                case SAVEDATA_HIDE:
+                    if(dialog.isShowing())
+                        dialog.dismiss();
+                    break;
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +153,8 @@ public class MyClientUpdateActivity extends BaseActivity {
                 if (!checkInput())
                     return;
                 if (customer != null) {
-                    mLoading.show();
+                    //mLoading.show();
+                    sendMsg(SAVEDATA);
                     updateData(customer);
                 }
                 break;
@@ -210,6 +236,12 @@ public class MyClientUpdateActivity extends BaseActivity {
                 startActivity(intent);
                 break;
         }
+    }
+
+    public void sendMsg(int flag){
+        Message msg = new Message();
+        msg.what = flag;
+        handler.sendMessage(msg);
     }
 
     public void showContactUsPopWin(Context context, String title, List<String> list) {
@@ -416,12 +448,14 @@ public class MyClientUpdateActivity extends BaseActivity {
                             @Override
                             public void onError(Call call, Exception e, int id) {
                                 ToastUtil.showNetError();
-                                mLoading.dismiss();
+                                //mLoading.dismiss();
+                                sendMsg(SAVEDATA_HIDE);
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
                                 //ToastUtil.showToast(response);
+                                sendMsg(SAVEDATA_HIDE);
                                 try {
                                     JSONObject json = new JSONObject(response);
                                     if (json.getBoolean("success")) {
@@ -433,7 +467,7 @@ public class MyClientUpdateActivity extends BaseActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                mLoading.dismiss();
+                                //mLoading.dismiss();
                             }
                         }
                 );

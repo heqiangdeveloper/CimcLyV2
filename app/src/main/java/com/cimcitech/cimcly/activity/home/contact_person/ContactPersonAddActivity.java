@@ -71,6 +71,7 @@ public class ContactPersonAddActivity extends BaseActivity {
     private PopupWindow pop, popupWindow;
     private AreaVo.Province userProvince;
     private AreaVo.Province.City userCity;
+    private AreaVo areaVo;
     private ListView listView2;
     private ClientVo customer;
     private ClientNameVo clientVo;

@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getProviceAndCity)
-                //.addHeader("checkTokenKey", Config.loginback.getToken())
+                .addHeader("checkTokenKey", Config.loginback.getToken())
                 .addHeader("sessionKey", Config.loginback.getUserId() + "")
                 .build()
                 .execute(
@@ -125,6 +125,11 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                 );
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState);//防止快速切换Fragment导致的FC-->不保存Fragment的状态，让其与activity一同消亡
     }
 
     @Override

@@ -1,11 +1,13 @@
 package com.cimcitech.cimcly.activity.home.quoted_price;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -161,10 +163,16 @@ public class QuotedPriceActivity extends AppCompatActivity {
                 updateData();
                 ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
-            /*case R.id.status_bt_sanjiao:
-                updateData();
-                ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                break;*/
+            case R.id.status_bt_sanjiao:
+                List<String> list2 = new ArrayList<>();
+                if (getQuoteStatus != null) {
+                    for (int i = 0; i < getQuoteStatus.getData().size(); i++) {
+                        list2.add(getQuoteStatus.getData().get(i).getCodevalue());
+                    }
+                }
+                showContactUsPopWin(QuotedPriceActivity.this, "选择订单状态查询", list2);
+                pop.showAtLocation(view, Gravity.CENTER, 0, 0);
+                break;
         }
     }
 

@@ -408,7 +408,8 @@ public class OrderContractDetailActivity extends BaseActivity {
         contractTypeDescTv.setText(data.getContractTypeDesc() != null ? "合同类型：" + data.getContractTypeDesc() : "合同类型：");
         sitecodeTv.setText(data.getSitecode() != null ? "交货地点：" + data.getSitecode() : "交货地点：");
         isbringmaterialTv.setText(data.getIsbringmaterial().equals("Y") ? "自带物资：自带物资" : "自带物资：不带物资");
-        arrivalDateTv.setText(data.getArrivaldate() != null ? "到场日期：" + data.getArrivaldate() : "到场日期：");
+        arrivalDateTv.setText(data.getArrivaldate() > 0 ? "到场日期：" + DateTool.getDateStr(data
+                .getArrivaldate()) : "到场日期：");
         signplaceTv.setText(data.getSigndate() > 0 ? "签订地点：" + DateTool.getDateStr(data.getSigndate()) : "签订地点：");
         ordertypeTv.setText(data.getOrdertype() != null ? "订单类型：" + data.getOrderTypeDesc() : "订单类型：");
         singlePriceTv.setText(data.getSinglePrice() > 0 ? "上装单价：" + data.getSinglePrice() : "装单价：");

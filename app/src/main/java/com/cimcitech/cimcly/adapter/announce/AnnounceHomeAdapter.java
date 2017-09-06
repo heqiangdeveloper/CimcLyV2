@@ -32,7 +32,7 @@ public class AnnounceHomeAdapter extends BaseAdapter {
     private DisplayImageOptions options;
 
     public AnnounceHomeAdapter(Context context, List<AnnounceVo.DataBean.ListBean> data) {
-        inflater = LayoutInflater.from(context);
+        if(null != context)  inflater = LayoutInflater.from(context);//防止快速切换Fragment导致的FC
         this.data = data;
         options = new DisplayImageOptions.Builder().showStubImage(R.mipmap.ic_launcher)
                 .showImageForEmptyUri(R.mipmap.ic_launcher).showImageOnFail(R.mipmap.ic_launcher)
@@ -65,7 +65,7 @@ public class AnnounceHomeAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder = null;
         AnnounceVo.DataBean.ListBean listBean = data.get(i);
-        if (viewHolder == null) {
+        if (viewHolder == null && null != inflater) {
             view = inflater.inflate(R.layout.announce_home_item_view, null);
             viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);

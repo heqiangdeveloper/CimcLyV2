@@ -114,7 +114,7 @@ public class MyClientAddActivity extends BaseActivity {
         ButterKnife.bind(this);
         systemDateTv.setText(DateTool.getSystemDate());
         getData();
-        getAreaData();
+
         clientNameTv.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -433,33 +433,6 @@ public class MyClientAddActivity extends BaseActivity {
                                     e.printStackTrace();
                                 }
                                 mLoading.dismiss();
-                            }
-                        }
-                );
-    }
-
-    public void getAreaData() {
-        OkHttpUtils
-                .post()
-                .url(Config.getProviceAndCity)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
-                .build()
-                .execute(
-                        new StringCallback() {
-                            @Override
-                            public void onError(Call call, Exception e, int id) {
-                                ToastUtil.showNetError();
-                            }
-
-                            @Override
-                            public void onResponse(String response, int id) {
-                                // ToastUtil.showToast(response);
-                                try {
-                                    areaVo = GjsonUtil.parseJsonWithGson(response, AreaVo.class);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
                             }
                         }
                 );

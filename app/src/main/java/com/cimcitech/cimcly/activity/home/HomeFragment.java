@@ -1,5 +1,6 @@
 package com.cimcitech.cimcly.activity.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -61,6 +62,7 @@ public class HomeFragment extends Fragment {
     private HomeGridAdapter gridAdapter;
     private AnnounceVo announceVo;
     private AnnounceHomeAdapter adapter;
+    private Context mContext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class HomeFragment extends Fragment {
 
     @OnClick(R.id.news_mote_tv)
     public void newsMore() {
-        startActivity(new Intent(getActivity(), AnnounceListActivity.class));
+        if(null != mContext) startActivity(new Intent(mContext, AnnounceListActivity.class));
     }
 
     class listContentItemListener implements AdapterView.OnItemClickListener {
@@ -81,59 +83,69 @@ public class HomeFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             AnnounceVo.DataBean.ListBean listBean = adapter.getAll().get(i);
-            Intent intent = new Intent(getActivity(), AnnounceDetailActivity.class);
-            intent.putExtra("annId", listBean.getAnnid());
-            startActivity(intent);
+            if(null != mContext){
+                Intent intent = new Intent(mContext, AnnounceDetailActivity.class);
+                intent.putExtra("annId", listBean.getAnnid());
+                startActivity(intent);
+            }
         }
     }
 
     public void initViewData() {
-        listContent.setOnItemClickListener(new listContentItemListener());
-        gridAdapter = new HomeGridAdapter(getActivity());
-        homeGrid.setAdapter(gridAdapter);
-        homeGrid.setSelector(R.drawable.hide_listview_yellow_selector);
-        homeGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {//客户拜访
-                    startActivity(new Intent(getActivity(), CustomerVisitActivity.class));
-                }
-                if (position == 1) { //意向跟踪
-                    startActivity(new Intent(getActivity(), IntentionTrackActivity.class));
-                }
-                if (position == 2) {//报价单
-                    startActivity(new Intent(getActivity(), QuotedPriceActivity.class));
-                }
-                if (position == 3) { //订单合同
-                    startActivity(new Intent(getActivity(), OrderContractActivity.class));
-                }
+        if(null != mContext){
+            listContent.setOnItemClickListener(new listContentItemListener());
+            gridAdapter = new HomeGridAdapter(mContext);
+            homeGrid.setAdapter(gridAdapter);
+            homeGrid.setSelector(R.drawable.hide_listview_yellow_selector);
+            homeGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (position == 0) {//客户拜访
+                        startActivity(new Intent(mContext, CustomerVisitActivity.class));
+                    }
+                    if (position == 1) { //意向跟踪
+                        startActivity(new Intent(mContext, IntentionTrackActivity.class));
+                    }
+                    if (position == 2) {//报价单
+                        startActivity(new Intent(mContext, QuotedPriceActivity.class));
+                    }
+                    if (position == 3) { //订单合同
+                        startActivity(new Intent(mContext, OrderContractActivity.class));
+                    }
 
-                if (position == 4) {//工作周报
-                    startActivity(new Intent(getActivity(), WorkWeeklyActivity.class));
-                }
-                if (position == 5) {//我的客户
-                    startActivity(new Intent(getActivity(), MyClientActivity.class));
-                }
-                if (position == 6) { //联系人
-                    startActivity(new Intent(getActivity(), ContactPersonActivity.class));
-                }
-                if (position == 7) {//问题反馈
-                    startActivity(new Intent(getActivity(), FeedBackActivity.class));
-                }
-                if (position == 8) {//回款跟踪
-                    startActivity(new Intent(getActivity(), PaymentActivity.class));
-                    //ToastUtil.showToast("开发中...");
-                }
-                if (position == 9) { //生产进度
-                    startActivity(new Intent(getActivity(), ProductionActivity.class));
-                    //ToastUtil.showToast("开发中...");
-                }
+                    if (position == 4) {//工作周报
+                        startActivity(new Intent(mContext, WorkWeeklyActivity.class));
+                    }
+                    if (position == 5) {//我的客户
+                        startActivity(new Intent(mContext, MyClientActivity.class));
+                    }
+                    if (position == 6) { //联系人
+                        startActivity(new Intent(mContext, ContactPersonActivity.class));
+                    }
+                    if (position == 7) {//问题反馈
+                        startActivity(new Intent(mContext, FeedBackActivity.class));
+                    }
+                    if (position == 8) {//回款跟踪
+                        startActivity(new Intent(mContext, PaymentActivity.class));
+                        //ToastUtil.showToast("开发中...");
+                    }
+                    if (position == 9) { //生产进度
+                        startActivity(new Intent(mContext, ProductionActivity.class));
+                        //ToastUtil.showToast("开发中...");
+                    }
                 /*if (position == 10) { //报表
-                     startActivity(new Intent(getActivity(), ReportMainActivity.class));
+                     startActivity(new Intent(mContext, ReportMainActivity.class));
                     //ToastUtil.showToast("开发中...");
                 }*/
-            }
-        });
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = getActivity();
     }
 
     public void getData() {
@@ -160,9 +172,13 @@ public class HomeFragment extends Fragment {
                                 if (announceVo != null)
                                     if (announceVo.isSuccess())
                                         if (announceVo.getData().getList().size() > 0) {
-                                            adapter = new AnnounceHomeAdapter(getActivity(), announceVo.getData().getList());
-                                            listContent.setAdapter(adapter);
-                                            new Utility().setListViewHeightBasedOnChildren(listContent);
+                                            if(mContext != null){
+                                                adapter = new AnnounceHomeAdapter(mContext, announceVo.getData().getList());
+                                                if(null != listContent){
+                                                    listContent.setAdapter(adapter);
+                                                    new Utility().setListViewHeightBasedOnChildren(listContent);
+                                                }
+                                            }
                                         }
                             }
                         }

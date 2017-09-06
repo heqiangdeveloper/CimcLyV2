@@ -251,6 +251,7 @@ public class PaymentActivity extends AppCompatActivity {
                             @Override
                             public void onError(Call call, Exception e, int id) {
                                 Log.e("MyClientActivity", "请求失败");
+                                swipeRefreshLayout.setRefreshing(false);
                             }
 
                             @Override

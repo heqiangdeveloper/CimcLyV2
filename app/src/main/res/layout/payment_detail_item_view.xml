@@ -157,36 +157,60 @@
                     android:textSize="14sp" />
 
             </LinearLayout>
-            <LinearLayout
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dip"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="8dip"
+                android:text="币种："
+                android:textColor="@color/black_33"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/money_type_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
                 android:layout_weight="1"
-                android:background="@color/white"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:text="币种："
-                    android:textColor="@color/black_33"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/money_type_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="8dip"
-                    android:textColor="@color/black_33"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
-
+                android:padding="8dip"
+                android:textColor="@color/black_33"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dip"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="8dip"
+                android:text="支付金额："
+                android:textColor="@color/black_33"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/pay_amount_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dip"
+                android:textColor="@color/black_33"
+                android:textSize="14sp" />
+
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -219,32 +243,7 @@
                     android:textSize="14sp" />
 
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:text="支付金额："
-                    android:textColor="@color/black_33"
-                    android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/pay_amount_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="8dip"
-                    android:textColor="@color/black_33"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -252,6 +251,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dip"
+            android:layout_marginTop="12dip"
             android:layout_marginLeft="15dip"
             android:layout_marginRight="10dip"
             android:orientation="vertical">
