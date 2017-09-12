@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
 import com.cimcitech.cimcly.activity.home.quoted_price.QuotedPriceAddActivity;
@@ -91,10 +92,13 @@ public class IntentionTrackDetailActivity extends AppCompatActivity {
                 if (("ST01".equals(infoVo.getData().getStage()) || "ST02".equals(infoVo.getData().getStage())
                         || "ST06".equals(infoVo.getData().getStage())) && !("CS05".equals(infoVo.getData().getCurrentstage()) ||
                         "CS04".equals(infoVo.getData().getCurrentstage()))) {
-                    Intent intent = new Intent(IntentionTrackDetailActivity.this, QuotedPriceAddActivity.class);
-                    if (infoVo != null)
+                    if (infoVo != null && infoVo.getData().getProductid() != null ){
+                        Intent intent = new Intent(IntentionTrackDetailActivity.this, QuotedPriceAddActivity.class);
                         intent.putExtra("infoVo", infoVo);
-                    startActivity(intent);
+                        startActivity(intent);
+                    }else{
+                        Toast.makeText(this,"产品型号不能为空，请完善信息！",Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     ToastUtil.showToast("此状态意向订单不可报价");
                 }

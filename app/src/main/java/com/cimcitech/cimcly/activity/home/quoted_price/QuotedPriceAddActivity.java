@@ -284,6 +284,9 @@ public class QuotedPriceAddActivity extends BaseActivity {
     }
 
     public void getIntentionTrackData() {
+        int i = infoVo.getData().getCustid();
+        int j = infoVo.getData().getOpportid();
+        String s = infoVo.getData().getProductid();
         OkHttpUtils
                 .post()
                 .url(Config.getNewQuoteBase)

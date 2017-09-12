@@ -99,7 +99,9 @@ public class CustomerVisitFragment extends Fragment {
         back_Img.setVisibility(View.INVISIBLE);
         initViewData();
         getData();
+        Log.d("hqf","customervisitfrag oncreate...");
         return view;
+
     }
 
     //刷新数据
@@ -124,6 +126,7 @@ public class CustomerVisitFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("hqf","customervisitfrag  onresume...");
         if (Config.isAddVisit) {
             Config.isAddVisit = false;
             updateData();
@@ -159,6 +162,11 @@ public class CustomerVisitFragment extends Fragment {
     }
 
     public void initViewData() {
+        //防止切换底部的Fragment时，出现recyclerView内容的重复加载
+        if(null != data){
+            Log.d("hqf","customervisitfrag initViewData data is not null...");
+            data.clear();
+        }
         adapter = new CustomerVisitFragmentAdapter(getActivity(), data);
         swipeRefreshLayout.setColorSchemeResources(R.color.blueStatus);
         swipeRefreshLayout.post(new Runnable() {
@@ -379,5 +387,6 @@ public class CustomerVisitFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        Log.d("hqf","customervisitfrag ondestroy...");
     }
 }

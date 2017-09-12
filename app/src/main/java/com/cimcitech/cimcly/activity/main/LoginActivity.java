@@ -46,7 +46,7 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        sp = this.getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);
+        sp = this.getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);//如果存在则打开它，否则创建新的Preferences
         getUserInfo();
     }
 

@@ -17,6 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dip"
         android:text="正在加载，请稍后..."
-        android:textColor="@color/black_3" />
+        android:textColor="#328EEC" />
 
 </LinearLayout>

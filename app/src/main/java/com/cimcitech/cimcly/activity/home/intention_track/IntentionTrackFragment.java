@@ -233,6 +233,10 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
         backRl.setOnClickListener(this);
         statusBt.setOnClickListener(this);
         searchBt.setOnClickListener(this);
+        //防止切换底部的Fragment时，出现recyclerView内容的重复加载
+        if(null != data || data.size() != 0){
+            data.clear();
+        }
         adapter = new IntentionTrackAdapter(getActivity(), data);
         swipeRefreshLayout.setColorSchemeResources(R.color.blueStatus);
         swipeRefreshLayout.post(new Runnable() {

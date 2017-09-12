@@ -180,6 +180,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
         chassisModelTv.setFocusableInTouchMode(false);
 
         isClicked = false;
+        mLoading.show();
         getData();
     }
 
@@ -364,6 +365,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                             @Override
                             public void onError(Call call, Exception e, int id) {
                                 ToastUtil.showNetError();
+                                if(mLoading.isShowing()) mLoading.dismiss();
                             }
 
                             @Override
@@ -450,6 +452,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
+                                if(mLoading.isShowing()) mLoading.dismiss();
                             }
                         }
                 );

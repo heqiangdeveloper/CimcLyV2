@@ -190,6 +190,7 @@ public class OrderContractDetailActivity extends BaseActivity {
         sOrderId = this.getIntent().getIntExtra("sOrderId", 0);
         order_contract = this.findViewById(R.id.order_contract_detail_view);
         specifications_confirmation_view = this.findViewById(R.id.specifications_confirmation_view);
+        mLoading.show();
         getData();
     }
 
@@ -285,6 +286,7 @@ public class OrderContractDetailActivity extends BaseActivity {
                             @Override
                             public void onError(Call call, Exception e, int id) {
                                 ToastUtil.showNetError();
+                                if(mLoading.isShowing()) mLoading.dismiss();
                             }
 
                             @Override
@@ -295,6 +297,7 @@ public class OrderContractDetailActivity extends BaseActivity {
                                     if (detailVo.isSuccess())
                                         initViewData();
                                 getOrderStandard();
+                                    if(mLoading.isShowing()) mLoading.dismiss();
                             }
                         }
                 );

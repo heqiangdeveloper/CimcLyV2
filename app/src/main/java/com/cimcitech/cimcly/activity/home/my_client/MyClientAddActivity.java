@@ -197,11 +197,13 @@ public class MyClientAddActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.user_provinces_tv: //联系人信息 省、市
-                if (areaVo != null)
-                    if (areaVo.isSuccess()) {
+                //if (areaVo != null)
+                  //  if (areaVo.isSuccess()) {
+                if (Config.areaVo != null)
+                    if (Config.areaVo.isSuccess()) {
                         List<String> list = new ArrayList<>();
-                        for (int i = 0; i < areaVo.getData().size(); i++) {
-                            list.add(areaVo.getData().get(i).getCategoryname());
+                        for (int i = 0; i < Config.areaVo.getData().size(); i++) {
+                            list.add(Config.areaVo.getData().get(i).getCategoryname());
                         }
                         String[] args = new String[list.size()];
                         list.toArray(args);
@@ -508,7 +510,7 @@ public class MyClientAddActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                userProvince = areaVo.getData().get(i);
+                userProvince = Config.areaVo.getData().get(i);
                 List<String> list = new ArrayList<>();
                 for (int j = 0; j < userProvince.getCateList().size(); j++) {
                     list.add(userProvince.getCateList().get(j).getCategoryname());

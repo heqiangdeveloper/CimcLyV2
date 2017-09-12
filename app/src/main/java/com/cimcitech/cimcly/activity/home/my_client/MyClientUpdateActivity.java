@@ -140,6 +140,7 @@ public class MyClientUpdateActivity extends BaseActivity {
         ButterKnife.bind(this);
         systemDateTv.setText(DateTool.getSystemDate());
         custid = this.getIntent().getLongExtra("custid", 0);
+        mLoading.show();
         getData();
     }
 
@@ -522,6 +523,7 @@ public class MyClientUpdateActivity extends BaseActivity {
         //备注
         setEditTextVaule(customer.getData().getSummary(), beizhuEt);
 
+        mLoading.dismiss();
     }
 
     // 查新增客户的缺省值 //查完后查客户的信息
