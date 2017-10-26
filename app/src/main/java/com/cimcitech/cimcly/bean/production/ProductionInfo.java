@@ -22,7 +22,25 @@ public class ProductionInfo implements Serializable{
     private Long actualbegindate;
     private Long actualenddate;
     private boolean isfinish;
-    private String userName;
+    private String userName;//业务员
+    private String productstages;
+    private String custName;//客户
+
+    public String getCustName() {
+        return custName;
+    }
+
+    public void setCustName(String custName) {
+        this.custName = custName;
+    }
+
+    public String getProductstages() {
+        return productstages;
+    }
+
+    public void setProductstages(String productstages) {
+        this.productstages = productstages;
+    }
 
     public String getUserName() {
         return userName;

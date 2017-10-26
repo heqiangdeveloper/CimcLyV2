@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -91,6 +92,13 @@ public class MyClientAddActivity extends BaseActivity {
     @Bind(R.id.beizhu_et)
     EditText beizhuEt;
 
+    //modidied by qianghe on 2017/10/11 begin
+    @Bind(R.id.province_Linear)
+    LinearLayout provinceLinear;
+    @Bind(R.id.city_Linear)
+    LinearLayout cityLinear;
+    //modidied by qianghe on 2017/10/11 end
+
     private CustSelectVo custSelectVo;
     private PopupWindow pop, popupWindow;
     public int intValue = 0;
@@ -122,6 +130,11 @@ public class MyClientAddActivity extends BaseActivity {
                     isCustExist(); //判断客户名称是否存在
             }
         });
+
+        //modidied by qianghe on 2017/10/11 begin
+        provinceLinear.setVisibility(View.VISIBLE);
+        cityLinear.setVisibility(View.VISIBLE);
+        //modidied by qianghe on 2017/10/11 end
     }
 
     @OnClick({R.id.customer_category_tv, R.id.country_tv, R.id.province_tv, R.id.city_tv,
@@ -253,6 +266,15 @@ public class MyClientAddActivity extends BaseActivity {
                     countryTv.setText(adapter.getAll().get(i));
                     countryTv.setTextColor(Color.parseColor("#666666"));
                     pop.dismiss();
+                    //modidied by qianghe on 2017/10/11 begin
+                    if(countryTv.getText().equals("中国")){
+                        provinceLinear.setVisibility(View.VISIBLE);
+                        cityLinear.setVisibility(View.VISIBLE);
+                    }else{
+                        provinceLinear.setVisibility(View.GONE);
+                        cityLinear.setVisibility(View.GONE);
+                    }
+                    //modidied by qianghe on 2017/10/11 end
                 }
                 if (intValue == 2) {//省份
                     provinceTv.setText(adapter.getAll().get(i));
@@ -297,11 +319,11 @@ public class MyClientAddActivity extends BaseActivity {
             ToastUtil.showToast("请选择国家");
             return false;
         }
-        if (cateList == null) {
+        if (countryTv.getText().equals("中国") && cateList == null) {
             ToastUtil.showToast("请选择省份");
             return false;
         }
-        if (city == null) {
+        if (countryTv.getText().equals("中国") && city == null) {
             ToastUtil.showToast("请选择城市");
             return false;
         }
@@ -380,29 +402,58 @@ public class MyClientAddActivity extends BaseActivity {
             userCityStr = userCity.getCategoryno();
         }
 
-
-        String json = new Gson().toJson(new AddMyClientReq(
-                clientNameTv.getText().toString().trim(),
-                addressEt.getText().toString().trim(),
-                mobileEt.getText().toString().trim(),
-                custType.getCodeid(),
-                zipCodeEt.getText().toString().trim(),
-                web.getCodeid(),
-                Config.loginback.getUserId(),
-                Config.loginback.getUserId(),
-                abbreviationEt.getText().toString().trim(),
-                faxEt.getText().toString().trim(),
-                region.getCategoryno(),
-                cateList.getCategoryno(),
-                city.getCategoryno(),
-                invoiceTv.getText().toString().trim(),
-                beizhuEt.getText().toString().trim(),
-                new Contact(
-                        userNameEt.getText().toString().trim(),
-                        userMobileEt.getText().toString().trim(),
-                        userPhoneEt.getText().toString().trim(),
-                        userProvinceStr, userCityStr, userAddressEt.getText().toString().trim(),
-                        beizhuEt.getText().toString().trim())));
+        String json = "";
+        //中国
+        if(region.getCategoryname().equals("中国")){
+            String json_China = new Gson().toJson(new AddMyClientReq(
+                    clientNameTv.getText().toString().trim(),
+                    addressEt.getText().toString().trim(),
+                    mobileEt.getText().toString().trim(),
+                    custType.getCodeid(),
+                    zipCodeEt.getText().toString().trim(),
+                    web.getCodeid(),
+                    Config.loginback.getUserId(),
+                    Config.loginback.getUserId(),
+                    abbreviationEt.getText().toString().trim(),
+                    faxEt.getText().toString().trim(),
+                    region.getCategoryno(),
+                    cateList.getCategoryno(),
+                    city.getCategoryno(),
+                    invoiceTv.getText().toString().trim(),
+                    beizhuEt.getText().toString().trim(),
+                    new Contact(
+                            userNameEt.getText().toString().trim(),
+                            userMobileEt.getText().toString().trim(),
+                            userPhoneEt.getText().toString().trim(),
+                            userProvinceStr, userCityStr, userAddressEt.getText().toString().trim(),
+                            beizhuEt.getText().toString().trim())));
+            json = json_China;
+        }else {
+            //外国地区
+            String json_Overseas = new Gson().toJson(new AddMyClientReq(
+                    clientNameTv.getText().toString().trim(),
+                    addressEt.getText().toString().trim(),
+                    mobileEt.getText().toString().trim(),
+                    custType.getCodeid(),
+                    zipCodeEt.getText().toString().trim(),
+                    web.getCodeid(),
+                    Config.loginback.getUserId(),
+                    Config.loginback.getUserId(),
+                    abbreviationEt.getText().toString().trim(),
+                    faxEt.getText().toString().trim(),
+                    region.getCategoryno(),
+                    null,
+                    null,
+                    invoiceTv.getText().toString().trim(),
+                    beizhuEt.getText().toString().trim(),
+                    new Contact(
+                            userNameEt.getText().toString().trim(),
+                            userMobileEt.getText().toString().trim(),
+                            userPhoneEt.getText().toString().trim(),
+                            userProvinceStr, userCityStr, userAddressEt.getText().toString().trim(),
+                            beizhuEt.getText().toString().trim())));
+            json = json_Overseas;
+        }
 
         OkHttpUtils
                 .postString()

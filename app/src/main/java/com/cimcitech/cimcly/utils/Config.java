@@ -44,7 +44,7 @@ public class Config {
 
     //public static final String IP = "http://10.33.155.27:8080/ly";//本机
 
-    //public static final String IP = "http://10.33.155.19:8080/ly";
+    //public static final String IP = "http://10.43.10.185" + ":8080/ly";
 
     public static final String custVisit = IP + "/custVisit/pageList"; //拜访记录
 

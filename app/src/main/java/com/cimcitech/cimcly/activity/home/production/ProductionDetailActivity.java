@@ -29,8 +29,8 @@ public class ProductionDetailActivity extends AppCompatActivity {
     @Bind(R.id.back_rl)
     RelativeLayout backRl;
 
-    @Bind(R.id.prodorderdetid_tv)
-    TextView prodorderdetid_Tv;
+    //@Bind(R.id.prodorderdetid_tv)
+    //TextView prodorderdetid_Tv;
     @Bind(R.id.sorderno_tv)
     TextView sorderno_Tv;
     @Bind(R.id.confirmdate_tv)
@@ -102,8 +102,8 @@ public class ProductionDetailActivity extends AppCompatActivity {
     }
 
     private void initViewData() {
-        prodorderdetid_Tv.setText(productionVo.getData().getProdorderdetid() > 0 ?
-                productionVo.getData().getProdorderdetid() + "" : "");
+        /*prodorderdetid_Tv.setText(productionVo.getData().getProdorderdetid() > 0 ?
+                productionVo.getData().getProdorderdetid() + "" : "");*/
         sorderno_Tv.setText(productionVo.getData().getSorderno() != null ?
                 productionVo.getData().getSorderno() + "" : "");
         if(productionVo.getData().getConfirmdate() > 0){

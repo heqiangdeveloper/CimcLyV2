@@ -99,6 +99,13 @@ public class MyClientUpdateActivity extends BaseActivity {
     @Bind(R.id.beizhu_et)
     EditText beizhuEt;
 
+    //modidied by qianghe on 2017/10/11 begin
+    @Bind(R.id.province_Linear)
+    LinearLayout provinceLinear;
+    @Bind(R.id.city_Linear)
+    LinearLayout cityLinear;
+    //modidied by qianghe on 2017/10/11 end
+
     private Long custid;
     private ClientVo customer;
     private CustSelectVo custSelectVo;
@@ -284,6 +291,15 @@ public class MyClientUpdateActivity extends BaseActivity {
                     countryTv.setText(adapter.getAll().get(i));
                     countryTv.setTextColor(Color.parseColor("#666666"));
                     pop.dismiss();
+                    //modidied by qianghe on 2017/10/11 begin
+                    if(countryTv.getText().equals("中国")){
+                        provinceLinear.setVisibility(View.VISIBLE);
+                        cityLinear.setVisibility(View.VISIBLE);
+                    }else{
+                        provinceLinear.setVisibility(View.GONE);
+                        cityLinear.setVisibility(View.GONE);
+                    }
+                    //modidied by qianghe on 2017/10/11 end
                 }
                 if (intValue == 2) {//省份
                     provinceTv.setText(adapter.getAll().get(i));
@@ -326,7 +342,7 @@ public class MyClientUpdateActivity extends BaseActivity {
                 }
             }
             if (customer.getData().getProvince() == null || customer.getData().getProvince().equals("")) {
-                if (cateList == null) {
+                if (countryTv.getText().equals("中国") && cateList == null) {
                     ToastUtil.showToast("请选择省份");
                     return false;
                 }
@@ -336,11 +352,10 @@ public class MyClientUpdateActivity extends BaseActivity {
                 ToastUtil.showToast("请选择城市");
                 return false;
             } else if (customer.getData().getCity() == null || customer.getData().getCity().equals("")) {
-                if (city == null) {
+                if (countryTv.getText().equals("中国") && city == null) {
                     ToastUtil.showToast("请选择城市");
                     return false;
                 }
-
             }
 
             if (customer.getData().getWeb() == null || customer.getData().getWeb().equals("")) {
@@ -418,23 +433,46 @@ public class MyClientUpdateActivity extends BaseActivity {
             else
                 webStr = web.getCodeid();
         }
-        String json = new Gson().toJson(new AddMyClientReq(
-                customer.getData().getCustid(),
-                clientNameTv.getText().toString().trim(),
-                addressEt.getText().toString().trim(),
-                mobileEt.getText().toString().trim(),
-                custtypeStr,
-                zipCodeEt.getText().toString().trim(),
-                webStr,
-                Config.loginback.getUserId(),
-                Config.loginback.getUserId(),
-                abbreviationEt.getText().toString().trim(),
-                faxEt.getText().toString().trim(),
-                countryStr,
-                provinceStr,
-                cityStr,
-                invoiceTv.getText().toString().trim(),
-                beizhuEt.getText().toString().trim()));
+        String json = "";
+        if(countryTv.getText().equals("中国")){
+            String json_China = new Gson().toJson(new AddMyClientReq(
+                    customer.getData().getCustid(),
+                    clientNameTv.getText().toString().trim(),
+                    addressEt.getText().toString().trim(),
+                    mobileEt.getText().toString().trim(),
+                    custtypeStr,
+                    zipCodeEt.getText().toString().trim(),
+                    webStr,
+                    Config.loginback.getUserId(),
+                    Config.loginback.getUserId(),
+                    abbreviationEt.getText().toString().trim(),
+                    faxEt.getText().toString().trim(),
+                    countryStr,
+                    provinceStr,
+                    cityStr,
+                    invoiceTv.getText().toString().trim(),
+                    beizhuEt.getText().toString().trim()));
+            json = json_China;
+        }else {
+            String json_Overseas = new Gson().toJson(new AddMyClientReq(
+                    customer.getData().getCustid(),
+                    clientNameTv.getText().toString().trim(),
+                    addressEt.getText().toString().trim(),
+                    mobileEt.getText().toString().trim(),
+                    custtypeStr,
+                    zipCodeEt.getText().toString().trim(),
+                    webStr,
+                    Config.loginback.getUserId(),
+                    Config.loginback.getUserId(),
+                    abbreviationEt.getText().toString().trim(),
+                    faxEt.getText().toString().trim(),
+                    countryStr,
+                    null,
+                    null,
+                    invoiceTv.getText().toString().trim(),
+                    beizhuEt.getText().toString().trim()));
+            json = json_Overseas;
+        }
 
         OkHttpUtils
                 .postString()
@@ -510,12 +548,22 @@ public class MyClientUpdateActivity extends BaseActivity {
         setTextViewVaule(customer.getData().getShortname(), abbreviationEt);
         setTextViewVaule(customer.getData().getCusttel(), mobileEt);
         setEditTextVaule(customer.getData().getFax(), faxEt);
-        setTextViewVaule(CustSelectUtils.getCountryName(custSelectVo, customer.getData().getCountry()), countryTv);
-        setTextViewVaule(CustSelectUtils.getProvinceName(custSelectVo, customer.getData().getCountry(),
-                customer.getData().getProvince()),
-                provinceTv);
-        setTextViewVaule(CustSelectUtils.getCityName(custSelectVo, customer.getData().getCountry(),
-                customer.getData().getProvince(), customer.getData().getCity()), cityTv);
+        String countryNameStr = CustSelectUtils.getCountryName(custSelectVo, customer.getData()
+                .getCountry());
+        setTextViewVaule(countryNameStr, countryTv);
+        if(countryNameStr.equals("中国")){
+            provinceTv.setVisibility(View.VISIBLE);
+            cityTv.setVisibility(View.VISIBLE);
+            setTextViewVaule(CustSelectUtils.getProvinceName(custSelectVo, customer.getData().getCountry(),
+                    customer.getData().getProvince()),
+                    provinceTv);
+            setTextViewVaule(CustSelectUtils.getCityName(custSelectVo, customer.getData().getCountry(),
+                    customer.getData().getProvince(), customer.getData().getCity()), cityTv);
+        }else{
+            provinceTv.setVisibility(View.GONE);
+            cityTv.setVisibility(View.GONE);
+        }
+
         setEditTextVaule(customer.getData().getCustaddress(), addressEt);
         setEditTextVaule(customer.getData().getZipcode(), zipCodeEt);
         setTextViewVaule(CustSelectUtils.getWebName(custSelectVo, customer.getData().getWeb()), taxesTv);

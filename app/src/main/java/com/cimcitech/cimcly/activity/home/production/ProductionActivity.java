@@ -232,10 +232,12 @@ public class ProductionActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new ProductionAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(ProductionActivity.this, ProductionDetailActivity.class);
+                //不显示详情
+                /*Intent intent = new Intent(ProductionActivity.this, ProductionDetailActivity
+                        .class);
                 ProductionInfo productionInfo = (ProductionInfo) adapter.getAll().get(position);
                 intent.putExtra("prodOrderDetId", productionInfo.getProdorderdetid());
-                startActivity(intent);
+                startActivity(intent);*/
             }
 
             @Override

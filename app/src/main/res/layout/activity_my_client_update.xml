@@ -355,11 +355,13 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/province_Linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dip"
                 android:background="@color/white"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="100dip"
@@ -368,7 +370,7 @@
                     android:padding="8dip"
                     android:text="省："
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/province_tv"
@@ -378,7 +380,8 @@
                     android:padding="8dip"
                     android:text="请选择省份"
                     android:textColor="@color/alpha30"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="visible"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -387,15 +390,17 @@
                     android:padding="8dip"
                     android:text=" * "
                     android:textColor="@color/red"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/city_Linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dip"
                 android:background="@color/white"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="100dip"
@@ -404,7 +409,7 @@
                     android:padding="8dip"
                     android:text="市："
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:id="@+id/city_tv"
@@ -414,7 +419,7 @@
                     android:padding="8dip"
                     android:text="请选择城市"
                     android:textColor="@color/alpha30"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -423,7 +428,7 @@
                     android:padding="8dip"
                     android:text=" * "
                     android:textColor="@color/red"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <LinearLayout
