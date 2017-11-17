@@ -215,13 +215,14 @@ public class WelcomeActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
+                                Log.d("hqtest","response is: " + response);
                                 apkUpdateVo = GjsonUtil.parseJsonWithGson(response, ApkUpdateVo.class);
                                 if (apkUpdateVo != null)
                                     if (apkUpdateVo.isSuccess()) {
                                         int versionCode = Integer.parseInt(
                                                 ApkUpdateUtil.getVersionCode(WelcomeActivity.this));
-                                        if (apkUpdateVo.getData().getVersioncode() > versionCode) {
+                                        if (apkUpdateVo.getData() != null && apkUpdateVo.getData()
+                                                .getVersioncode() > versionCode) {
                                             if (!isNetworkAvalible(WelcomeActivity.this)) {
                                                 Toast.makeText(WelcomeActivity.this, "无法连接网络，请检查网络！", Toast.LENGTH_SHORT).show();
                                                 handler.sendEmptyMessage(1001);

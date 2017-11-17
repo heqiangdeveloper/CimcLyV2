@@ -73,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
                     case R.id.radio_button_home:
-                        mFragment = Config.isLeader ? mFragments[4] : mFragments[0];
-                        //mFragment = mFragments[0];
+                        //mFragment = Config.isLeader ? mFragments[4] : mFragments[0];
+                        mFragment = mFragments[0];
                         break;
                     case R.id.radio_button_customer_visit:
                         mFragment = mFragments[1];

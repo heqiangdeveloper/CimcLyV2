@@ -103,8 +103,7 @@ public class ProductionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if(!ProductionActivity.myData){
                 ((ItemViewHolder) holder).salesman_Tv.setVisibility(View.VISIBLE);
                 ((ItemViewHolder) holder).salesman_Tv.setText((item.getUserName() != null && item
-                        .getUserName() != "") ?
-                        "业务员：" + item.getUserName() : "业务员：");
+                        .getUserName() != "") ? "业务员：" + item.getUserName() : "业务员：");
             }else{
                 ((ItemViewHolder) holder).salesman_Tv.setVisibility(View.GONE);
             }

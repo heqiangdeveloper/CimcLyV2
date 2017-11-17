@@ -6,6 +6,8 @@ import android.view.inputmethod.InputMethodManager;
 import com.cimcitech.cimcly.bean.AreaVo;
 import com.cimcitech.cimcly.bean.Loginback;
 
+import java.net.Socket;
+
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 /**
@@ -17,6 +19,8 @@ public class Config {
     public static  String  userName = "";
 
     public static  boolean isLeader = false;
+
+    public static  String AppAuthStr  = "";
 
     public static boolean isLogin = false;
 
@@ -35,6 +39,9 @@ public class Config {
     public static boolean isAddTrack = false;
     public static boolean isFollowUp = false;
     public static boolean isAddWork = false;
+    public static boolean isCarInStorage = false;
+    public static boolean isAlreadyInStorage = false;
+    public static boolean isDepartRequest = false;
     public static boolean isQuotedPrice = false;
     public static int type = 1; //周报类型  1.今天 2.本周 3.历史
 
@@ -42,9 +49,9 @@ public class Config {
 
     //public static final String IP = "http://zh.lingyu.com:8081/ly";  //正式
 
-    //public static final String IP = "http://10.33.155.27:8080/ly";//本机
+    //public static final String IP = "http://10.43.10.52:8080/ly";//本机
 
-    //public static final String IP = "http://10.43.10.185" + ":8080/ly";
+    //public static final String IP = "http://10.43.10.35" + ":8080/ly";
 
     public static final String custVisit = IP + "/custVisit/pageList"; //拜访记录
 
@@ -185,5 +192,17 @@ public class Config {
     public static final String closeOpportUnit = IP + "/opportUnit/close";
     //“意向跟踪”中，关闭记录
 
+    public static final String waitInStorageList = IP + "/prodOrder/getNotInWarehouse";// 待入库清单
 
+    public static final String waitInStorageAction = IP + "/prodOrder/updateInWarehouse";// 入库操作
+
+    public static final String alreadyInStorageList = IP + "/prodOrder/getInWarehouseList";// 已入库清单
+
+    public static final String outStorageAction = IP + "/prodOrder/reFund";//退库操作
+
+    public static final String departRequestAction = IP + "/prodOrder/addDepatureApply";// 发车申请
+
+    public static final String alreadyRequestList = IP + "/prodOrder/getDepatureList";// 已申请发车清单
+
+    public static final String carOutFactoryAction = IP + "/prodOrder/outgate";// 车辆出厂动作
 }

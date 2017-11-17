@@ -1,11 +1,13 @@
 package com.cimcitech.cimcly.activity.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +23,17 @@ import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitAddActivity;
 import com.cimcitech.cimcly.activity.home.annount.AnnounceDetailActivity;
 import com.cimcitech.cimcly.activity.home.annount.AnnounceListActivity;
 import com.cimcitech.cimcly.activity.home.back_money.BackMoneyActivity;
+import com.cimcitech.cimcly.activity.home.car_in_storage.CarInStorageActivity;
+import com.cimcitech.cimcly.activity.home.car_out_factory.CarOutFactoryActivity;
 import com.cimcitech.cimcly.activity.home.contact_person.ContactPersonActivity;
+import com.cimcitech.cimcly.activity.home.depart_request.DepartRequestActivity;
 import com.cimcitech.cimcly.activity.home.feed_back.FeedBackActivity;
 import com.cimcitech.cimcly.activity.home.my_client.MyClientActivity;
 import com.cimcitech.cimcly.activity.home.order_contract.OrderContractActivity;
 import com.cimcitech.cimcly.activity.home.payment.PaymentActivity;
 import com.cimcitech.cimcly.activity.home.production.ProductionActivity;
+import com.cimcitech.cimcly.activity.home.qrcode_in_storage.QRCodeInStorageActivity;
+import com.cimcitech.cimcly.activity.home.qrcode_out_factory.QRCodeOutFactoryActivity;
 import com.cimcitech.cimcly.activity.home.quoted_price.QuotedPriceActivity;
 import com.cimcitech.cimcly.activity.home.report.ReportMainActivity;
 import com.cimcitech.cimcly.activity.home.work_weekly.WorkWeeklyActivity;
@@ -94,49 +101,65 @@ public class HomeFragment extends Fragment {
     public void initViewData() {
         if(null != mContext){
             listContent.setOnItemClickListener(new listContentItemListener());
-            gridAdapter = new HomeGridAdapter(mContext);
+            String appAuthStr = Config.AppAuthStr;
+            gridAdapter = new HomeGridAdapter(mContext,appAuthStr);
             homeGrid.setAdapter(gridAdapter);
             homeGrid.setSelector(R.drawable.hide_listview_yellow_selector);
             homeGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (position == 0) {//客户拜访
-                        startActivity(new Intent(mContext, CustomerVisitActivity.class));
+                    TextView textView = (TextView) view.findViewById(R.id.tv_logo);
+                    String itemName = textView.getText().toString();
+                    switch(itemName){
+                        case "客户拜访":
+                            startActivity(new Intent(mContext, CustomerVisitActivity.class));
+                            break;
+                        case "意向跟踪":
+                            startActivity(new Intent(mContext, IntentionTrackActivity.class));
+                            break;
+                        case "报价单":
+                            startActivity(new Intent(mContext, QuotedPriceActivity.class));
+                            break;
+                        case "订单合同":
+                            startActivity(new Intent(mContext, OrderContractActivity.class));
+                            break;
+                        case "工作汇报":
+                            startActivity(new Intent(mContext, WorkWeeklyActivity.class));
+                            break;
+                        case "我的客户":
+                            startActivity(new Intent(mContext, MyClientActivity.class));
+                            break;
+                        case "联系人":
+                            startActivity(new Intent(mContext, ContactPersonActivity.class));
+                            break;
+                        case "问题反馈":
+                            startActivity(new Intent(mContext, FeedBackActivity.class));
+                            break;
+                        case "回款跟踪":
+                            startActivity(new Intent(mContext, PaymentActivity.class));
+                            break;
+                        case "生产进度":
+                            startActivity(new Intent(mContext, ProductionActivity.class));
+                            break;
+                        case "车辆入库":
+                            startActivity(new Intent(mContext, CarInStorageActivity.class));
+                            break;
+                        case "发车申请":
+                            startActivity(new Intent(mContext, DepartRequestActivity.class));
+                            break;
+                        case "车辆出厂":
+                            startActivity(new Intent(mContext, CarOutFactoryActivity.class));
+                            break;
+                        case "扫码入库":
+                            startActivity(new Intent(mContext, QRCodeInStorageActivity.class));
+                            break;
+                        case "扫码出厂":
+                            startActivity(new Intent(mContext, QRCodeOutFactoryActivity.class));
+                            break;
+                        case "报表":
+                            startActivity(new Intent(mContext, ReportMainActivity.class));
+                            break;
                     }
-                    if (position == 1) { //意向跟踪
-                        startActivity(new Intent(mContext, IntentionTrackActivity.class));
-                    }
-                    if (position == 2) {//报价单
-                        startActivity(new Intent(mContext, QuotedPriceActivity.class));
-                    }
-                    if (position == 3) { //订单合同
-                        startActivity(new Intent(mContext, OrderContractActivity.class));
-                    }
-
-                    if (position == 4) {//工作周报
-                        startActivity(new Intent(mContext, WorkWeeklyActivity.class));
-                    }
-                    if (position == 5) {//我的客户
-                        startActivity(new Intent(mContext, MyClientActivity.class));
-                    }
-                    if (position == 6) { //联系人
-                        startActivity(new Intent(mContext, ContactPersonActivity.class));
-                    }
-                    if (position == 7) {//问题反馈
-                        startActivity(new Intent(mContext, FeedBackActivity.class));
-                    }
-                    if (position == 8) {//回款跟踪
-                        startActivity(new Intent(mContext, PaymentActivity.class));
-                        //ToastUtil.showToast("开发中...");
-                    }
-                    if (position == 9) { //生产进度
-                        startActivity(new Intent(mContext, ProductionActivity.class));
-                        //ToastUtil.showToast("开发中...");
-                    }
-                /*if (position == 10) { //报表
-                     startActivity(new Intent(mContext, ReportMainActivity.class));
-                    //ToastUtil.showToast("开发中...");
-                }*/
                 }
             });
         }

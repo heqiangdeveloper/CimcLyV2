@@ -29,6 +29,7 @@ import com.cimcitech.cimcly.bean.production.ProductionReq;
 import com.cimcitech.cimcly.utils.Config;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xys.libzxing.zxing.camera.CameraManager;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -91,6 +92,7 @@ public class ProductionActivity extends AppCompatActivity {
         myData = true;
         initViewData();
         getData();
+
     }
 
     //刷新数据

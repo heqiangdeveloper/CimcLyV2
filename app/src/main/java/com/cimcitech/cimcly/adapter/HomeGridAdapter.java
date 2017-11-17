@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by cimcitech on 2017/7/25.
  */
@@ -17,45 +20,157 @@ import com.cimcitech.cimcly.R;
 public class HomeGridAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
+    private String AppAuthStr;
+    private List<Integer> ImageLists = new ArrayList<Integer>();
 
-    private Integer[] Images = {
-            R.mipmap.v2__apps_ic__legwork,
-            R.mipmap.v2__apps_ic__plan_work,
-            R.mipmap.v2__apps_ic__expense,
-            R.mipmap.v3__apps_ic__monthly_analysis,
-            R.mipmap.v2__apps_ic__workreport,
-            R.mipmap.v2__apps_ic__customer,
-            R.mipmap.v3_crm_refund_analysis_customer,
-            R.mipmap.v2__apps_ic__task,
-            R.mipmap.v2__apps_ic__salesopp,
-            R.mipmap.v3__mine_setting_company
-    };
+    private List<String> TextLists = new ArrayList<String>(){{
+    }};
 
-    private String[] texts = {
-            "客户拜访",
-            "意向跟踪",
-            "报价单",
-            "订单合同",
-            "工作汇报",
-            "我的客户",
-            "联系人",
-            "问题反馈",
-            "回款跟踪",
-            "生产进度"
-    };
+    private final String ad = "A";//管理员
+    private final String mw = "G";//门卫
+    private final String ck = "M";//仓管
+    private final String ld = "Y";//领导
+    private final String sa = "S";//业务员
 
-
-    public String[] getAll() {
-        return texts;
+    public List<String> getAll() {
+        return TextLists;
     }
 
-    public HomeGridAdapter(Context context) {
+    public HomeGridAdapter(Context context,String AppAuthStr) {
         inflater = LayoutInflater.from(context);
+        this.AppAuthStr = AppAuthStr;
+        initAppAuth();
+    }
+
+    public void initAppAuth(){
+        if(AppAuthStr != null && AppAuthStr.length() == 1){
+                switch (AppAuthStr) {
+                    case ck://仓库
+                        addCKData();
+                        break;
+                    case mw://门卫
+                        addMWData();
+                        break;
+                    case ld://领导
+                        addLDData();
+                        break;
+                    case sa://业务员
+                        addSAData();
+                        break;
+                    case ad://管理员
+                        addADData();
+                        break;
+                }
+        }else{
+            addSAData();
+        }
+    }
+
+
+    public void addADData(){
+        ImageLists.add(R.mipmap.v2__apps_ic__legwork);
+        TextLists.add("客户拜访");
+        ImageLists.add(R.mipmap.v2__apps_ic__plan_work);
+        TextLists.add("意向跟踪");
+        ImageLists.add(R.mipmap.v2__apps_ic__expense);
+        TextLists.add("报价单");
+        ImageLists.add(R.mipmap.v3__apps_ic__monthly_analysis);
+        TextLists.add("订单合同");
+        ImageLists.add(R.mipmap.v2__apps_ic__workreport);
+        TextLists.add("工作汇报");
+        ImageLists.add(R.mipmap.v2__apps_ic__customer);
+        TextLists.add("我的客户");
+        ImageLists.add(R.mipmap.v3_crm_refund_analysis_customer);
+        TextLists.add("联系人");
+        ImageLists.add(R.mipmap.v2__apps_ic__task);
+        TextLists.add("问题反馈");
+        ImageLists.add(R.mipmap.v2__apps_ic__salesopp);
+        TextLists.add("回款跟踪");
+        ImageLists.add(R.mipmap.v3__mine_setting_company);
+        TextLists.add("生产进度");
+        ImageLists.add(R.mipmap.v4_app_ic_car_in);
+        TextLists.add("车辆入库");
+        ImageLists.add(R.mipmap.v4_app_ic_departrequest);
+        TextLists.add("发车申请");
+        ImageLists.add(R.mipmap.v4_app_ic_car_out);
+        TextLists.add("车辆出厂");
+        ImageLists.add(R.mipmap.v4_app_ic_qrcode_in);
+        TextLists.add("扫码入库");
+        ImageLists.add(R.mipmap.v4_app_ic_qrcode_out);
+        TextLists.add("扫码出厂");
+        ImageLists.add(R.mipmap.v2__apps_ic__crm_order);
+        TextLists.add("报表");
+    }
+
+    public void addMWData(){
+        ImageLists.add(R.mipmap.v4_app_ic_car_out);
+        TextLists.add("车辆出厂");
+        ImageLists.add(R.mipmap.v4_app_ic_qrcode_out);
+        TextLists.add("扫码出厂");
+    }
+
+    public void addCKData(){
+        ImageLists.add(R.mipmap.v3__mine_setting_company);
+        TextLists.add("生产进度");
+        ImageLists.add(R.mipmap.v4_app_ic_car_in);
+        TextLists.add("车辆入库");
+        ImageLists.add(R.mipmap.v4_app_ic_qrcode_in);
+        TextLists.add("扫码入库");
+    }
+
+    public void addLDData(){
+        ImageLists.add(R.mipmap.v2__apps_ic__legwork);
+        TextLists.add("客户拜访");
+        ImageLists.add(R.mipmap.v2__apps_ic__plan_work);
+        TextLists.add("意向跟踪");
+        ImageLists.add(R.mipmap.v2__apps_ic__expense);
+        TextLists.add("报价单");
+        ImageLists.add(R.mipmap.v3__apps_ic__monthly_analysis);
+        TextLists.add("订单合同");
+        ImageLists.add(R.mipmap.v2__apps_ic__workreport);
+        TextLists.add("工作汇报");
+        ImageLists.add(R.mipmap.v2__apps_ic__customer);
+        TextLists.add("我的客户");
+        ImageLists.add(R.mipmap.v3_crm_refund_analysis_customer);
+        TextLists.add("联系人");
+        ImageLists.add(R.mipmap.v2__apps_ic__task);
+        TextLists.add("问题反馈");
+        ImageLists.add(R.mipmap.v2__apps_ic__salesopp);
+        TextLists.add("回款跟踪");
+        ImageLists.add(R.mipmap.v3__mine_setting_company);
+        TextLists.add("生产进度");
+        ImageLists.add(R.mipmap.v2__apps_ic__crm_order);
+        TextLists.add("报表");
+    }
+
+    public void addSAData(){
+        ImageLists.add(R.mipmap.v2__apps_ic__legwork);
+        TextLists.add("客户拜访");
+        ImageLists.add(R.mipmap.v2__apps_ic__plan_work);
+        TextLists.add("意向跟踪");
+        ImageLists.add(R.mipmap.v2__apps_ic__expense);
+        TextLists.add("报价单");
+        ImageLists.add(R.mipmap.v3__apps_ic__monthly_analysis);
+        TextLists.add("订单合同");
+        ImageLists.add(R.mipmap.v2__apps_ic__workreport);
+        TextLists.add("工作汇报");
+        ImageLists.add(R.mipmap.v2__apps_ic__customer);
+        TextLists.add("我的客户");
+        ImageLists.add(R.mipmap.v3_crm_refund_analysis_customer);
+        TextLists.add("联系人");
+        ImageLists.add(R.mipmap.v2__apps_ic__task);
+        TextLists.add("问题反馈");
+        ImageLists.add(R.mipmap.v2__apps_ic__salesopp);
+        TextLists.add("回款跟踪");
+        ImageLists.add(R.mipmap.v3__mine_setting_company);
+        TextLists.add("生产进度");
+        ImageLists.add(R.mipmap.v4_app_ic_departrequest);
+        TextLists.add("发车申请");
     }
 
     @Override
     public int getCount() {
-        return Images.length;
+        return ImageLists.size();
     }
 
     @Override
@@ -81,14 +196,13 @@ public class HomeGridAdapter extends BaseAdapter {
         } else {
             wrapper = (ImgTextWrapper) convertView.getTag();
         }
-        wrapper.imageButton.setBackgroundResource(Images[position]);
-        wrapper.textView.setText(texts[position]);
+        wrapper.imageButton.setBackgroundResource(ImageLists.get(position));
+        wrapper.textView.setText(TextLists.get(position));
         return convertView;
     }
 
     class ImgTextWrapper {
         ImageView imageButton;
         TextView textView;
-
     }
 }

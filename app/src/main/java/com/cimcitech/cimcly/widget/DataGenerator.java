@@ -14,12 +14,12 @@ import com.cimcitech.cimcly.activity.user.UserFragment;
 
 public class DataGenerator {
     public static Fragment[] getFragments() {
-        Fragment fragments[] = new Fragment[5];
+        Fragment fragments[] = new Fragment[4];
         fragments[0] = new HomeFragment();
         fragments[1] = new CustomerVisitFragment();
         fragments[2] = new IntentionTrackFragment();
         fragments[3] = new UserFragment();
-        fragments[4] = new LeaderHomeFragment();
+        //fragments[4] = new LeaderHomeFragment();
         return fragments;
     }
 }

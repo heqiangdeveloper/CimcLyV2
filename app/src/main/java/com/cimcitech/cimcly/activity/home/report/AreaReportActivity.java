@@ -239,7 +239,6 @@ public class AreaReportActivity extends AppCompatActivity{
 
     @OnClick({R.id.back_rl})
     public void onclick(View view) {
-
         finish();
     }
 
@@ -406,6 +405,8 @@ public class AreaReportActivity extends AppCompatActivity{
         //1、基本设置
         xAxis=barChart.getXAxis();
         xAxis.setDrawAxisLine(true);
+        xAxis.setAxisLineColor(Color.WHITE);
+        //xAxis.setGridColor(Color.WHITE);
         xAxis.setDrawGridLines(false);
         xAxis.setTextColor(Color.WHITE);
         barChart.setDrawGridBackground(false); // 是否显示表格颜色
@@ -413,8 +414,10 @@ public class AreaReportActivity extends AppCompatActivity{
         barChart.setTouchEnabled(true); // 设置是否可以触摸
         barChart.setDragEnabled(true);// 是否可以拖拽
         barChart.setScaleEnabled(false);// 是否可以缩放
+        barChart.setExtraBottomOffset(5);//设置Table表格距离整个图表区域下边框的距离
         //2、y轴和比例尺
 
+        barChart.setDescriptionPosition(barChart.getWidth(),barChart.getHeight() - 10 - 20 -10);
         barChart.setDescription("   区域");// 数据描述
 
         barChart.setDescriptionColor(Color.WHITE);
@@ -436,15 +439,17 @@ public class AreaReportActivity extends AppCompatActivity{
             for(int i = 0; i < list.size(); i++){
                 xValues.add(list.get(i).getRegionDesc());
             }
-
         }
 
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//数据位于底部
 
         YAxis leftAxis = barChart.getAxisLeft();
         leftAxis.setEnabled(true);
+        //leftAxis.setSpaceBottom(60);
         leftAxis.setDrawLabels(true);
         leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setAxisLineColor(Color.WHITE);
+        leftAxis.setGridColor(Color.WHITE);
 
         //YAxis rightAxis = barChart.getAxisRight();
         leftAxis.setStartAtZero(true);
@@ -497,9 +502,12 @@ public class AreaReportActivity extends AppCompatActivity{
                 Color.rgb(171, 71, 188), Color.rgb(255, 193, 7), Color.rgb(0, 255, 0),Color
                 .rgb(255, 255, 0), Color.rgb(255, 0, 0), Color.rgb(0, 0, 255), Color.rgb(63, 81,
                 181)});
+        barDataSet.setBarSpacePercent(50f);//值越大，柱状图就越宽度越小；
         //7、显示，柱状图的宽度和动画效果
         BarData barData = new BarData(xValues, barDataSet);
-        barDataSet.setBarSpacePercent(70f);//值越大，柱状图就越宽度越小；
+        //设置顶点值的字体大小和颜色
+        barData.setValueTextColor(Color.WHITE);
+        barData.setValueTextSize(18);
         barChart.animateY(1000);
         barChart.setData(barData); //
 

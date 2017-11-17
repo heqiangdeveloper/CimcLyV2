@@ -447,6 +447,7 @@ public class ProductReportActivity extends AppCompatActivity{
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
         xAxis.setTextColor(Color.WHITE);
+        xAxis.setAxisLineColor(Color.WHITE);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//数据位于底部
         xAxis.setLabelRotationAngle(80);//x轴标签旋转方向
         barChart.setDrawGridBackground(false); // 是否显示表格颜色
@@ -456,6 +457,7 @@ public class ProductReportActivity extends AppCompatActivity{
         barChart.setScaleEnabled(false);// 是否可以缩放
         //2、y轴和比例尺
 
+        barChart.setDescriptionPosition(barChart.getWidth(),barChart.getHeight() - 110);
         barChart.setDescription("   产品");// 数据描述
         barChart.setDescriptionColor(Color.WHITE);
         //barChart.setDescriptionTextSize(24);
@@ -483,6 +485,8 @@ public class ProductReportActivity extends AppCompatActivity{
         leftAxis.setEnabled(true);
         leftAxis.setDrawLabels(true);
         leftAxis.setTextColor(Color.WHITE);
+        leftAxis.setAxisLineColor(Color.WHITE);
+        leftAxis.setGridColor(Color.WHITE);
 
         //YAxis rightAxis = barChart.getAxisRight();
         leftAxis.setStartAtZero(true);
@@ -523,6 +527,7 @@ public class ProductReportActivity extends AppCompatActivity{
 
         //5、设置显示的数字为整形
         BarDataSet barDataSet=new BarDataSet(yValues,"");
+        //设置顶点值的显示格式
         barDataSet.setValueFormatter(new ValueFormatter() {
              @Override
              public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
@@ -535,9 +540,13 @@ public class ProductReportActivity extends AppCompatActivity{
                 Color.rgb(171, 71, 188), Color.rgb(255, 193, 7), Color.rgb(0, 255, 0),Color
                 .rgb(255, 255, 0), Color.rgb(255, 0, 0), Color.rgb(0, 0, 255), Color.rgb(63, 81,
                 181)});
+        barDataSet.setBarSpacePercent(55f);//值越大，柱状图就越宽度越小；
         //7、显示，柱状图的宽度和动画效果
         BarData barData = new BarData(xValues, barDataSet);
-        barDataSet.setBarSpacePercent(75f);//值越大，柱状图就越宽度越小；
+        //设置顶点值的字体大小和颜色
+        barData.setValueTextColor(Color.WHITE);
+        barData.setValueTextSize(18);
+
         barChart.animateY(1000);
         barChart.setData(barData); //
 

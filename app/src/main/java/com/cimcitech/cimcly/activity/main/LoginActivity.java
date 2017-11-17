@@ -99,9 +99,7 @@ public class LoginActivity extends BaseActivity {
                                             Config.loginback = loginVo.getData();
                                             saveUserInfo();
                                             Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-
-                                            Config.isLeader = loginVo.getData().getAppAuth()
-                                                    .equals("Y")? true:false;
+                                            Config.AppAuthStr = loginVo.getData().getAppAuth();
                                             Config.userName = loginVo.getData().getUserName();
                                             //Config.isLeader = true;
                                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
