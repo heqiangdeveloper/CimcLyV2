@@ -34,7 +34,7 @@ public class Customer implements Serializable{
 
     private Long creator;
 
-    private Date createdate;
+    private long createdate;
 
     private Long modifyby;
 
@@ -252,11 +252,11 @@ public class Customer implements Serializable{
         this.creator = creator;
     }
 
-    public Date getCreatedate() {
+    public long getCreatedate() {
         return createdate;
     }
 
-    public void setCreatedate(Date createdate) {
+    public void setCreatedate(long createdate) {
         this.createdate = createdate;
     }
 
