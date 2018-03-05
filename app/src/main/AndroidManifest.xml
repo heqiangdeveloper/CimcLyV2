@@ -54,21 +54,22 @@
         <activity
             android:name=".activity.main.LoginActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+        </activity>
         <activity
             android:name=".activity.main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.customer_visit.CustomerVisitActivity"
+            android:name=".activity.home.customer_visit.CustomerVisitActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.customer_visit.CustomerVisitDetailActivity"
+            android:name=".activity.home.customer_visit.CustomerVisitDetailActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.customer_visit.CustomerVisitAddActivity"
+            android:name=".activity.home.customer_visit.CustomerVisitAddActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
@@ -195,6 +196,38 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.home.report.ProductReportActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.report.AreaContractAmountReportActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.report.AreaContractAmountReportDetailActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.report.ProductContractAmountReportActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.report.ProductContractAmountReportDetailActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.report.ProvinceTop10ReportActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.report.ProvinceTop10ReportDetailActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.report.CustomerTop10ReportActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.report.CustomerTop10ReportDetailActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity

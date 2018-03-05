@@ -1,4 +1,4 @@
-package com.cimcitech.cimcly.adapter;
+package com.cimcitech.cimcly.adapter.quoted_price;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,27 +8,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.bean.CustomerVisit;
-import com.cimcitech.cimcly.bean.MyClientVo;
-import com.cimcitech.cimcly.bean.client.Customer;
-import com.cimcitech.cimcly.utils.DateTool;
+import com.cimcitech.cimcly.bean.quoted_price.QuotedPriceVo;
 
 import java.util.List;
 
 /**
- * Created by cimcitech on 2017/8/1.
+ * Created by cimcitech on 2017/8/7.
  */
 
-public class MyClientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class QuotedPriceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
-    private List<Customer> data;
+    List<QuotedPriceVo.DataBean.PageInfoBean.ListBean> data;
     private LayoutInflater inflater;
     private static final int TYPE_END = 2;
     private boolean isNotMoreData = false;
 
-    public MyClientAdapter(Context context, List<Customer> data) {
+    public QuotedPriceAdapter(Context context, List<QuotedPriceVo.DataBean.PageInfoBean.ListBean> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
     }
@@ -62,7 +59,7 @@ public class MyClientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
-            View view = inflater.inflate(R.layout.my_client_item_view, parent, false);
+            View view = inflater.inflate(R.layout.quoted_price_list_item_view, parent, false);
             return new ItemViewHolder(view);
         } else if (viewType == TYPE_FOOTER) {
             View view = inflater.inflate(R.layout.recycler_foot_view, parent, false);
@@ -96,10 +93,13 @@ public class MyClientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 });
             }
-            final Customer item = data.get(position);
-            ((ItemViewHolder) holder).client_name_tv.setText(item.getCustname() != null ? "客户名称：" + item.getCustname() : "客户名称：");
-            ((ItemViewHolder) holder).client_code_tv.setText(item.getCustomerno() != null ? "客户代码：" + item.getCustomerno() : "客户代码：");
-            ((ItemViewHolder) holder).seller_tv.setText(item.getOwnername() != null ? "销  售  员：" + item.getOwnername() : "销  售  员：");
+            final QuotedPriceVo.DataBean.PageInfoBean.ListBean item = data.get(position);
+            ((ItemViewHolder) holder).time_tv.setText("报价时间：" + item.getCreatedate());
+            ((ItemViewHolder) holder).order_number_tv.setText(item.getQuoteid()+"");
+            ((ItemViewHolder) holder).status_tv.setText(item.getQuoteStatusValue());
+            ((ItemViewHolder) holder).order_money_tv.setText(item.getQuoteCarType() + "");
+            ((ItemViewHolder) holder).count_Tv.setText(item.getProductCount() + "");
+            ((ItemViewHolder) holder).client_name_tv.setText(item.getCustName() != null ? "客户：" + item.getCustName() : "客户：");
         }
     }
 
@@ -121,13 +121,16 @@ public class MyClientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView client_name_tv, client_code_tv, seller_tv;
+        TextView client_name_tv, time_tv, status_tv, order_number_tv, order_money_tv,count_Tv;
 
         public ItemViewHolder(View view) {
             super(view);
             client_name_tv = view.findViewById(R.id.client_name_tv);
-            client_code_tv = view.findViewById(R.id.client_code_tv);
-            seller_tv = view.findViewById(R.id.seller_tv);
+            time_tv = view.findViewById(R.id.time_tv);
+            status_tv = view.findViewById(R.id.status_tv);
+            order_number_tv = view.findViewById(R.id.order_number_tv);
+            order_money_tv = view.findViewById(R.id.order_money_tv);
+            count_Tv = view.findViewById(R.id.count_tv);
         }
     }
 

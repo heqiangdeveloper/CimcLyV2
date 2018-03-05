@@ -22,4 +22,8 @@
     <dimen name="small_string_size">14sp</dimen>
     <dimen name="big_string_size">25sp</dimen>
 
+    <dimen name="customer_top10_area_tv_width">180dp</dimen>
+    <dimen name="customer_top10_linear_padding">5dp</dimen>
+    <dimen name="report_title_margin">40dp</dimen>
+
 </resources>

@@ -34,4 +34,13 @@
         </string>
     <string name="qa_callback_mail">反馈邮箱:loc-bugs@baidu.com</string>
     <string name="okhttpError">请求失败，请检查网络是否连接</string>
+    <string name="chooseYearLabel">请选择年度：</string>
+    <string-array name="years">
+        <item>2017</item>
+        <item>2016</item>
+        <item>2015</item>
+        <item>2014</item>
+        <item>2013</item>
+        <item>2012</item>
+    </string-array>
 </resources>

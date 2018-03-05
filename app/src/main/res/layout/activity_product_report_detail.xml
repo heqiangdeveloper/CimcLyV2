@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="不同区域的意向订单统计"
+            android:text="不同产品的意向订单统计明细"
             android:textColor="@color/white"
             android:textSize="16sp" />
     </RelativeLayout>

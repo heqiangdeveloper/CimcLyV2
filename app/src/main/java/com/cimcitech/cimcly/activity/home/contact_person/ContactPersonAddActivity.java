@@ -189,14 +189,16 @@ public class ContactPersonAddActivity extends BaseActivity {
             ToastUtil.showToast("请输入联系电话");
             return false;
         }
-        if (phoneEt.getText().toString().trim().equals("") || phoneEt.getText().toString().trim().length() < 11) {
+        //if (phoneEt.getText().toString().trim().equals("") || phoneEt.getText().toString().trim
+                //().length() < 11) {
+        if (phoneEt.getText().toString().trim().equals("")){
             ToastUtil.showToast("请输入正确手机号码");
             return false;
         }
-        if (!AccountValidatorUtil.isMobile(phoneEt.getText().toString().trim())) {
+        /*if (!AccountValidatorUtil.isMobile(phoneEt.getText().toString().trim())) {
             ToastUtil.showToast("请输入正确手机号码");
             return false;
-        }
+        }*/
         if (areaTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请选择省、市");
             return false;

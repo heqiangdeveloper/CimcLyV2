@@ -2,13 +2,11 @@ package com.cimcitech.cimcly.activity.home.intention_track;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.adapter.IntentionTrackRecordingAdapter;
+import com.cimcitech.cimcly.adapter.intention_track.IntentionTrackRecordingAdapter;
 import com.cimcitech.cimcly.bean.opport_unit.IntentionTrackRecordingVo;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.GjsonUtil;

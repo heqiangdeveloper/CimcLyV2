@@ -1,4 +1,4 @@
-package com.cimcitech.cimcly.adapter;
+package com.cimcitech.cimcly.adapter.customer_visit;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitActivity;
+import com.cimcitech.cimcly.activity.home.customer_visit.CustomerVisitActivity;
 import com.cimcitech.cimcly.bean.CustomerVisit;
 import com.cimcitech.cimcly.utils.DateTool;
 

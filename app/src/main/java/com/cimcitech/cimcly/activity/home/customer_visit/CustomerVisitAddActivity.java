@@ -1,4 +1,4 @@
-package com.cimcitech.cimcly.activity.customer_visit;
+package com.cimcitech.cimcly.activity.home.customer_visit;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -14,7 +14,6 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +32,6 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.Poi;
 import com.cimcitech.cimcly.ApkApplication;
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.activity.home.work_weekly.WorkWeeklyAddActivity;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.baidu.LocationService;
 import com.cimcitech.cimcly.bean.client.ClientNameVo;

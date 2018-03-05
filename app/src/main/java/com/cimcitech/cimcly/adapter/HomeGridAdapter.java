@@ -29,6 +29,7 @@ public class HomeGridAdapter extends BaseAdapter {
     private final String ad = "A";//管理员
     private final String mw = "G";//门卫
     private final String ck = "M";//仓管
+    private final String sc = "N";//生产人员
     private final String ld = "Y";//领导
     private final String sa = "S";//业务员
 
@@ -42,6 +43,15 @@ public class HomeGridAdapter extends BaseAdapter {
         initAppAuth();
     }
 
+    /*
+    * 1.模块授权：在gc_user的app_auth列中授权
+    *   G-门卫（车辆出厂、扫描出厂）
+    *   M-仓库管理员（车辆入库、扫码入库、生产进度）
+    *   N-生产人员（生产进度）
+    *   Y-领导（客户拜访、意向跟踪、报价单、订单合同、工作汇报、我的客户、联系人、问题反馈、回款跟踪、生产进度、报表）
+    *   S-业务员（客户拜访、意向跟踪、报价单、订单合同、工作汇报、我的客户、联系人、问题反馈、回款跟踪、生产进度、发车申请)；另外不授权，缺省为业务员
+    *   A-管理员（所有权限）
+     */
     public void initAppAuth(){
         if(AppAuthStr != null && AppAuthStr.length() == 1){
                 switch (AppAuthStr) {
@@ -59,6 +69,9 @@ public class HomeGridAdapter extends BaseAdapter {
                         break;
                     case ad://管理员
                         addADData();
+                        break;
+                    case sc://生产人员
+                        addSCData();
                         break;
                 }
         }else{
@@ -110,12 +123,18 @@ public class HomeGridAdapter extends BaseAdapter {
     }
 
     public void addCKData(){
-        ImageLists.add(R.mipmap.v3__mine_setting_company);
-        TextLists.add("生产进度");
+        //生产报完工由生产人员完成。--2018.03.05
+        //ImageLists.add(R.mipmap.v3__mine_setting_company);
+        //TextLists.add("生产进度");
         ImageLists.add(R.mipmap.v4_app_ic_car_in);
         TextLists.add("车辆入库");
         ImageLists.add(R.mipmap.v4_app_ic_qrcode_in);
         TextLists.add("扫码入库");
+    }
+
+    public void addSCData(){
+        ImageLists.add(R.mipmap.v3__mine_setting_company);
+        TextLists.add("生产进度");
     }
 
     public void addLDData(){

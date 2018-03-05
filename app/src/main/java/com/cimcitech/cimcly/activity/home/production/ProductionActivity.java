@@ -1,6 +1,5 @@
 package com.cimcitech.cimcly.activity.home.production;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
@@ -17,19 +16,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.activity.home.payment.PaymentDetailActivity;
-import com.cimcitech.cimcly.adapter.PaymentAdapter;
-import com.cimcitech.cimcly.adapter.ProductionAdapter;
+import com.cimcitech.cimcly.adapter.production.ProductionAdapter;
 import com.cimcitech.cimcly.bean.ListPagers;
 import com.cimcitech.cimcly.bean.Result;
-import com.cimcitech.cimcly.bean.payment.PaymentCustomer;
-import com.cimcitech.cimcly.bean.payment.PaymentReq;
 import com.cimcitech.cimcly.bean.production.ProductionInfo;
 import com.cimcitech.cimcly.bean.production.ProductionReq;
 import com.cimcitech.cimcly.utils.Config;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.xys.libzxing.zxing.camera.CameraManager;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 

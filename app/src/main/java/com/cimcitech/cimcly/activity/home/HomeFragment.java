@@ -1,28 +1,20 @@
 package com.cimcitech.cimcly.activity.home;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitActivity;
-import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitAddActivity;
+import com.cimcitech.cimcly.activity.home.customer_visit.CustomerVisitActivity;
 import com.cimcitech.cimcly.activity.home.annount.AnnounceDetailActivity;
 import com.cimcitech.cimcly.activity.home.annount.AnnounceListActivity;
-import com.cimcitech.cimcly.activity.home.back_money.BackMoneyActivity;
 import com.cimcitech.cimcly.activity.home.car_in_storage.CarInStorageActivity;
 import com.cimcitech.cimcly.activity.home.car_out_factory.CarOutFactoryActivity;
 import com.cimcitech.cimcly.activity.home.contact_person.ContactPersonActivity;
@@ -199,6 +191,7 @@ public class HomeFragment extends Fragment {
                                                 adapter = new AnnounceHomeAdapter(mContext, announceVo.getData().getList());
                                                 if(null != listContent){
                                                     listContent.setAdapter(adapter);
+                                                    //以下代码不可少，否则页面不能够上下滑动
                                                     new Utility().setListViewHeightBasedOnChildren(listContent);
                                                 }
                                             }

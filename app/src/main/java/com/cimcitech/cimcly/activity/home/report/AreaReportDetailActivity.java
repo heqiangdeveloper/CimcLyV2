@@ -1,7 +1,6 @@
 package com.cimcitech.cimcly.activity.home.report;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,9 +26,7 @@ import android.widget.TextView;
 
 import com.cimcitech.cimcly.ApkApplication;
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackAddActivity;
-import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackDetailActivity;
-import com.cimcitech.cimcly.adapter.IntentionTrackAdapter;
+import com.cimcitech.cimcly.adapter.intention_track.IntentionTrackAdapter;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.bean.GetCurrStageSelect;
 import com.cimcitech.cimcly.bean.opport_unit.OpportUnitReq;

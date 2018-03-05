@@ -1,13 +1,10 @@
 package com.cimcitech.cimcly.activity.home.quoted_price;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -28,12 +25,10 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baidu.location.Poi;
 import com.cimcitech.cimcly.ApkApplication;
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitAddActivity;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
-import com.cimcitech.cimcly.adapter.QuotedPriceAdapter;
+import com.cimcitech.cimcly.adapter.quoted_price.QuotedPriceAdapter;
 import com.cimcitech.cimcly.bean.quoted_price.GetQuoteStatus;
 import com.cimcitech.cimcly.bean.quoted_price.QuotedPriceReq;
 import com.cimcitech.cimcly.bean.quoted_price.QuotedPriceVo;

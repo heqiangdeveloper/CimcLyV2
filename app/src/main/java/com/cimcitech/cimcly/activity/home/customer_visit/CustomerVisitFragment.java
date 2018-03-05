@@ -1,4 +1,4 @@
-package com.cimcitech.cimcly.activity.customer_visit;
+package com.cimcitech.cimcly.activity.home.customer_visit;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.cimcitech.cimcly.ApkApplication;
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.adapter.CustomerVisitFragmentAdapter;
+import com.cimcitech.cimcly.adapter.customer_visit.CustomerVisitFragmentAdapter;
 import com.cimcitech.cimcly.bean.CustomerVisit;
 import com.cimcitech.cimcly.bean.ListPagers;
 import com.cimcitech.cimcly.bean.RequestBean.RuquMyVisit;

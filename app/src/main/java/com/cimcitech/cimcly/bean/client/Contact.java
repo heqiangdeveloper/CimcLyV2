@@ -25,7 +25,7 @@ public class Contact {
 
     private Long creator;
 
-    private Date createdate;
+    private long createdate;
 
     private Long modifyby;
 
@@ -190,11 +190,11 @@ public class Contact {
         this.creator = creator;
     }
 
-    public Date getCreatedate() {
+    public long getCreatedate() {
         return createdate;
     }
 
-    public void setCreatedate(Date createdate) {
+    public void setCreatedate(long createdate) {
         this.createdate = createdate;
     }
 

@@ -38,7 +38,7 @@ public class Customer implements Serializable{
 
     private Long modifyby;
 
-    private Date ts;
+    private long ts;
 
     private String contacter;
 
@@ -268,11 +268,11 @@ public class Customer implements Serializable{
         this.modifyby = modifyby;
     }
 
-    public Date getTs() {
+    public long getTs() {
         return ts;
     }
 
-    public void setTs(Date ts) {
+    public void setTs(long ts) {
         this.ts = ts;
     }
 

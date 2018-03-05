@@ -3,14 +3,14 @@ package com.cimcitech.cimcly.activity.home.contact_person;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitAddActivity;
+import com.cimcitech.cimcly.activity.home.customer_visit.CustomerVisitAddActivity;
 import com.cimcitech.cimcly.bean.contact.ContactInfoVo;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.DateTool;
@@ -109,7 +109,7 @@ public class ContactPersonDetailActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
+                                Log.d("timelog","response is: " + response);
                                 try {
                                     contactInfoVo = GjsonUtil.parseJsonWithGson(response, ContactInfoVo.class);
                                     if(contactInfoVo!=null)

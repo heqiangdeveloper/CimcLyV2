@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import com.cimcitech.cimcly.ApkApplication;
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.adapter.IntentionTrackAdapter;
+import com.cimcitech.cimcly.adapter.intention_track.IntentionTrackAdapter;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.bean.GetCurrStageSelect;
 import com.cimcitech.cimcly.bean.opport_unit.OpportUnitReq;
@@ -332,10 +332,18 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
     }
 
     public void getData() {
-        String json = new Gson().toJson(new OpportUnitReq(pageNum, 10, "",
-                new OpportUnitReq.OpportUnityBean(Config.loginback.getUserId(),
-                        searchEt.getText().toString().trim()
-                        , quotestatus)));
+        String json = "";
+        if(searchEt != null){
+            json = new Gson().toJson(new OpportUnitReq(pageNum, 10, "",
+                    new OpportUnitReq.OpportUnityBean(Config.loginback.getUserId(),
+                            searchEt.getText().toString().trim()
+                            , quotestatus)));
+        }else {
+            json = new Gson().toJson(new OpportUnitReq(pageNum, 10, "",
+                    new OpportUnitReq.OpportUnityBean(Config.loginback.getUserId(),
+                            ""
+                            , quotestatus)));
+        }
         OkHttpUtils
                 .postString()
                 .url(Config.opportUnitList)

@@ -104,4 +104,56 @@
         android:text=" 不同产品的意向订单统计"
         android:textColor="@color/black"
         android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/area_contract_amount_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/v2_apps_ic_report3"
+        android:drawableRight="@mipmap/more_icon"
+        android:padding="15dip"
+        android:text=" 不同区域年度合同数统计"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/product_contract_amount_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/v2_apps_ic_report4"
+        android:drawableRight="@mipmap/more_icon"
+        android:padding="15dip"
+        android:text=" 不同产品年度合同数统计"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/province_top10_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/v2_apps_ic_report5"
+        android:drawableRight="@mipmap/more_icon"
+        android:padding="15dip"
+        android:text=" 合同总额前10的省份年度合同数统计"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/customer_top10_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dip"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/v2_apps_ic_report6"
+        android:drawableRight="@mipmap/more_icon"
+        android:padding="15dip"
+        android:text=" 合同总额前10的客户年度合同数统计"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.cimcitech.cimcly.adapter;
+package com.cimcitech.cimcly.adapter.payment;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

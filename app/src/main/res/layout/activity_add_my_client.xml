@@ -214,9 +214,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/white"
-                    android:hint="请输入手机号码"
+                    android:hint="请输入电话号码"
                     android:inputType="numberDecimal"
-                    android:maxLength="11"
+
                     android:padding="8dip"
                     android:textColor="@color/black_33"
                     android:textColorHint="@color/alpha30"
@@ -455,15 +455,15 @@
                     android:textColor="@color/black_33"
                     android:textSize="14sp" />
 
+                <!--暂时默认为中国区：CNY-->
                 <TextView
                     android:id="@+id/taxes_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="8dip"
-                    android:text="请选择分区"
-                    android:textColor="@color/alpha30"
-                    android:textSize="14sp" />
+                    android:text="CNY"
+                    android:textSize="14sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -577,7 +577,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@color/white"
-                        android:hint="请输入手机号码"
+                        android:hint="请输入电话号码"
+                        android:inputType="numberDecimal"
                         android:padding="8dip"
                         android:textColor="@color/black_33"
                         android:textColorHint="@color/alpha30"
@@ -608,7 +609,7 @@
                         android:background="@color/white"
                         android:hint="请输入手机号码"
                         android:inputType="numberDecimal"
-                        android:maxLength="11"
+
                         android:padding="8dip"
                         android:textColor="@color/black_33"
                         android:textColorHint="@color/alpha30"

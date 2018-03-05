@@ -17,14 +17,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.activity.home.my_client.MyClientAddActivity;
-import com.cimcitech.cimcly.activity.home.my_client.MyClientUpdateActivity;
-import com.cimcitech.cimcly.adapter.MyClientAdapter;
-import com.cimcitech.cimcly.adapter.PaymentAdapter;
+import com.cimcitech.cimcly.adapter.payment.PaymentAdapter;
 import com.cimcitech.cimcly.bean.ListPagers;
 import com.cimcitech.cimcly.bean.Result;
-import com.cimcitech.cimcly.bean.client.Customer;
-import com.cimcitech.cimcly.bean.client.MyClientReq;
 import com.cimcitech.cimcly.bean.payment.PaymentCustomer;
 import com.cimcitech.cimcly.bean.payment.PaymentReq;
 import com.cimcitech.cimcly.utils.Config;

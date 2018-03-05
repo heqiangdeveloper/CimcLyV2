@@ -1,4 +1,4 @@
-package com.cimcitech.cimcly.adapter;
+package com.cimcitech.cimcly.adapter.intention_track;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,24 +8,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.bean.quoted_price.QuotedPriceVo;
+import com.cimcitech.cimcly.bean.CustomerVisit;
+import com.cimcitech.cimcly.bean.opport_unit.OpportUnitVo;
+import com.cimcitech.cimcly.utils.DateTool;
 
 import java.util.List;
 
 /**
- * Created by cimcitech on 2017/8/7.
+ * Created by cimcitech on 2017/8/1.
  */
 
-public class QuotedPriceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class IntentionTrackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
-    List<QuotedPriceVo.DataBean.PageInfoBean.ListBean> data;
+    private List<OpportUnitVo.DataBean.PageInfoBean.ListBean> data;
     private LayoutInflater inflater;
     private static final int TYPE_END = 2;
     private boolean isNotMoreData = false;
 
-    public QuotedPriceAdapter(Context context, List<QuotedPriceVo.DataBean.PageInfoBean.ListBean> data) {
+    public IntentionTrackAdapter(Context context, List<OpportUnitVo.DataBean.PageInfoBean.ListBean> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
     }
@@ -53,13 +55,12 @@ public class QuotedPriceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
-
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
-            View view = inflater.inflate(R.layout.quoted_price_list_item_view, parent, false);
+            View view = inflater.inflate(R.layout.intention_track_item_view, parent, false);
             return new ItemViewHolder(view);
         } else if (viewType == TYPE_FOOTER) {
             View view = inflater.inflate(R.layout.recycler_foot_view, parent, false);
@@ -93,13 +94,17 @@ public class QuotedPriceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     }
                 });
             }
-            final QuotedPriceVo.DataBean.PageInfoBean.ListBean item = data.get(position);
-            ((ItemViewHolder) holder).time_tv.setText("报价时间：" + item.getCreatedate());
-            ((ItemViewHolder) holder).order_number_tv.setText(item.getQuoteid()+"");
-            ((ItemViewHolder) holder).status_tv.setText(item.getQuoteStatusValue());
-            ((ItemViewHolder) holder).order_money_tv.setText(item.getQuoteCarType() + "");
-            ((ItemViewHolder) holder).count_Tv.setText(item.getProductCount() + "");
-            ((ItemViewHolder) holder).client_name_tv.setText(item.getCustName() != null ? "客户：" + item.getCustName() : "客户：");
+            final OpportUnitVo.DataBean.PageInfoBean.ListBean item = data.get(position);
+            ((ItemViewHolder) holder).intentional_theme_tv.setText("意向主题：" + item.getOpportsubject());
+            ((ItemViewHolder) holder).client_name_tv.setText("客户名称：" + item.getCustName());
+            ((ItemViewHolder) holder).status_tv.setText("状态：" + item.getCurrentStageValue());
+            ((ItemViewHolder) holder).order_number_tv.setText(item.getOpportno());
+            ((ItemViewHolder) holder).order_money_tv.setText(item.getPlanmoney() + "");
+            ((ItemViewHolder) holder).create_time_tv.setText("创建时间：" + DateTool.getDateStr(item.getCreatedate()));
+            ((ItemViewHolder) holder).product_num_tv.setText("产品数量：" + item.getProductcount());
+            ((ItemViewHolder) holder).deliver_time_tv.setText("需求交付：" + DateTool.getDateStr(item.getPlansigndate()));
+            ((ItemViewHolder) holder).product_model_tv.setText("产品型号：" + item.getProductid());
+            ((ItemViewHolder) holder).user_name_tv.setText("业务员：" + item.getUserName());
         }
     }
 
@@ -121,16 +126,33 @@ public class QuotedPriceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView client_name_tv, time_tv, status_tv, order_number_tv, order_money_tv,count_Tv;
+        TextView intentional_theme_tv,
+                client_name_tv,
+                status_tv,
+                order_number_tv,
+                order_money_tv,
+                create_time_tv,
+                product_num_tv,
+                deliver_time_tv,
+                product_model_tv,
+                sales_order_tv,
+                order_contract_tv,
+                user_name_tv;
 
         public ItemViewHolder(View view) {
             super(view);
+            intentional_theme_tv = view.findViewById(R.id.intentional_theme_tv);
             client_name_tv = view.findViewById(R.id.client_name_tv);
-            time_tv = view.findViewById(R.id.time_tv);
             status_tv = view.findViewById(R.id.status_tv);
             order_number_tv = view.findViewById(R.id.order_number_tv);
             order_money_tv = view.findViewById(R.id.order_money_tv);
-            count_Tv = view.findViewById(R.id.count_tv);
+            create_time_tv = view.findViewById(R.id.create_time_tv);
+            product_num_tv = view.findViewById(R.id.product_num_tv);
+            deliver_time_tv = view.findViewById(R.id.deliver_time_tv);
+            product_model_tv = view.findViewById(R.id.product_model_tv);
+            sales_order_tv = view.findViewById(R.id.sales_order_tv);
+            order_contract_tv = view.findViewById(R.id.order_contract_tv);
+            user_name_tv = view.findViewById(R.id.user_name_tv);
         }
     }
 

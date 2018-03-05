@@ -307,14 +307,16 @@ public class MyClientAddActivity extends BaseActivity {
             ToastUtil.showToast("请输入客户名称");
             return false;
         }
-        if (mobileEt.getText().toString().trim().equals("") || mobileEt.getText().toString().trim().length() < 11) {
+        //if (mobileEt.getText().toString().trim().equals("") || mobileEt.getText().toString()
+                //.trim().length() < 11) {
+        if (mobileEt.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入正确电话号码");
             return false;
         }
-        if (!AccountValidatorUtil.isMobile(mobileEt.getText().toString().trim())) {
+        /*if (!AccountValidatorUtil.isMobile(mobileEt.getText().toString().trim())) {
             ToastUtil.showToast("请输入正确电话号码");
             return false;
-        }
+        }*/
         if (region == null) {
             ToastUtil.showToast("请选择国家");
             return false;
@@ -331,14 +333,14 @@ public class MyClientAddActivity extends BaseActivity {
             ToastUtil.showToast("请输入详细地址");
             return false;
         }
-        if (web == null) {
+        /*if (web == null) {
             ToastUtil.showToast("请选择税种");
             return false;
-        }
-        if (mobileEt.getText().toString().trim().length() != 11) {
+        }*/
+        /*if (mobileEt.getText().toString().trim().length() != 11) {
             ToastUtil.showToast("请输入正确的手机号码");
             return false;
-        }
+        }*/
         if (userNameEt.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入联系人姓名");
             return false;
@@ -347,10 +349,10 @@ public class MyClientAddActivity extends BaseActivity {
             ToastUtil.showToast("请输入联系人手机号码");
             return false;
         }
-        if (userPhoneEt.getText().toString().trim().length() != 11) {
+        /*if (userPhoneEt.getText().toString().trim().length() != 11) {
             ToastUtil.showToast("请输入正确的联系人手机号码");
             return false;
-        }
+        }*/
         if (!zipCodeEt.getText().toString().trim().equals(""))
             if (!AccountValidatorUtil.isPostCode(zipCodeEt.getText().toString().trim())) {
                 ToastUtil.showToast("请输入正确的邮政编码");
@@ -381,7 +383,6 @@ public class MyClientAddActivity extends BaseActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
                                 try {
                                     custSelectVo = GjsonUtil.parseJsonWithGson(response, CustSelectVo.class);
                                 } catch (Exception e) {
@@ -400,6 +401,10 @@ public class MyClientAddActivity extends BaseActivity {
             userProvinceStr = userProvince.getCategoryno();
         if (userCity != null) {
             userCityStr = userCity.getCategoryno();
+        }
+        //客户分区默认为CNY
+        if(web == null){
+            web = custSelectVo.getData().getWeb().get(1);
         }
 
         String json = "";
@@ -429,7 +434,7 @@ public class MyClientAddActivity extends BaseActivity {
                             beizhuEt.getText().toString().trim())));
             json = json_China;
         }else {
-            //外国地区
+            //外国地区,隐藏省，市
             String json_Overseas = new Gson().toJson(new AddMyClientReq(
                     clientNameTv.getText().toString().trim(),
                     addressEt.getText().toString().trim(),

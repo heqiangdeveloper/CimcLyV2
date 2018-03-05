@@ -31,18 +31,31 @@ public class ReportMainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.back_rl,R.id.area_tv,R.id.product_tv})
+    @OnClick({R.id.back_rl,R.id.area_tv,R.id.product_tv,R.id.area_contract_amount_tv,
+            R.id.product_contract_amount_tv,R.id.province_top10_tv,R.id.customer_top10_tv})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back_rl:
                 finish();
                 break;
-            case R.id.area_tv:
+            case R.id.area_tv://不同区域的意向订单统计
                 startActivity(new Intent(ReportMainActivity.this,AreaReportActivity.class));
-            break;
-            case R.id.product_tv:
+                break;
+            case R.id.product_tv://不同产品的意向订单统计
                 startActivity(new Intent(ReportMainActivity.this,ProductReportActivity.class));
-            break;
+                break;
+            case R.id.area_contract_amount_tv://不同区域的合同数量统计
+                startActivity(new Intent(ReportMainActivity.this,AreaContractAmountReportActivity.class));
+                break;
+            case R.id.product_contract_amount_tv://不同产品年度合同数统计
+                startActivity(new Intent(ReportMainActivity.this,ProductContractAmountReportActivity.class));
+                break;
+            case R.id.province_top10_tv://合同总额前10的省份合同数量统计
+                startActivity(new Intent(ReportMainActivity.this,ProvinceTop10ReportActivity.class));
+                break;
+            case R.id.customer_top10_tv://合同总额前10的客户合同数量统计
+                startActivity(new Intent(ReportMainActivity.this,CustomerTop10ReportActivity.class));
+                break;
         }
     }
 }

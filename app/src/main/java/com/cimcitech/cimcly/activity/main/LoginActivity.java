@@ -1,12 +1,8 @@
 package com.cimcitech.cimcly.activity.main;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,8 +10,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitActivity;
-import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitDetailActivity;
 import com.cimcitech.cimcly.bean.LoginVo;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.GjsonUtil;

@@ -1,4 +1,4 @@
-package com.cimcitech.cimcly.adapter;
+package com.cimcitech.cimcly.adapter.intention_track;
 
 import android.content.Context;
 import android.view.LayoutInflater;

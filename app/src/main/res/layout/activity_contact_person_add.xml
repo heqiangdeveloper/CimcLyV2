@@ -230,7 +230,7 @@
                 android:background="@color/white"
                 android:hint="请输入手机号码"
                 android:inputType="numberDecimal"
-                android:maxLength="11"
+
                 android:padding="8dip"
                 android:textColor="@color/black_33"
                 android:textColorHint="@color/alpha30"

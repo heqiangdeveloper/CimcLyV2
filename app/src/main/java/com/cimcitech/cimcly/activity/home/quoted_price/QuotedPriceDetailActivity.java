@@ -542,6 +542,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                         quoteDetailListBeen,
                         isbringchassis
                 ));
+        Log.d("testlog","json is: " + json);
 
         OkHttpUtils
                 .postString()

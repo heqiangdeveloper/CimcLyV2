@@ -1,4 +1,4 @@
-package com.cimcitech.cimcly.adapter;
+package com.cimcitech.cimcly.adapter.report;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,26 +8,26 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.bean.CustomerVisit;
-import com.cimcitech.cimcly.bean.opport_unit.OpportUnitVo;
+import com.cimcitech.cimcly.bean.order_contract.OrderContractVo;
+import com.cimcitech.cimcly.bean.report.ContractReportDetailVo;
 import com.cimcitech.cimcly.utils.DateTool;
 
 import java.util.List;
 
 /**
- * Created by cimcitech on 2017/8/1.
+ * Created by apple on 2017/8/11.
  */
 
-public class IntentionTrackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AreaContractAmountDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
-    private List<OpportUnitVo.DataBean.PageInfoBean.ListBean> data;
+    private List<ContractReportDetailVo.DataBean.PageInfoBean> data;
     private LayoutInflater inflater;
     private static final int TYPE_END = 2;
     private boolean isNotMoreData = false;
 
-    public IntentionTrackAdapter(Context context, List<OpportUnitVo.DataBean.PageInfoBean.ListBean> data) {
+    public AreaContractAmountDetailAdapter(Context context, List<ContractReportDetailVo.DataBean.PageInfoBean> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
     }
@@ -55,12 +55,13 @@ public class IntentionTrackAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
-            View view = inflater.inflate(R.layout.intention_track_item_view, parent, false);
+            View view = inflater.inflate(R.layout.order_contract_list_item_view, parent, false);
             return new ItemViewHolder(view);
         } else if (viewType == TYPE_FOOTER) {
             View view = inflater.inflate(R.layout.recycler_foot_view, parent, false);
@@ -94,17 +95,16 @@ public class IntentionTrackAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     }
                 });
             }
-            final OpportUnitVo.DataBean.PageInfoBean.ListBean item = data.get(position);
-            ((ItemViewHolder) holder).intentional_theme_tv.setText("意向主题：" + item.getOpportsubject());
+            final ContractReportDetailVo.DataBean.PageInfoBean item = data.get(position);
             ((ItemViewHolder) holder).client_name_tv.setText("客户名称：" + item.getCustName());
-            ((ItemViewHolder) holder).status_tv.setText("状态：" + item.getCurrentStageValue());
-            ((ItemViewHolder) holder).order_number_tv.setText(item.getOpportno());
-            ((ItemViewHolder) holder).order_money_tv.setText(item.getPlanmoney() + "");
-            ((ItemViewHolder) holder).create_time_tv.setText("创建时间：" + DateTool.getDateStr(item.getCreatedate()));
-            ((ItemViewHolder) holder).product_num_tv.setText("产品数量：" + item.getProductcount());
-            ((ItemViewHolder) holder).deliver_time_tv.setText("需求交付：" + DateTool.getDateStr(item.getPlansigndate()));
-            ((ItemViewHolder) holder).product_model_tv.setText("产品型号：" + item.getProductid());
-            ((ItemViewHolder) holder).user_name_tv.setText("业务员：" + item.getUserName());
+            ((ItemViewHolder) holder).status_tv.setText("订单状态：" + item.getfStateName());
+            ((ItemViewHolder) holder).order_number_tv.setText(item.getContractno());
+            ((ItemViewHolder) holder).order_money_tv.setText(item.getTotalprice() + "");
+            ((ItemViewHolder) holder).intention_number_tv.setText("产品名称：" + item.getProductVarietyDesc());
+            ((ItemViewHolder) holder).product_number_tv.setText("产品型号：" + item.getProdtypecode());
+            ((ItemViewHolder) holder).order_date_tv.setText("订单日期：" + DateTool.getDateStr(item.getSigndate()));
+            ((ItemViewHolder) holder).expected_delivery_tv.setText("预期交货：" + DateTool.getDateStr(item.getConfirmDate()));
+            ((ItemViewHolder) holder).commit_tv.setText(item.getIscommit().equals("Y") ? "是否提交：已提交审批" : "是否提交：未提交审批");
         }
     }
 
@@ -126,33 +126,20 @@ public class IntentionTrackAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView intentional_theme_tv,
-                client_name_tv,
-                status_tv,
-                order_number_tv,
-                order_money_tv,
-                create_time_tv,
-                product_num_tv,
-                deliver_time_tv,
-                product_model_tv,
-                sales_order_tv,
-                order_contract_tv,
-                user_name_tv;
+        TextView status_tv, client_name_tv, order_number_tv, order_money_tv, intention_number_tv, order_date_tv,
+                product_number_tv, expected_delivery_tv, commit_tv;
 
         public ItemViewHolder(View view) {
             super(view);
-            intentional_theme_tv = view.findViewById(R.id.intentional_theme_tv);
             client_name_tv = view.findViewById(R.id.client_name_tv);
             status_tv = view.findViewById(R.id.status_tv);
             order_number_tv = view.findViewById(R.id.order_number_tv);
             order_money_tv = view.findViewById(R.id.order_money_tv);
-            create_time_tv = view.findViewById(R.id.create_time_tv);
-            product_num_tv = view.findViewById(R.id.product_num_tv);
-            deliver_time_tv = view.findViewById(R.id.deliver_time_tv);
-            product_model_tv = view.findViewById(R.id.product_model_tv);
-            sales_order_tv = view.findViewById(R.id.sales_order_tv);
-            order_contract_tv = view.findViewById(R.id.order_contract_tv);
-            user_name_tv = view.findViewById(R.id.user_name_tv);
+            intention_number_tv = view.findViewById(R.id.intention_number_tv);
+            order_date_tv = view.findViewById(R.id.order_date_tv);
+            product_number_tv = view.findViewById(R.id.product_number_tv);
+            expected_delivery_tv = view.findViewById(R.id.expected_delivery_tv);
+            commit_tv = view.findViewById(R.id.commit_tv);
         }
     }
 

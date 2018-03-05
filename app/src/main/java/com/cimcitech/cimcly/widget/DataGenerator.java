@@ -2,9 +2,8 @@ package com.cimcitech.cimcly.widget;
 
 import android.support.v4.app.Fragment;
 
-import com.cimcitech.cimcly.activity.customer_visit.CustomerVisitFragment;
+import com.cimcitech.cimcly.activity.home.customer_visit.CustomerVisitFragment;
 import com.cimcitech.cimcly.activity.home.HomeFragment;
-import com.cimcitech.cimcly.activity.home.LeaderHomeFragment;
 import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackFragment;
 import com.cimcitech.cimcly.activity.user.UserFragment;
 

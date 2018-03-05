@@ -45,11 +45,11 @@ public class Config {
     public static boolean isQuotedPrice = false;
     public static int type = 1; //周报类型  1.今天 2.本周 3.历史
 
-    public static final String IP = "http://test.lingyu.com:8081/ly";  //测试
+    //public static final String IP = "http://test.lingyu.com:8081/ly";  //测试
 
-    //public static final String IP = "http://zh.lingyu.com:8081/ly";  //正式
+    public static final String IP = "http://zh.lingyu.com:8081/ly";  //正式
 
-    //public static final String IP = "http://10.43.10.52:8080/ly";//本机
+    //public static final String IP = "http://10.43.10.121:8080/ly";//本机
 
     //public static final String IP = "http://10.43.10.35" + ":8080/ly";
 
@@ -186,6 +186,21 @@ public class Config {
 
     public static final String getDiffProductOrder = IP + "/opportUnit/rptProdOpportCount";
     //获取不同产品的意向订单
+
+    public static final String getAreaContractAmount = IP + "/sContOrder/rptRegionScont";
+    //不同区域的合同数量统计
+
+    public static final String getProductContractAmount = IP + "/sContOrder/rptProdScont";
+    //不同产品年度合同数统计
+
+    public static final String getProvinceTop10 = IP + "/sContOrder/rptFirstProviceScont";
+    //合同总额前10的省份合同数量统计
+
+    public static final String getCustomerTop10 = IP + "/sContOrder/rptFirstCustScont";
+    //合同总额前10的客户合同数量统计
+
+    public static final String getContractDetailList = IP + "/sContOrder/rptPageList";
+    //获取报表中合同详情列表
 
     public static final String rptOpportUnitList = IP + "/opportUnit/rptPageList"; //不同区域/产品的意向订单详细
 
