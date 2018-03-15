@@ -117,7 +117,7 @@ public class WorkWeeklyAddActivity extends BaseActivity {
     private static final int LOCATESUCCESS = 3;
     private static final int LOCATEFAIL = 4;
 
-    private static final int requestLocTime = 5000;
+    private static final int requestLocTime = 7000;
     private boolean isFinishlocating = false;
     Handler handler = new Handler(){
         @Override
@@ -135,7 +135,7 @@ public class WorkWeeklyAddActivity extends BaseActivity {
                     isFinishlocating = true;
                     if(dialog.isShowing())
                         dialog.dismiss();
-                    if(locSb != null && locSb.length() != 0){
+                    if(locSb != null && locSb.length() != 0 && !locSb.toString().contains("null")){
                         locationTv.setText(locSb.toString());
                     }
                     break;
@@ -209,7 +209,7 @@ public class WorkWeeklyAddActivity extends BaseActivity {
                 break;
             case R.id.work_type_tv:
                 intValue = 0;
-                if (reportTypeVo.isSuccess()) {
+                if (null != reportTypeVo && reportTypeVo.isSuccess()) {
                     list = new ArrayList<>();
                     for (int i = 0; i < reportTypeVo.getData().size(); i++)
                         list.add(reportTypeVo.getData().get(i).getCodevalue());
@@ -256,7 +256,7 @@ public class WorkWeeklyAddActivity extends BaseActivity {
 
                 }
             }
-        });
+        }).start();
 
     }
 
@@ -372,7 +372,13 @@ public class WorkWeeklyAddActivity extends BaseActivity {
             if (mDate1.compareTo(mDate2) > 0) {
                 ToastUtil.showToast("起日期大于止日期");
             } else {
-                endTimeTv.setText(string);
+                /*
+                * 防止当选择了结束时间后，结束时间文本显示格式变成了2018-3-14，导致服务器无法识别，提交失败问题
+                * Modified by he.qiang@cimc.com  on 2018-03-14 begin
+                * */
+                //endTimeTv.setText(string);
+                endTimeTv.setText(foramt.format(mDate2));
+                //Modified by he.qiang@cimc.com  on 2018-03-14 end
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -423,6 +429,7 @@ public class WorkWeeklyAddActivity extends BaseActivity {
                             @Override
                             public void onError(Call call, Exception e, int id) {
                                 ToastUtil.showNetError();
+                                Log.d("hqtest","error is: " + e);
                                 mLoading.dismiss();
                             }
 
@@ -519,8 +526,12 @@ public class WorkWeeklyAddActivity extends BaseActivity {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
-            // TODO Auto-generated method stub
-            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+            Log.d("loclog","local type is: " + location.getLocType());//值为161，代表定位成功
+            /*Toast.makeText(WorkWeeklyAddActivity.this,"type is: " + location.getLocType(),Toast
+                    .LENGTH_SHORT).show();*/
+            if (null != location && location.getLocType() == BDLocation.TypeNetWorkLocation) {
+                locationService.unregisterListener(mListener);
+                locationService.stop();
                 sb = new StringBuffer(256);
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
@@ -535,14 +546,18 @@ public class WorkWeeklyAddActivity extends BaseActivity {
                     locStr.append(addr.streetNumber);
                 }*/
                 //locStr = new StringBuffer();
-                if(location.getAddress() != null){
+                Log.d("loclog","location.getCity() is: " + location.getCity());
+                if(location.getAddress() != null && location.getCity() != null){
                     locSb = new StringBuffer();
                     locSb.append(location.getCity());
                     locSb.append(location.getDistrict());
                     locSb.append(location.getStreet());
                     locSb.append(location.getStreetNumber());
+                    sendMsg(LOCATESUCCESS);
+                }else{
+                    sendMsg(LOCATEFAIL);
                 }
-                sendMsg(LOCATESUCCESS);
+
                 /*if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
                     sb.append("gps定位成功");
                 } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {// 网络定位结果

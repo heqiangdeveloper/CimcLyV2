@@ -45,11 +45,11 @@ public class Config {
     public static boolean isQuotedPrice = false;
     public static int type = 1; //周报类型  1.今天 2.本周 3.历史
 
-    //public static final String IP = "http://test.lingyu.com:8081/ly";  //测试
+    public static final String IP = "http://test.lingyu.com:8081/ly";  //测试
 
-    public static final String IP = "http://zh.lingyu.com:8081/ly";  //正式
+    //public static final String IP = "http://zh.lingyu.com:8081/ly";  //正式
 
-    //public static final String IP = "http://10.43.10.121:8080/ly";//本机
+    //public static final String IP = "http://10.34.40.206:8080/ly";//本机
 
     //public static final String IP = "http://10.43.10.35" + ":8080/ly";
 
@@ -220,4 +220,8 @@ public class Config {
     public static final String alreadyRequestList = IP + "/prodOrder/getDepatureList";// 已申请发车清单
 
     public static final String carOutFactoryAction = IP + "/prodOrder/outgate";// 车辆出厂动作
+
+    public static final String getVehicleInfo = IP + "/prodOrder/getVehicleInfo";// 获取车工号当前工序
+
+    public static final String submitTestResult = IP + "/prodOrder/checkOutProduction";// 提交检验结果
 }

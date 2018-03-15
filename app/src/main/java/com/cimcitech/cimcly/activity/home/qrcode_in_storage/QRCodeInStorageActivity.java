@@ -80,18 +80,7 @@ public class QRCodeInStorageActivity extends AppCompatActivity{
                 break;
             case R.id.in_storage_bt:
                 if(vehicleno.length() != 0){
-                    if(submitCarInStorageData(vehicleno)){
-                        warn_Tv.setVisibility(View.GONE);
-                        result_Tv.setVisibility(View.GONE);
-                        in_storage_Btn.setVisibility(View.GONE);
-                        Toast.makeText(QRCodeInStorageActivity.this,"入库成功",Toast.LENGTH_SHORT).show();
-                        vehicleno = "";
-                    }else {
-                        warn_Tv.setVisibility(View.VISIBLE);
-                        result_Tv.setVisibility(View.VISIBLE);
-                        in_storage_Btn.setVisibility(View.VISIBLE);
-                        Toast.makeText(QRCodeInStorageActivity.this,"入库失败，请稍后再试",Toast.LENGTH_SHORT).show();
-                    }
+                    submitCarInStorageData(vehicleno);
                 }
                 break;
         }
@@ -147,11 +136,7 @@ public class QRCodeInStorageActivity extends AppCompatActivity{
         }
     }
 
-    public boolean submitCarInStorageData(String vehiclenos){
-        /*String json = new Gson().toJson(new WaitInStorageDataBean(Config.loginback.getUserId(),
-                vehiclenos));*/
-        //Log.d("hetest","commit json is：" + json);
-
+    public void submitCarInStorageData(String vehiclenos){
         OkHttpUtils
                 .post()
                 .url(Config.waitInStorageAction)
@@ -166,15 +151,21 @@ public class QRCodeInStorageActivity extends AppCompatActivity{
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
-                                isCommitSuccess = false;
+                                warn_Tv.setVisibility(View.VISIBLE);
+                                result_Tv.setVisibility(View.VISIBLE);
+                                in_storage_Btn.setVisibility(View.VISIBLE);
+                                Toast.makeText(QRCodeInStorageActivity.this,"入库失败，请稍后再试",Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
-                                isCommitSuccess = true;
+                                warn_Tv.setVisibility(View.GONE);
+                                result_Tv.setVisibility(View.GONE);
+                                in_storage_Btn.setVisibility(View.GONE);
+                                Toast.makeText(QRCodeInStorageActivity.this,"入库成功",Toast.LENGTH_SHORT).show();
+                                vehicleno = "";
                             }
                         }
                 );
-        return isCommitSuccess;
     }
 }

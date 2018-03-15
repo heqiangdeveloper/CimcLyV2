@@ -106,13 +106,19 @@ public class WorkWeeklyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
 
             ((ItemViewHolder) holder).time_tv.setText(DateTool.getDateStr(item.getCreatedate()));
-            ((ItemViewHolder) holder).content_tv.setText(DateTool.getDateStr(
+             /*
+            *将汇报时间从2018-03-14，外加上时分秒
+            * Modified by he.qiang@cimc.com  on 2018-03-14 begin
+             */
+            /*((ItemViewHolder) holder).content_tv.setText(DateTool.getDateStr(
                     item.getCreatedate()).equals(DateTool.getDateStr(item.getBegintime())) ?
                     "汇报时间：" + DateTool.getDateStr(
                             item.getCreatedate()) :
                     "汇报时间：从" + DateTool.getDateStr(
                             item.getCreatedate()) + "至" +
-                            DateTool.getDateStr(item.getBegintime()));
+                            DateTool.getDateStr(item.getBegintime()));*/
+            ((ItemViewHolder) holder).content_tv.setText(
+                    "汇报时间：" + DateTool.getDateStrNoTime(item.getCreatedate()));
             ((ItemViewHolder) holder).location_tv.setText(item.getSignInAddress() != null ? item.getSignInAddress() : "");
             ((ItemViewHolder) holder).type_tv.setText(item.getReportTypeDesc() + "");
         }

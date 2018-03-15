@@ -14,6 +14,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,7 +120,7 @@ public class CustomerVisitAddActivity extends BaseActivity {
     private static final int LOCATEFAIL = 4;
 
     private StringBuffer locSb ;
-    private static final int requestLocTime = 5000;
+    private static final int requestLocTime = 7000;
     private boolean isFinishlocating = false;
     Handler handler = new Handler(){
         @Override
@@ -137,12 +138,13 @@ public class CustomerVisitAddActivity extends BaseActivity {
                     isFinishlocating = true;
                     if(dialog.isShowing())
                         dialog.dismiss();
-                    if(locSb != null && locSb.length() != 0){
+                    if(locSb != null && locSb.toString().length() != 0 && !locSb.toString().contains("null")){
                         locationTv.setText(locSb.toString());
                     }
                     break;
                 case LOCATEFAIL:
                     isFinishlocating = true;
+                    locationTv.setText("");
                     if(dialog.isShowing())
                         dialog.dismiss();
                     Toast.makeText(CustomerVisitAddActivity.this,"定位失败！请检查网络或GPS",Toast
@@ -245,7 +247,7 @@ public class CustomerVisitAddActivity extends BaseActivity {
 
                 }
             }
-        });
+        }).start();
 
     }
 
@@ -417,11 +419,11 @@ public class CustomerVisitAddActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (intValue == 0) {//签到地址
+                /*if (intValue == 0) {//签到地址
                     Poi poi = pois.get(i);
                     locationTv.setText(poi.getName());
                     pop.dismiss();
-                }
+                }*/
                 if (intValue == 1) {//客户名称
                     item = clientVo.getData().get(i);
                     clientNameTv.setText(item.getCustname() != null && !item.getCustname().equals("") ? item.getCustname() : "");
@@ -630,8 +632,11 @@ public class CustomerVisitAddActivity extends BaseActivity {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
-            // TODO Auto-generated method stub
-            if (null != location && location.getLocType() != BDLocation.TypeServerError) {
+            //location.getLocType() = 161 表示定位成功
+            Log.d("loclog","loc status is: " + location.getLocType());
+            if (null != location && location.getLocType() == BDLocation.TypeNetWorkLocation) {
+                locationService.unregisterListener(mListener);
+                locationService.stop();
                 StringBuffer sb = new StringBuffer(256);
                 sb.append("\nlatitude : ");// 纬度
                 sb.append(location.getLatitude());
@@ -647,14 +652,17 @@ public class CustomerVisitAddActivity extends BaseActivity {
                         sb.append(poi.getName() + ";");
                     }
                 }*/
-                if(location.getAddress() != null){
+                if(location.getAddress() != null && location.getCity() != null){
                     locSb = new StringBuffer();
                     locSb.append(location.getCity());
                     locSb.append(location.getDistrict());
                     locSb.append(location.getStreet());
                     locSb.append(location.getStreetNumber());
+                    sendMsg(LOCATESUCCESS);
+                }else{
+                    sendMsg(LOCATEFAIL);
                 }
-                sendMsg(LOCATESUCCESS);
+
                 /*if (location.getLocType() == BDLocation.TypeGpsLocation) {// GPS定位结果
                     sb.append("gps定位成功");
                 } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {// 网络定位结果

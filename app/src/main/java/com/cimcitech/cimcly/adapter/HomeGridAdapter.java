@@ -47,7 +47,7 @@ public class HomeGridAdapter extends BaseAdapter {
     * 1.模块授权：在gc_user的app_auth列中授权
     *   G-门卫（车辆出厂、扫描出厂）
     *   M-仓库管理员（车辆入库、扫码入库、生产进度）
-    *   N-生产人员（生产进度）
+    *   N-生产人员（生产进度，检验）
     *   Y-领导（客户拜访、意向跟踪、报价单、订单合同、工作汇报、我的客户、联系人、问题反馈、回款跟踪、生产进度、报表）
     *   S-业务员（客户拜访、意向跟踪、报价单、订单合同、工作汇报、我的客户、联系人、问题反馈、回款跟踪、生产进度、发车申请)；另外不授权，缺省为业务员
     *   A-管理员（所有权限）
@@ -113,6 +113,8 @@ public class HomeGridAdapter extends BaseAdapter {
         TextLists.add("扫码出厂");
         ImageLists.add(R.mipmap.v2__apps_ic__crm_order);
         TextLists.add("报表");
+        ImageLists.add(R.mipmap.v3__apps_test);
+        TextLists.add("检验");
     }
 
     public void addMWData(){
@@ -135,6 +137,8 @@ public class HomeGridAdapter extends BaseAdapter {
     public void addSCData(){
         ImageLists.add(R.mipmap.v3__mine_setting_company);
         TextLists.add("生产进度");
+        ImageLists.add(R.mipmap.v3__apps_test);
+        TextLists.add("检验");
     }
 
     public void addLDData(){

@@ -71,6 +71,7 @@ public class ProductionDetailActivity extends AppCompatActivity {
     }
 
     public void getData() {
+        Log.d("prodetail","prodOrderDetId is: " + prodOrderDetId);
         OkHttpUtils
                 .post()
                 .url(Config.productionDetailUrl)
