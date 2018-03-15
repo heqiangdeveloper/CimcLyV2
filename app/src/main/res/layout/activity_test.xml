@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="扫码入库"
+            android:text="检验"
             android:textColor="@color/white"
             android:textSize="16sp" />
     </RelativeLayout>
@@ -50,11 +50,11 @@
         android:textStyle="bold"
         android:textSize="24sp"/>
     <Button
-        android:id="@+id/in_storage_bt"
+        android:id="@+id/start_test_bt"
         android:layout_width="match_parent"
         android:layout_height="40dip"
         android:background="@color/colorPrimaryDark"
-        android:text="入库"
+        android:text="开始检验"
         android:textColor="@color/white"
         android:textSize="14sp" />
 </LinearLayout>

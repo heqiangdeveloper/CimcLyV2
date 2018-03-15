@@ -37,7 +37,7 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="jls2b98uIYqpMyrvM5lLXTnYQjvzZoj1" />
+            android:value="TuyYX0nAtZ6cpWEGPiKEVv9xfvY24omP" />
 
         <!--<meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -55,6 +55,7 @@
             android:name=".activity.main.LoginActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
+
         </activity>
         <activity
             android:name=".activity.main.MainActivity"
@@ -260,6 +261,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.home.qrcode_out_factory.QRCodeOutFactoryActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.test.QRCodeTestActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.home.test.QRCodeStartTestActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
     </application>
