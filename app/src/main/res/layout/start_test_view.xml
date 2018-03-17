@@ -262,10 +262,12 @@
                 android:textSize="14sp"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"/>
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/cancel_bt"
                 android:layout_width="match_parent"
                 android:layout_height="40dip"

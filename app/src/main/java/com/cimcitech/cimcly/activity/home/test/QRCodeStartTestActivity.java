@@ -3,6 +3,7 @@ package com.cimcitech.cimcly.activity.home.test;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -10,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -59,14 +61,9 @@ public class QRCodeStartTestActivity extends BaseActivity {
     Button submit_Bt;
     @Bind(R.id.cancel_bt)
     Button cancel_Bt;
-    private final int PERMISSION_CODE = 1;
-    private final int CAMERA_CODE = 2;
-    private final String StartStr = "http://service.lingyu.com?id=";
     private String vehicleno = "";
     private VehicleInfoVo vehicleInfo = null;
-    private boolean isCommitSuccess = false;
     private final static String resultOK = "是";
-    private final static String resultNOK = "否";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,10 +72,26 @@ public class QRCodeStartTestActivity extends BaseActivity {
 
         vehicleno = getIntent().getStringExtra("vehicleno");
         vehicleInfo = (VehicleInfoVo)getIntent().getSerializableExtra("vehicleInfo");
-        Log.d("qrlog","receive data is: " + "vehicleno: " + vehicleno + "vehicleInfo: " +
-                vehicleInfo
-                .getData().getScheduleResultId());
         initView();
+
+        isStandard_Sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String data = (String)isStandard_Sp.getItemAtPosition(position);//从spinner中获取被选择的数据
+                remark_Et.setText("");
+                if(data.equals(resultOK)){
+                    remark_Et.setHint("");
+                }else {
+                    remark_Et.setHint("请在此填写不合格的原因");
+                    remark_Et.setHintTextColor(Color.RED);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     public void initView(){
@@ -119,7 +132,6 @@ public class QRCodeStartTestActivity extends BaseActivity {
             isAllInput =true;
         }else{//不合格
             if(remark_Et.getText().toString().trim().equals("") || remark_Et.getText().length() == 0){
-                Toast.makeText(QRCodeStartTestActivity.this,"请在备注中填写不合格的原因！",Toast.LENGTH_SHORT).show();
                 isAllInput = false;
             }else {
                 isAllInput = true;
@@ -156,17 +168,20 @@ public class QRCodeStartTestActivity extends BaseActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
+                                mLoading.dismiss();
                                 try {
                                     JSONObject json = new JSONObject(response);
                                     if (json.getBoolean("success")) {
                                         ToastUtil.showToast("提交成功");
+                                        Intent i = new Intent(QRCodeStartTestActivity.this,
+                                                QRCodeTestActivity.class);
+                                        startActivity(i);
                                         finish();
                                     } else
                                         ToastUtil.showToast("提交失败");
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                mLoading.dismiss();
                             }
                         }
                 );

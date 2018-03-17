@@ -48,7 +48,6 @@ public class QRCodeTestActivity extends AppCompatActivity{
     private final int CAMERA_CODE = 2;
     private final String StartStr = "http://service.lingyu.com?id=";
     private String vehicleno = "";
-    private int testStatus = 1;
     private VehicleInfoVo vehicleInfoVo =null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +156,8 @@ public class QRCodeTestActivity extends AppCompatActivity{
                                 warn_Tv.setVisibility(View.VISIBLE);
                                 result_Tv.setVisibility(View.VISIBLE);
                                 start_test_Bt.setVisibility(View.VISIBLE);
-                                Toast.makeText(QRCodeTestActivity.this,"入库失败，请检测网络",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(QRCodeTestActivity.this,"查看检验状态失败，请检测网络！",Toast
+                                        .LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -166,24 +166,26 @@ public class QRCodeTestActivity extends AppCompatActivity{
                                 vehicleInfoVo = new Gson().fromJson(response, VehicleInfoVo.class);
                                 if(vehicleInfoVo.isSuccess()){
                                     String productionName = vehicleInfoVo.getData().getProductionName();
+                                    warn_Tv.setVisibility(View.GONE);
+                                    result_Tv.setVisibility(View.GONE);
+                                    start_test_Bt.setVisibility(View.GONE);
                                     if(productionName.equals("")){//已检测
-                                        warn_Tv.setVisibility(View.GONE);
-                                        result_Tv.setVisibility(View.GONE);
-                                        start_test_Bt.setVisibility(View.GONE);
-                                        Toast.makeText(QRCodeTestActivity.this,"该车辆已经检测过，请确认！",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(QRCodeTestActivity.this,"该车辆已经检验过，请确认！",
+                                                Toast.LENGTH_SHORT).show();
                                         //vehicleno = "";
-                                    }else{
+                                    }else{//未检验
                                         Intent i = new Intent(QRCodeTestActivity.this,QRCodeStartTestActivity.class);
                                         i.putExtra("vehicleInfo",vehicleInfoVo);
                                         i.putExtra("vehicleno",vehicleno);
                                         startActivity(i);
-                                        finish();
+                                        //finish();
                                     }
                                 }else{
                                     warn_Tv.setVisibility(View.VISIBLE);
                                     result_Tv.setVisibility(View.VISIBLE);
                                     start_test_Bt.setVisibility(View.VISIBLE);
-                                    Toast.makeText(QRCodeTestActivity.this,"入库失败，请检测网络",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(QRCodeTestActivity.this,"查看检验状态失败，请检测网络！",
+                                            Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }

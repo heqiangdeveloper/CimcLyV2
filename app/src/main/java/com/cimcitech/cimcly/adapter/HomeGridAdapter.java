@@ -54,31 +54,61 @@ public class HomeGridAdapter extends BaseAdapter {
      */
     public void initAppAuth(){
         if(AppAuthStr != null && AppAuthStr.length() == 1){
-                switch (AppAuthStr) {
-                    case ck://仓库
-                        addCKData();
-                        break;
-                    case mw://门卫
-                        addMWData();
-                        break;
-                    case ld://领导
-                        addLDData();
-                        break;
-                    case sa://业务员
-                        addSAData();
-                        break;
-                    case ad://管理员
-                        addADData();
-                        break;
-                    case sc://生产人员
-                        addSCData();
-                        break;
+            addModule(AppAuthStr);
+        }else if(AppAuthStr != null && AppAuthStr.length() > 1){
+            String[] authStrs = AppAuthStr.split(",");
+            if(AppAuthStr.contains(ad)){//管理员
+                addModule(ad);
+            }else{
+                for(int i = 0; i < authStrs.length; i++){
+                    addModule(authStrs[i]);
                 }
+                removeDuplicate();//移除掉ImageLists，TextLists中重复的项
+            }
         }else{
-            addSAData();
+            addModule(sa);//缺省值
         }
     }
 
+    public void addModule(String str){
+        switch (str) {
+            case ck://仓库
+                addCKData();
+                break;
+            case mw://门卫
+                addMWData();
+                break;
+            case ld://领导
+                addLDData();
+                break;
+            case sa://业务员
+                addSAData();
+                break;
+            case ad://管理员
+                addADData();
+                break;
+            case sc://生产人员
+                addSCData();
+                break;
+        }
+    }
+
+    public void removeDuplicate(){//移除掉ImageLists，TextLists中重复的项
+        for ( int i = 0 ; i < ImageLists.size() - 1 ; i ++ ) {   //从左向右循环
+            for ( int j = ImageLists.size() - 1 ; j > i; j -- ) {  //从右往左内循环
+                if (ImageLists.get(j).equals(ImageLists.get(i))) {
+                    ImageLists.remove(j);                              //相等则移除
+                }
+            }
+        }
+        for ( int i = 0 ; i < TextLists.size() - 1 ; i ++ ) {   //从左向右循环
+            for ( int j = TextLists.size() - 1 ; j > i; j -- ) {  //从右往左内循环
+                if (TextLists.get(j).equals(TextLists.get(i))) {
+                    TextLists.remove(j);                              //相等则移除
+                }
+            }
+        }
+    }
 
     public void addADData(){
         ImageLists.add(R.mipmap.v2__apps_ic__legwork);
