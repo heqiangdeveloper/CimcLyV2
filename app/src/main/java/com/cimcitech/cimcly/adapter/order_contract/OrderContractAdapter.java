@@ -98,7 +98,11 @@ public class OrderContractAdapter extends RecyclerView.Adapter<RecyclerView.View
             final OrderContractVo.DataBean.ListBean item = data.get(position);
             ((ItemViewHolder) holder).client_name_tv.setText("客户名称：" + item.getCustName());
             ((ItemViewHolder) holder).status_tv.setText("订单状态：" + item.getFStateName());
-            ((ItemViewHolder) holder).order_number_tv.setText(item.getContractno());
+            //((ItemViewHolder) holder).order_number_tv.setText(item.getContractno());
+
+            ((ItemViewHolder) holder).order_number_tv.setText(item.getOrderno() == null ? "无":item.getOrderno());
+            //销售订单号
+            ((ItemViewHolder) holder).contract_number_tv.setText(item.getContractno());//合同号
             ((ItemViewHolder) holder).order_money_tv.setText(item.getTotalprice() + "");
             ((ItemViewHolder) holder).intention_number_tv.setText("意向编号：" + item.getOpportNo());
             ((ItemViewHolder) holder).product_number_tv.setText("产品型号：" + item.getProdtypecode());
@@ -127,7 +131,7 @@ public class OrderContractAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView status_tv, client_name_tv, order_number_tv, order_money_tv, intention_number_tv, order_date_tv,
-                product_number_tv, expected_delivery_tv, commit_tv;
+                product_number_tv, expected_delivery_tv, commit_tv,contract_number_tv;
 
         public ItemViewHolder(View view) {
             super(view);
@@ -140,6 +144,7 @@ public class OrderContractAdapter extends RecyclerView.Adapter<RecyclerView.View
             product_number_tv = view.findViewById(R.id.product_number_tv);
             expected_delivery_tv = view.findViewById(R.id.expected_delivery_tv);
             commit_tv = view.findViewById(R.id.commit_tv);
+            contract_number_tv = view.findViewById(R.id.contract_number_tv);
         }
     }
 

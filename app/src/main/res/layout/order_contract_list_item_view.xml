@@ -78,22 +78,54 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:padding="5dip"
-                    android:text="销售订单号" />
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:padding="5dip"
+                        android:text="合同号:" />
 
-                <TextView
-                    android:id="@+id/order_number_tv"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/contract_number_tv"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="5dip"
+                        android:text="123456"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:padding="5dip"
-                    android:text="123456"
-                    android:textStyle="bold" />
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:padding="5dip"
+                        android:text="销售订单号:" />
+
+                    <TextView
+                        android:id="@+id/order_number_tv"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="5dip"
+                        android:text="123456"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

@@ -229,19 +229,19 @@ public class OrderContractDetailActivity extends BaseActivity {
                 order_contract.setVisibility(View.GONE);
                 specifications_confirmation_view.setVisibility(View.VISIBLE);
                 break;
-            case R.id.textView1:
+            case R.id.textView1://底盘特性
                 setImageViewShow(imageView1);
                 setListViewShow(listContent1);
                 break;
-            case R.id.textView2:
+            case R.id.textView2://图案要求
                 setImageViewShow(imageView2);
                 setListViewShow(listContent2);
                 break;
-            case R.id.textView3:
+            case R.id.textView3://选装配置
                 setImageViewShow(imageView3);
                 setListViewShow(listContent3);
                 break;
-            case R.id.textView4:
+            case R.id.textView4://特殊要求
                 setImageViewShow(imageView4);
                 setListViewShow(listContent4);
                 break;
@@ -320,6 +320,7 @@ public class OrderContractDetailActivity extends BaseActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
+                                Log.d("testlog","response is: " + response);
                                 orderStandardDetailVo = GjsonUtil.parseJsonWithGson(response, OrderStandardDetailVo.class);
                                 if (orderStandardDetailVo != null)
                                     if (orderStandardDetailVo.isSuccess()) {
