@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -472,7 +473,7 @@ public class MyClientUpdateActivity extends BaseActivity {
 
         OkHttpUtils
                 .postString()
-                .url(Config.mpdifyCust)
+                .url(Config.modifyCust)
                 .addHeader("checkTokenKey", Config.loginback.getToken())
                 .addHeader("sessionKey", Config.loginback.getUserId() + "")
                 .content(json)
@@ -489,7 +490,7 @@ public class MyClientUpdateActivity extends BaseActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
+                                Log.d("testlog","response is: " + response);
                                 sendMsg(SAVEDATA_HIDE);
                                 try {
                                     JSONObject json = new JSONObject(response);
@@ -583,12 +584,13 @@ public class MyClientUpdateActivity extends BaseActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mLoading.isShowing()) mLoading.dismiss();
                                 ToastUtil.showNetError();
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
+                                if(mLoading.isShowing()) mLoading.dismiss();
                                 try {
                                     custSelectVo = GjsonUtil.parseJsonWithGson(response, CustSelectVo.class);
                                     inquireData(custid);

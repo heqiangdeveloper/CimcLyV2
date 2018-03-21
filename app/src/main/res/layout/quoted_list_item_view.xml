@@ -37,7 +37,7 @@
             android:text="*"
             android:textColor="@color/red" />
 
-        <EditText
+        <!--<EditText
             android:id="@+id/quoteValue_et_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -45,7 +45,15 @@
             android:maxLines="30"
             android:padding="10dip"
             android:textColor="@color/black_33"
-            android:textSize="14sp" />
+            android:textSize="14sp" />-->
+        <EditText
+            android:id="@+id/quoteValue_et_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:textColor="@color/black_33"
+            android:background="@color/white"
+            android:gravity="center_vertical"/>
     </LinearLayout>
 
     <LinearLayout
@@ -85,6 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textSize="14sp"
+            android:textColor="@color/black_33"
             android:background="@color/white"
             android:gravity="center_vertical"/>
     </LinearLayout>

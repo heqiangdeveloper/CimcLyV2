@@ -669,7 +669,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
     }
 
     /**
-     * OptionalConfigurationAdapter
+     * OptionalConfigurationAdapter 选装配置
      */
     public class OptionalConfigurationAdapter extends BaseAdapter {
 
@@ -955,7 +955,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
     }
 
     /**
-     * ChassisCharacteristicsAdapter
+     * ChassisCharacteristicsAdapter 底盘特性
      */
     public class ChassisCharacteristicsAdapter extends BaseAdapter {
 
@@ -1243,7 +1243,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
     }
 
     /**
-     * PatternRequirementsAdapter
+     * PatternRequirementsAdapter 图案要求
      */
 
     public class PatternRequirementsAdapter extends BaseAdapter {
@@ -1530,7 +1530,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
     }
 
     /**
-     * SpecialRequirementsAdapter
+     * SpecialRequirementsAdapter 特殊要求
      */
 
     public class SpecialRequirementsAdapter extends BaseAdapter {

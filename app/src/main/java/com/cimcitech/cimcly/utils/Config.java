@@ -65,7 +65,7 @@ public class Config {
 
     public static final String addCust = IP + "/cust/addCust"; //添加客户信息
 
-    public static final String mpdifyCust = IP + "/cust/mpdifyCust"; //修改客户信息
+    public static final String modifyCust = IP + "/cust/modifyCust"; //修改客户信息
 
     public static final String getCurrInfo = IP + "/cust/getCurrInfo"; //查询客户信息
 
