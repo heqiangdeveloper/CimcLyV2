@@ -139,6 +139,7 @@ public class QuotedPriceAddActivity extends BaseActivity {
         setContentView(R.layout.activity_quoted_price_add);
         ButterKnife.bind(this);
         infoVo = (OpportUnitInfoVo) this.getIntent().getSerializableExtra("infoVo");
+        mLoading.show();
         getIntentionTrackData();
     }
 
@@ -300,6 +301,9 @@ public class QuotedPriceAddActivity extends BaseActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mLoading.isShowing()){
+                                    mLoading.dismiss();
+                                }
                                 ToastUtil.showNetError();
                             }
 
@@ -381,6 +385,9 @@ public class QuotedPriceAddActivity extends BaseActivity {
                                         }
                                 } catch (Exception e) {
                                     e.printStackTrace();
+                                }
+                                if(mLoading.isShowing()){
+                                    mLoading.dismiss();
                                 }
                             }
                         }

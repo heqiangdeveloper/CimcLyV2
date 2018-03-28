@@ -104,6 +104,7 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intention_track_follow_up);
         ButterKnife.bind(this);
+        mLoading.show();
         getOpportSelect();
         final Calendar ca = Calendar.getInstance();
         mYear = ca.get(Calendar.YEAR);
@@ -319,6 +320,9 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mLoading.isShowing()){
+                                    mLoading.dismiss();
+                                }
                                 ToastUtil.showNetError();
                             }
 
@@ -331,7 +335,9 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-
+                                if(mLoading.isShowing()){
+                                    mLoading.dismiss();
+                                }
                             }
                         }
                 );

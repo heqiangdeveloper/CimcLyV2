@@ -19,6 +19,7 @@ import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.DateTool;
 import com.cimcitech.cimcly.utils.GjsonUtil;
 import com.cimcitech.cimcly.utils.ToastUtil;
+import com.cimcitech.cimcly.widget.BaseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
 
-public class IntentionTrackDetailActivity extends AppCompatActivity {
+public class IntentionTrackDetailActivity extends BaseActivity {
 
     @Bind(R.id.back_rl)
     RelativeLayout backRl;
@@ -71,6 +72,7 @@ public class IntentionTrackDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_intention_track_detail);
         ButterKnife.bind(this);
         opportId = getIntent().getIntExtra("opportId", 0);
+        mLoading.show();
         getData();
     }
 
@@ -88,57 +90,64 @@ public class IntentionTrackDetailActivity extends AppCompatActivity {
             case R.id.back_rl:
                 finish();
                 break;
-            case R.id.quoted_price_bt:
-                if (("ST01".equals(infoVo.getData().getStage()) || "ST02".equals(infoVo.getData().getStage())
-                        || "ST06".equals(infoVo.getData().getStage())) && !("CS05".equals(infoVo.getData().getCurrentstage()) ||
-                        "CS04".equals(infoVo.getData().getCurrentstage()))) {
-                    if (infoVo != null && infoVo.getData().getProductid() != null ){
-                        Intent intent = new Intent(IntentionTrackDetailActivity.this, QuotedPriceAddActivity.class);
-                        intent.putExtra("infoVo", infoVo);
-                        startActivity(intent);
-                    }else{
-                        Toast.makeText(this,"产品型号不能为空，请完善信息！",Toast.LENGTH_SHORT).show();
+            case R.id.quoted_price_bt://准备报价
+                if(null != infoVo){
+                    if (("ST01".equals(infoVo.getData().getStage()) || "ST02".equals(infoVo.getData().getStage())
+                            || "ST06".equals(infoVo.getData().getStage())) && !("CS05".equals(infoVo.getData().getCurrentstage()) ||
+                            "CS04".equals(infoVo.getData().getCurrentstage()))) {
+                        if (infoVo != null && infoVo.getData().getProductid() != null ){
+                            Intent intent = new Intent(IntentionTrackDetailActivity.this, QuotedPriceAddActivity.class);
+                            intent.putExtra("infoVo", infoVo);
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(this,"产品型号不能为空，请完善信息！",Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        ToastUtil.showToast("此状态意向订单不可报价");
                     }
-                } else {
-                    ToastUtil.showToast("此状态意向订单不可报价");
                 }
-
                 break;
-            case R.id.follow_up_bt:
-                if (("ST01".equals(infoVo.getData().getStage()) || "ST02".equals(infoVo.getData().getStage())
-                        || "ST06".equals(infoVo.getData().getStage())) && !("CS05".equals(infoVo.getData().getCurrentstage()) ||
-                        "CS04".equals(infoVo.getData().getCurrentstage()))) {
-                    Intent intent = new Intent(IntentionTrackDetailActivity.this, IntentionTrackFollowUpActivity.class);
-                    if (infoVo != null)
-                        intent.putExtra("infoVo", infoVo);
+            case R.id.follow_up_bt://意向跟进
+                if(null != infoVo){
+                    if (("ST01".equals(infoVo.getData().getStage()) || "ST02".equals(infoVo.getData().getStage())
+                            || "ST06".equals(infoVo.getData().getStage())) && !("CS05".equals(infoVo.getData().getCurrentstage()) ||
+                            "CS04".equals(infoVo.getData().getCurrentstage()))) {
+                        Intent intent = new Intent(IntentionTrackDetailActivity.this, IntentionTrackFollowUpActivity.class);
+                        if (infoVo != null)
+                            intent.putExtra("infoVo", infoVo);
+                        startActivity(intent);
+                    } else {
+                        ToastUtil.showToast("此状态意向订单不可跟进");
+                    }
+                }
+                break;
+            case R.id.record_bt://跟进记录
+                if(null != infoVo){
+                    Intent intent = new Intent(IntentionTrackDetailActivity.this, IntentionTrackRecordingActivity.class);
+                    intent.putExtra("opportId", opportId);
                     startActivity(intent);
-                } else {
-                    ToastUtil.showToast("此状态意向订单不可跟进");
                 }
                 break;
-            case R.id.record_bt:
-                Intent intent = new Intent(IntentionTrackDetailActivity.this, IntentionTrackRecordingActivity.class);
-                intent.putExtra("opportId", opportId);
-                startActivity(intent);
-                break;
-            case R.id.close_bt:
-                new AlertDialog.Builder(this)
-                        .setTitle("提示")
-                        .setMessage("    关闭之后不能针对此意向进行报价，是否关闭此意向？")
-                        .setCancelable(true)
-                        .setPositiveButton("是", new DialogInterface.OnClickListener() {
+            case R.id.close_bt://关闭记录
+                if(null != infoVo){
+                    new AlertDialog.Builder(this)
+                            .setTitle("提示")
+                            .setMessage("    关闭之后不能针对此意向进行报价，是否关闭此意向？")
+                            .setCancelable(true)
+                            .setPositiveButton("是", new DialogInterface.OnClickListener() {
 
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                CloseRecord();
-                            }
-                        })
-                        .setNegativeButton("否", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        }).create().show();
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    CloseRecord();
+                                }
+                            })
+                            .setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).create().show();
+                }
                 break;
         }
     }
@@ -192,6 +201,8 @@ public class IntentionTrackDetailActivity extends AppCompatActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mLoading.isShowing())
+                                    mLoading.dismiss();
                                 ToastUtil.showNetError();
                             }
 
@@ -221,7 +232,8 @@ public class IntentionTrackDetailActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-
+                                if(mLoading.isShowing())
+                                    mLoading.dismiss();
                             }
                         }
                 );

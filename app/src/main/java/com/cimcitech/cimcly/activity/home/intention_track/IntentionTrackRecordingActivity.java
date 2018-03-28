@@ -11,6 +11,7 @@ import com.cimcitech.cimcly.bean.opport_unit.IntentionTrackRecordingVo;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.GjsonUtil;
 import com.cimcitech.cimcly.utils.ToastUtil;
+import com.cimcitech.cimcly.widget.BaseActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -22,7 +23,7 @@ import okhttp3.Call;
 /**
  * 跟进记录
  */
-public class IntentionTrackRecordingActivity extends AppCompatActivity {
+public class IntentionTrackRecordingActivity extends BaseActivity {
 
     @Bind(R.id.back_rl)
     RelativeLayout backRl;
@@ -39,6 +40,7 @@ public class IntentionTrackRecordingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_intention_track_recording);
         ButterKnife.bind(this);
         opportId = this.getIntent().getIntExtra("opportId", 0);
+        mLoading.show();
         getData();
     }
 
@@ -59,6 +61,9 @@ public class IntentionTrackRecordingActivity extends AppCompatActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mLoading.isShowing()){
+                                    mLoading.dismiss();
+                                }
                                 ToastUtil.showNetError();
                             }
 
@@ -76,7 +81,9 @@ public class IntentionTrackRecordingActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-
+                                if(mLoading.isShowing()){
+                                    mLoading.dismiss();
+                                }
                             }
                         }
                 );
