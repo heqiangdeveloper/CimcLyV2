@@ -29,6 +29,7 @@ import com.cimcitech.cimcly.activity.home.qrcode_out_factory.QRCodeOutFactoryAct
 import com.cimcitech.cimcly.activity.home.quoted_price.QuotedPriceActivity;
 import com.cimcitech.cimcly.activity.home.report.ReportMainActivity;
 import com.cimcitech.cimcly.activity.home.test.QRCodeTestActivity;
+import com.cimcitech.cimcly.activity.home.test.QRCodeTestMainActivity;
 import com.cimcitech.cimcly.activity.home.work_weekly.WorkWeeklyActivity;
 import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackActivity;
 import com.cimcitech.cimcly.adapter.HomeGridAdapter;
@@ -153,7 +154,7 @@ public class HomeFragment extends Fragment {
                             startActivity(new Intent(mContext, ReportMainActivity.class));
                             break;
                         case "检验":
-                            startActivity(new Intent(mContext, QRCodeTestActivity.class));
+                            startActivity(new Intent(mContext, QRCodeTestMainActivity.class));
                             break;
                     }
                 }
