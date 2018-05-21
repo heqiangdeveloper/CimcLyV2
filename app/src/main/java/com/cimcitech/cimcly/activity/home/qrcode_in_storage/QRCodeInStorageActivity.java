@@ -16,7 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.bean.depart_request.RequestFeedbackBean;
 import com.cimcitech.cimcly.utils.Config;
+import com.google.gson.Gson;
 import com.xys.libzxing.zxing.activity.CaptureActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -154,16 +156,26 @@ public class QRCodeInStorageActivity extends AppCompatActivity{
                                 warn_Tv.setVisibility(View.VISIBLE);
                                 result_Tv.setVisibility(View.VISIBLE);
                                 in_storage_Btn.setVisibility(View.VISIBLE);
-                                Toast.makeText(QRCodeInStorageActivity.this,"入库失败，请稍后再试",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(QRCodeInStorageActivity.this,"入库失败，请检查网络",Toast
+                                        .LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
-                                warn_Tv.setVisibility(View.GONE);
-                                result_Tv.setVisibility(View.GONE);
-                                in_storage_Btn.setVisibility(View.GONE);
-                                Toast.makeText(QRCodeInStorageActivity.this,"入库成功",Toast.LENGTH_SHORT).show();
-                                vehicleno = "";
+                                RequestFeedbackBean RequestFeedbackStr = new Gson().fromJson(response, RequestFeedbackBean.class);
+                                if(RequestFeedbackStr.isSuccess()){
+                                    warn_Tv.setVisibility(View.GONE);
+                                    result_Tv.setVisibility(View.GONE);
+                                    in_storage_Btn.setVisibility(View.GONE);
+                                    Toast.makeText(QRCodeInStorageActivity.this,"入库成功",Toast.LENGTH_SHORT).show();
+                                    vehicleno = "";
+                                }else {
+                                    warn_Tv.setVisibility(View.VISIBLE);
+                                    result_Tv.setVisibility(View.VISIBLE);
+                                    in_storage_Btn.setVisibility(View.VISIBLE);
+                                    Toast.makeText(QRCodeInStorageActivity.this,RequestFeedbackStr
+                                            .getMsg(),Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
                 );

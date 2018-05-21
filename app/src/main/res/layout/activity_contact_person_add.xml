@@ -190,7 +190,6 @@
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:hint="请输入联系电话"
-                android:inputType="numberDecimal"
                 android:padding="8dip"
                 android:textColor="@color/black_33"
                 android:textColorHint="@color/alpha30"
@@ -229,7 +228,6 @@
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:hint="请输入手机号码"
-                android:inputType="numberDecimal"
 
                 android:padding="8dip"
                 android:textColor="@color/black_33"

@@ -60,9 +60,10 @@ public class LoginActivity extends BaseActivity {
         if (sp.getString("user_name", "") != "") {
             String name = sp.getString("user_name", "");
             String pwd = sp.getString("password", "");
-            System.out.println(name + pwd);
+            //System.out.println(name + pwd);
             userNameTv.setText(sp.getString("user_name", ""));
             passwordTv.setText(sp.getString("password", ""));
+            userNameTv.setSelection(userNameTv.getText().toString().length());
         }
     }
 

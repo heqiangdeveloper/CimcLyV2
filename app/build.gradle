@@ -7,8 +7,8 @@ android {
         applicationId "com.cimcitech.cimcly"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 17
-        versionName "8.36"
+        versionCode 19
+        versionName "8.38"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

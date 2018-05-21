@@ -209,7 +209,8 @@ public class ProductionActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 //上拉加载
-                                if (null != status && status.getData().isHasNextPage()) {
+                                if (null != status && null != status.getData() &&
+                                        status.getData().isHasNextPage()) {
                                     pageNum++;
                                     //getData();//添加数据
                                     if (myData)
@@ -218,6 +219,9 @@ public class ProductionActivity extends AppCompatActivity {
                                         getSubordinateData();
                                 }
                                 isLoading = false;
+                                if(swipeRefreshLayout.isRefreshing()){
+                                    swipeRefreshLayout.setRefreshing(false);
+                                }
                             }
                         }, 1000);
                     }

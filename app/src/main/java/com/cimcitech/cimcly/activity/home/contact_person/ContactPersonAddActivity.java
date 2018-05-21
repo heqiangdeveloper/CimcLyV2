@@ -118,7 +118,7 @@ public class ContactPersonAddActivity extends BaseActivity {
                 break;
             case R.id.client_tv:
                 List<String> list = new ArrayList<>();
-                if (clientVo != null) {
+                if (clientVo != null && null != clientVo.getData()) {
                     for (int i = 0; i < clientVo.getData().size(); i++) {
                         list.add(clientVo.getData().get(i).getCustname());
                     }
@@ -177,24 +177,31 @@ public class ContactPersonAddActivity extends BaseActivity {
     }
 
     public boolean checkInput() {
-        if (clientTv.getText().toString().trim().equals("")) {
+        /*if (clientTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请选择所属客户");
             return false;
         }
         if (nameEt.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入姓名");
             return false;
+        }*/
+        String phoneStr = phoneEt.getText().toString().trim();//手机
+        String mobileStr = mobileEt.getText().toString().trim();//联系电话
+
+        if (!isValidatePhone(phoneStr)) {
+            ToastUtil.showToast("请输入正确手机号码");
+            return false;
         }
-        if (mobileEt.getText().toString().trim().equals("")) {
-            ToastUtil.showToast("请输入联系电话");
+        if (!isValidatePhone(mobileStr)) {
+            ToastUtil.showToast("请输入正确联系电话");
             return false;
         }
         //if (phoneEt.getText().toString().trim().equals("") || phoneEt.getText().toString().trim
                 //().length() < 11) {
-        if (phoneEt.getText().toString().trim().equals("")){
+        /*if (phoneEt.getText().toString().trim().equals("")){
             ToastUtil.showToast("请输入正确手机号码");
             return false;
-        }
+        }*/
         /*if (!AccountValidatorUtil.isMobile(phoneEt.getText().toString().trim())) {
             ToastUtil.showToast("请输入正确手机号码");
             return false;
@@ -206,6 +213,37 @@ public class ContactPersonAddActivity extends BaseActivity {
         if (addressTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入详细地址");
             return false;
+        }
+        return true;
+    }
+
+    //判断是否是正确的手机或固话格式
+    public boolean isValidatePhone(String str){
+        if(str.length() == 0){
+            return false;
+        }else if(!str.contains("-")){
+            if(!(AccountValidatorUtil.isCellPhone(str) || AccountValidatorUtil.isPhone(str))){
+                return false;
+            }else{
+                return true;
+            }
+        }else if(str.contains("-")){
+            int num = 0;
+            for(int i = 0; i < str.length(); i++){
+                if(str.charAt(i) == '-'){
+                    num++;
+                }
+            }
+            if(num > 1){
+                return false;
+            }
+            String str1 = str.substring(0,str.indexOf("-"));//区号，3位或4位
+            String str2 = str.substring(str.indexOf("-")+1);
+            if((str1.trim().length() == 3 || str1.trim().length() == 4) &&  str2.trim().length() > 1){
+                return true;
+            }else {
+                return false;
+            }
         }
         return true;
     }

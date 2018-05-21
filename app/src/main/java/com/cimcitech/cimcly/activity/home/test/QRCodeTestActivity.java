@@ -184,7 +184,7 @@ public class QRCodeTestActivity extends AppCompatActivity{
                                     warn_Tv.setVisibility(View.VISIBLE);
                                     result_Tv.setVisibility(View.VISIBLE);
                                     start_test_Bt.setVisibility(View.VISIBLE);
-                                    Toast.makeText(QRCodeTestActivity.this,"查看检验状态失败，请检测网络！",
+                                    Toast.makeText(QRCodeTestActivity.this,vehicleInfoVo.getMsg(),
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }

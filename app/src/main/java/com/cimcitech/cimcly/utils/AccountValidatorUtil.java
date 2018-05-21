@@ -7,6 +7,16 @@ import java.util.regex.Pattern;
  */
 
 public class AccountValidatorUtil {
+    /**
+     * 正则表达式：验证固定电话，形如：027-8562324,0712-236545
+     */
+    public static final String REGEX_PHONE = "\\d{3}-\\d{8}|\\d{4}-\\d{7}";
+
+    /**
+     * 正则表达式：验证电话或手机，纯数字形式
+     */
+    public static final String REGEX_NUMBER = "^[0-9]*$";
+
 
     /**
      * 正则表达式：验证用户名
@@ -141,5 +151,25 @@ public class AccountValidatorUtil {
      */
     public static boolean isIPAddr(String ipAddr) {
         return Pattern.matches(REGEX_IP_ADDR, ipAddr);
+    }
+
+    /**
+     * 校验固定电话
+     *
+     * @param phoneStr
+     * @return
+     */
+    public static boolean isPhone(String phoneStr) {
+        return Pattern.matches(REGEX_PHONE, phoneStr);
+    }
+
+    /**
+     * 校验IP地址
+     *
+     * @param phoneStr
+     * @return
+     */
+    public static boolean isCellPhone(String phoneStr) {
+        return Pattern.matches(REGEX_NUMBER, phoneStr);
     }
 }

@@ -27,6 +27,7 @@ import com.cimcitech.cimcly.bean.ListPagers;
 import com.cimcitech.cimcly.bean.car_in_storage.WaitInStorageInfo;
 import com.cimcitech.cimcly.bean.car_in_storage.WaitInStorageReq;
 import com.cimcitech.cimcly.bean.Result;
+import com.cimcitech.cimcly.bean.depart_request.RequestFeedbackBean;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.ToastUtil;
 import com.google.gson.Gson;
@@ -339,13 +340,19 @@ public class CarInStorageActivity extends AppCompatActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
-                                Toast.makeText(CarInStorageActivity.this,"入库失败",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CarInStorageActivity.this,"入库失败,请检查网络",Toast
+                                        .LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
-                                Toast.makeText(CarInStorageActivity.this,"入库成功",Toast.LENGTH_SHORT).show();
-                                sendMsg(REFRESH_DATA);
+                                RequestFeedbackBean requestFeedbackStr = new Gson().fromJson(response, RequestFeedbackBean.class);
+                                if(requestFeedbackStr.isSuccess()){
+                                    Toast.makeText(CarInStorageActivity.this,"入库成功",Toast.LENGTH_SHORT).show();
+                                    sendMsg(REFRESH_DATA);
+                                }else{
+                                    Toast.makeText(CarInStorageActivity.this,requestFeedbackStr.getMsg(), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
                 );
@@ -366,13 +373,20 @@ public class CarInStorageActivity extends AppCompatActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
-                                Toast.makeText(CarInStorageActivity.this,"退库失败",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CarInStorageActivity.this,"退库失败，请检查网络",Toast
+                                        .LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
-                                Toast.makeText(CarInStorageActivity.this,"退库成功",Toast.LENGTH_SHORT).show();
-                                sendMsg(REFRESH_DATA);
+                                RequestFeedbackBean RequestFeedbackStr = new Gson().fromJson(response, RequestFeedbackBean.class);
+                                if(RequestFeedbackStr.isSuccess()){
+                                    Toast.makeText(CarInStorageActivity.this,"退库成功",Toast.LENGTH_SHORT).show();
+                                }else {
+                                    Toast.makeText(CarInStorageActivity.this,RequestFeedbackStr.getMsg(),
+                                            Toast.LENGTH_SHORT).show();
+                                    sendMsg(REFRESH_DATA);
+                                }
                             }
                         }
                 );

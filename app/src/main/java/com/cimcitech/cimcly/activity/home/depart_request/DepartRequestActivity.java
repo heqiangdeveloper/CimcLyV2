@@ -333,7 +333,8 @@ public class DepartRequestActivity extends AppCompatActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
-                                Toast.makeText(DepartRequestActivity.this,"发车申请失败",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DepartRequestActivity.this,"发车申请失败,请检查网络",Toast
+                                        .LENGTH_SHORT).show();
                             }
 
                             @Override

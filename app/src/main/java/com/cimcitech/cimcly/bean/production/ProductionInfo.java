@@ -25,6 +25,15 @@ public class ProductionInfo implements Serializable{
     private String userName;//业务员
     private String productstages;
     private String custName;//客户
+    private String prodorderno;
+
+    public String getProdorderno() {
+        return prodorderno;
+    }
+
+    public void setProdorderno(String prodorderno) {
+        this.prodorderno = prodorderno;
+    }
 
     public String getCustName() {
         return custName;

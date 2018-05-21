@@ -172,13 +172,16 @@ public class QRCodeStartTestActivity extends BaseActivity {
                                 try {
                                     JSONObject json = new JSONObject(response);
                                     if (json.getBoolean("success")) {
-                                        ToastUtil.showToast("提交成功");
+                                        Toast.makeText(QRCodeStartTestActivity.this,"提交成功",Toast
+                                                .LENGTH_SHORT).show();
                                         Intent i = new Intent(QRCodeStartTestActivity.this,
                                                 QRCodeTestActivity.class);
                                         startActivity(i);
                                         finish();
-                                    } else
-                                        ToastUtil.showToast("提交失败");
+                                    } else{
+                                        Toast.makeText(QRCodeStartTestActivity.this,json.getString("msg"),Toast
+                                                .LENGTH_SHORT).show();
+                                    }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

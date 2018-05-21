@@ -98,8 +98,9 @@ public class ProductionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
             final ProductionInfo item = data.get(position);
             ((ItemViewHolder) holder).order_name_Tv.setText(item.getSorderno() != null ? "订单号：" +
-                    item
-                    .getSorderno() : "订单号：");
+                    item.getSorderno() : "订单号：");
+            ((ItemViewHolder) holder).prodorderno_Tv.setText(item.getProdorderno() != null ? "生产订单号：" +
+                    item.getProdorderno() : "生产订单号：");
             if(!ProductionActivity.myData){
                 ((ItemViewHolder) holder).salesman_Tv.setVisibility(View.VISIBLE);
                 ((ItemViewHolder) holder).salesman_Tv.setText((item.getUserName() != null && item
@@ -155,7 +156,7 @@ public class ProductionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     static class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView order_name_Tv, salesman_Tv, product_model_Tv,vehicleno_Tv,
                 plan_start_Tv, plan_finish_Tv,act_start_Tv,act_finish_Tv,product_stages_Tv,
-                cus_name_Tv;
+                cus_name_Tv,prodorderno_Tv;
 
         public ItemViewHolder(View view) {
             super(view);
@@ -169,6 +170,7 @@ public class ProductionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             act_finish_Tv = view.findViewById(R.id.act_finish_tv);
             product_stages_Tv = view.findViewById(R.id.product_stages_tv);
             cus_name_Tv = view.findViewById(R.id.cus_name_tv);
+            prodorderno_Tv = view.findViewById(R.id.prodorderno_tv);
         }
     }
 
