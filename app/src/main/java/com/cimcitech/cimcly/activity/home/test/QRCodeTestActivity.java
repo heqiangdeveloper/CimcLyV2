@@ -127,12 +127,20 @@ public class QRCodeTestActivity extends AppCompatActivity{
                 result_Tv.setVisibility(View.VISIBLE);
                 start_test_Bt.setVisibility(View.VISIBLE);
                 result_Tv.setText(vehicleno);
-            }else {
+            }else if(scanResult.length() != 0 && scanResult.contains("L-") && scanResult.indexOf
+                    ("L") == scanResult.length() - 1 - 5){//条形码扫描的结果
+                vehicleno = scanResult;
+                warn_Tv.setVisibility(View.VISIBLE);
+                result_Tv.setVisibility(View.VISIBLE);
+                start_test_Bt.setVisibility(View.VISIBLE);
+                result_Tv.setText(vehicleno);
+            }
+            else {
                 vehicleno = "";
                 warn_Tv.setVisibility(View.GONE);
                 result_Tv.setVisibility(View.GONE);
                 start_test_Bt.setVisibility(View.GONE);
-                Toast.makeText(QRCodeTestActivity.this,"请确认是否是正确的二维码！",Toast.LENGTH_SHORT)
+                Toast.makeText(QRCodeTestActivity.this,"请确认是否是正确的二维码或条形码！",Toast.LENGTH_SHORT)
                         .show();
             }
         }

@@ -146,18 +146,27 @@ public class QRCodeOutFactoryActivity extends AppCompatActivity{
             Bundle bundle = data.getExtras();
             String scanResult = bundle.getString("result");
             Log.d("hqtest","s is: " + scanResult);
+            //二维码结果
             if(scanResult.length() > 29 && scanResult.substring(0,29).equals(StartStr)){
                 vehicleno = scanResult.substring(29);
                 warn_Tv.setVisibility(View.VISIBLE);
                 result_Tv.setVisibility(View.VISIBLE);
                 out_factory_Btn.setVisibility(View.VISIBLE);
                 result_Tv.setText(vehicleno);
-            }else {
+            }else if(scanResult.length() != 0 && scanResult.contains("L-") && scanResult.indexOf
+                    ("L") == scanResult.length() - 1 - 5){//条形码扫描的结果
+                vehicleno = scanResult;
+                warn_Tv.setVisibility(View.VISIBLE);
+                result_Tv.setVisibility(View.VISIBLE);
+                out_factory_Btn.setVisibility(View.VISIBLE);
+                result_Tv.setText(vehicleno);
+            }
+            else {
                 vehicleno = "";
                 warn_Tv.setVisibility(View.GONE);
                 result_Tv.setVisibility(View.GONE);
                 out_factory_Btn.setVisibility(View.GONE);
-                Toast.makeText(QRCodeOutFactoryActivity.this,"请确认是否是正确的二维码！",Toast.LENGTH_SHORT)
+                Toast.makeText(QRCodeOutFactoryActivity.this,"请确认是否是正确的二维码或条形码！",Toast.LENGTH_SHORT)
                         .show();
             }
         }
