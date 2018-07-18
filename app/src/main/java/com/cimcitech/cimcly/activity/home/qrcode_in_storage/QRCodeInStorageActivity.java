@@ -47,12 +47,10 @@ public class QRCodeInStorageActivity extends AppCompatActivity{
     TextView more_Tv;
     @Bind(R.id.titleName_tv)
     TextView titleName_Tv;
-
     private final int PERMISSION_CODE = 1;
     private final int CAMERA_CODE = 2;
     private final String StartStr = "http://service.lingyu.com?id=";
     private String vehicleno = "";
-    private boolean isCommitSuccess = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
