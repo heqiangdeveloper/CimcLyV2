@@ -43,5 +43,6 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     testCompile 'junit:junit:4.12'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
-    compile project(':libzxing')
+    compile project(':LibZxing')
+    compile 'com.github.chaychan:BottomBarLayout:1.1.2'
 }

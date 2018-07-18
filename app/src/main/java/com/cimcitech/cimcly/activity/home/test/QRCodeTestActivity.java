@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,7 +20,7 @@ import com.cimcitech.cimcly.R;
 import com.cimcitech.cimcly.bean.test.VehicleInfoVo;
 import com.cimcitech.cimcly.utils.Config;
 import com.google.gson.Gson;
-import com.xys.libzxing.zxing.activity.CaptureActivity;
+import com.google.zxing.client.android.CaptureActivity2;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -37,12 +38,17 @@ public class QRCodeTestActivity extends AppCompatActivity{
     TextView qrcode_Tv;
     @Bind(R.id.result_tv)
     TextView result_Tv;
-    @Bind(R.id.back_rl)
-    RelativeLayout backRl;
     @Bind(R.id.start_test_bt)
     Button start_test_Bt;
     @Bind(R.id.warn_tv)
     TextView warn_Tv;
+
+    @Bind(R.id.more_tv)
+    TextView more_Tv;
+    @Bind(R.id.title_ll)
+    LinearLayout title_Ll;
+    @Bind(R.id.titleName_tv)
+    TextView titleName_Tv;
 
     private final int PERMISSION_CODE = 1;
     private final int CAMERA_CODE = 2;
@@ -52,18 +58,25 @@ public class QRCodeTestActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_test2);
         ButterKnife.bind(this);
+        initTitle();
 
         warn_Tv.setVisibility(View.GONE);
         result_Tv.setVisibility(View.GONE);
         start_test_Bt.setVisibility(View.GONE);
     }
 
-    @OnClick({R.id.qrcode_tv,R.id.back_rl,R.id.start_test_bt})
+    public void initTitle(){
+        more_Tv.setVisibility(View.GONE);
+        title_Ll.setVisibility(View.GONE);
+        titleName_Tv.setText("扫码获取车工号");
+    }
+
+    @OnClick({R.id.qrcode_tv,R.id.back_iv,R.id.start_test_bt})
     public void onclick(View view) {
         switch (view.getId()) {
-            case R.id.back_rl:
+            case R.id.back_iv:
                 finish();
                 break;
             case R.id.qrcode_tv:
@@ -89,7 +102,7 @@ public class QRCodeTestActivity extends AppCompatActivity{
     }
 
     public void getQRCode(){
-        Intent i = new Intent(QRCodeTestActivity.this, CaptureActivity.class);
+        Intent i = new Intent(QRCodeTestActivity.this, CaptureActivity2.class);
         startActivityForResult(i,CAMERA_CODE);
     }
 
@@ -118,8 +131,9 @@ public class QRCodeTestActivity extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_CODE && resultCode == RESULT_OK) {
-            Bundle bundle = data.getExtras();
-            String scanResult = bundle.getString("result");
+            //Bundle bundle = data.getExtras();
+            //String scanResult = bundle.getString("result");
+            String scanResult = data.getStringExtra("CaptureIsbn");//这里一定要使用“CaptureIsbn”
             Log.d("hqtest","s is: " + scanResult);
             if(scanResult.length() > 29 && scanResult.substring(0,29).equals(StartStr)){
                 vehicleno = scanResult.substring(29);
