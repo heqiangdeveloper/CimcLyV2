@@ -1,20 +1,13 @@
 package com.cimcitech.cimcly.activity.home.test;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
 
-public class QRCodeWriteTestActivity extends AppCompatActivity{
+public class WriteTestActivity extends AppCompatActivity{
     @Bind(R.id.year_spinner)
     Spinner year_Spinner;
     @Bind(R.id.partb_et)
@@ -114,7 +107,7 @@ public class QRCodeWriteTestActivity extends AppCompatActivity{
     public boolean checkInput(){
         /*  车工号规则：
         *  1、	A段，前两位年份后两位是枚举值，要求用户下拉选择，默认是今年；
-        *  2、	B段，第3位到固定字符“L”中间是用户手工输入的物料号，有字母和数据组成，强制转化为大写；
+        *  2、	B段，第3位到固定字符“L”中间是用户手工输入的物料号，有字母和数据组成，强制转化为大写；(4-6位)
         *  3、	C段，固定字符“L-”；
         *  4、	D段，纯数字流水号，用户手工输入，要求位数限制为4位，只能输入数字格式，不足四位强制在前面补0；
         *   18      J020       L-      0023
@@ -123,10 +116,10 @@ public class QRCodeWriteTestActivity extends AppCompatActivity{
         PARTBSTR = partb_Et.getText().toString().trim();
         PARTDSTR = partd_Et.getText().toString().trim();
         if(PARTBSTR.length() == 0 || PARTDSTR.length() == 0){
-            Toast.makeText(QRCodeWriteTestActivity.this,"请填写完整车工号！",Toast.LENGTH_SHORT).show();
+            Toast.makeText(WriteTestActivity.this,"请填写完整车工号！",Toast.LENGTH_SHORT).show();
             return false;
         }else if(PARTBSTR.length() < 4){//B段最少是4位
-            Toast.makeText(QRCodeWriteTestActivity.this,"B段最少是4位！",Toast.LENGTH_SHORT).show();
+            Toast.makeText(WriteTestActivity.this,"B段最少是4位！",Toast.LENGTH_SHORT).show();
             return false;
         }else{
             //D段：要求位数限制为4位，只能输入数字格式，不足四位强制在前面补0；
@@ -155,10 +148,10 @@ public class QRCodeWriteTestActivity extends AppCompatActivity{
         OkHttpUtils
                 .get()
                 .url(Config.getVehicleInfo)
-                //.addParams("userId", Config.loginback.getUserId() + "")
+                //.addParams("userId", Config.USERID + "")
                 .addParams("vehicleNo", vehicleno)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 //.content(json)
                 //.mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -166,7 +159,7 @@ public class QRCodeWriteTestActivity extends AppCompatActivity{
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
-                                Toast.makeText(QRCodeWriteTestActivity.this,"查看检验状态失败，请检测网络！",Toast
+                                Toast.makeText(WriteTestActivity.this,"查看检验状态失败，请检测网络！",Toast
                                         .LENGTH_SHORT).show();
                             }
 
@@ -177,21 +170,21 @@ public class QRCodeWriteTestActivity extends AppCompatActivity{
                                 if(vehicleInfoVo.isSuccess()){
                                     String productionName = vehicleInfoVo.getData().getProductionName();
                                     if(null == productionName){//车工号不正确
-                                        Toast.makeText(QRCodeWriteTestActivity.this,
+                                        Toast.makeText(WriteTestActivity.this,
                                                 "未查到该车工号信息，请确认输入的车工号是否正确！",Toast.LENGTH_SHORT).show();
                                     }else if(productionName != null && productionName.equals("")) {//已检测
-                                        Toast.makeText(QRCodeWriteTestActivity.this,"该车辆已经检验过，请确认！",
+                                        Toast.makeText(WriteTestActivity.this,"该车辆已经检验过，请确认！",
                                                 Toast.LENGTH_SHORT).show();
                                         //vehicleno = "";
                                     }else{//未检验
-                                        Intent i = new Intent(QRCodeWriteTestActivity.this,QRCodeStartTestActivity.class);
+                                        Intent i = new Intent(WriteTestActivity.this,QRCodeStartTestActivity.class);
                                         i.putExtra("vehicleInfo",vehicleInfoVo);
                                         i.putExtra("vehicleno",vehicleno);
                                         startActivity(i);
                                         //finish();
                                     }
                                 }else{
-                                    Toast.makeText(QRCodeWriteTestActivity.this,"查看检验状态失败，请检测网络！",
+                                    Toast.makeText(WriteTestActivity.this,"查看检验状态失败，请检测网络！",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }

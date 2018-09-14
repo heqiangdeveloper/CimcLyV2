@@ -291,8 +291,8 @@ public class AreaReportDetailActivity extends AppCompatActivity implements View.
         OkHttpUtils
                 .postString()
                 .url(Config.rptOpportUnitList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -337,14 +337,14 @@ public class AreaReportDetailActivity extends AppCompatActivity implements View.
 
     public void getSubData() {
         String json = new Gson().toJson(new OpportUnitReq(pageNum, 10, "",
-                new OpportUnitReq.OpportUnityBean(Config.loginback.getUserId(),
+                new OpportUnitReq.OpportUnityBean(Config.USERID,
                         searchEt.getText().toString().trim()
                         , quotestatus)));
         OkHttpUtils
                 .postString()
                 .url(Config.opportUnitSubList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -400,8 +400,8 @@ public class AreaReportDetailActivity extends AppCompatActivity implements View.
         OkHttpUtils
                 .post()
                 .url(Config.getCurrStageSelect)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {

@@ -1,10 +1,13 @@
 package com.cimcitech.cimcly.activity.home.customer_visit;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -22,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -34,6 +38,8 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.Poi;
 import com.cimcitech.cimcly.ApkApplication;
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackAddActivity;
+import com.cimcitech.cimcly.activity.main.EditValueActivity;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.baidu.LocationService;
 import com.cimcitech.cimcly.bean.client.ClientNameVo;
@@ -68,7 +74,6 @@ import okhttp3.Call;
 import okhttp3.MediaType;
 
 public class CustomerVisitAddActivity extends BaseActivity {
-
     @Bind(R.id.client_no_tv)
     TextView clientNoTv;
     @Bind(R.id.create_time_tv)
@@ -102,6 +107,8 @@ public class CustomerVisitAddActivity extends BaseActivity {
     LinearLayout status_Ll;
     @Bind(R.id.who_spinner)
     Spinner whoSpinner;
+    @Bind(R.id.back_iv)
+    ImageView back_Iv;
 
     private LocationService locationService;
     private ArrayList<Poi> pois = new ArrayList<>(); //获取到的定位位置的对象
@@ -296,12 +303,34 @@ public class CustomerVisitAddActivity extends BaseActivity {
     }
 
     @OnClick({R.id.back_iv, R.id.location_tv, R.id.client_name_tv, R.id.client_manager_tv
-            , R.id.visit_time_tv, R.id.visit_time_2_tv, R.id.add_bt})
+            , R.id.visit_time_tv, R.id.visit_time_2_tv, R.id.add_bt,
+            R.id.mobile_tv,R.id.address_tv})
     public void onclick(View view) {
         List<String> list;
         switch (view.getId()) {
             case R.id.back_iv:
-                finish();
+                if(isChanged()){
+                    String content = getResources().getString(R.string.content_changed_warning);
+                    new AlertDialog.Builder(CustomerVisitAddActivity.this)
+                            .setMessage(content)
+                            .setCancelable(false)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).create().show();
+                }else{
+                    finish();
+                }
                 break;
             case R.id.location_tv:
                 intValue = 0;
@@ -342,15 +371,77 @@ public class CustomerVisitAddActivity extends BaseActivity {
                 showDialog(DATE_DIALOG);//跳出时间选择控件
                 break;
             case R.id.add_bt:
+                String startTime = visitTimeTv.getText().toString().trim();
+                String endTime = visitTime2Tv.getText().toString().trim();
+                SimpleDateFormat foramt = new SimpleDateFormat("yyyy-MM-dd");
+                Date startDate = null,endDate = null;
+                try{
+                    startDate = foramt.parse(startTime);
+                    endDate = foramt.parse(endTime);
+                }catch (Exception e){
+
+                }
+
+                if(startDate.compareTo(endDate) > 0){
+                    ToastUtil.showToast("起时间不能大于止时间");
+                    return;
+                }
                 if (visitSummaryTv.getText().toString().trim().equals("")) {
                     ToastUtil.showToast("请输入拜访总结");
                     return;
                 } else if (customer != null || item != null || contactInfoVo != null) { //两个其中一个不能为空
-                    mLoading.show();
+                    mCommittingDialog.show();
                     addData();
                 } else
                     ToastUtil.showToast("请选择客户名称");
                 break;
+//            case R.id.mobile_tv:
+//                Intent intent1 = new Intent(CustomerVisitAddActivity.this, EditValueActivity.class);
+//                intent1.putExtra("type","num");
+//                intent1.putExtra("title","电话");
+//                intent1.putExtra("content",mobileTv.getText().toString().trim());
+//                startActivityForResult(intent1,0);
+//                break;
+//            case R.id.address_tv:
+//                Intent intent2 = new Intent(CustomerVisitAddActivity.this, EditValueActivity.class);
+//                intent2.putExtra("type","str");
+//                intent2.putExtra("title","客户地址");
+//                intent2.putExtra("content",addressTv.getText().toString().trim());
+//                startActivityForResult(intent2,1);
+//                break;
+        }
+    }
+
+    public boolean isChanged(){
+        String visitTimeStr = DateTool.getSystemDate();
+        String visitTime2Str = DateTool.getSystemDate();
+        if(!visitTimeStr.equals(visitTimeTv.getText()) ||
+                !visitTime2Str.equals(visitTime2Tv.getText()) ||
+                        clientNameTv.getText().toString().trim().length() != 0 ||
+                        clientManagerTv.getText().toString().trim().length() != 0 ||
+                        contactPersonTv.getText().toString().trim().length() != 0 ||
+                        mobileTv.getText().toString().trim().length() != 0 ||
+                        addressTv.getText().toString().trim().length() != 0 ||
+                        visitSummaryTv.getText().toString().trim().length() != 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(RESULT_OK == resultCode){
+            String result = data.getStringExtra("result");
+            switch (requestCode){
+                case 0:
+                    mobileTv.setText(result);
+                    break;
+                case 1:
+                    addressTv.setText(result);
+                    break;
+            }
         }
     }
 
@@ -459,7 +550,6 @@ public class CustomerVisitAddActivity extends BaseActivity {
                     addressTv.setText(item.getCustaddress() != null && !item.getCustaddress().equals("") ? item.getCustaddress() : "");
                     clientNameTv.setTextColor(Color.parseColor("#333333"));
                     getContactPersonData(item.getCustid());
-                    pop.dismiss();
                 }
                 if (intValue == 2) {
                     contactItem = contactNameVo.getData().get(i);
@@ -470,8 +560,8 @@ public class CustomerVisitAddActivity extends BaseActivity {
                     clientManagerTv.setTextColor(Color.parseColor("#333333"));
                     contactPersonTv.setTextColor(Color.parseColor("#333333"));
                     mobileTv.setText(contactItem.getConttel());
-                    pop.dismiss();
                 }
+                pop.dismiss();
             }
         });
     }
@@ -480,12 +570,12 @@ public class CustomerVisitAddActivity extends BaseActivity {
      * 获取客户名称列表
      */
     public void getClientData() {
-        String json = new Gson().toJson(new OpprtCustReq(Config.loginback.getUserId() + ""));
+        String json = new Gson().toJson(new OpprtCustReq(Config.USERID + ""));
         OkHttpUtils
                 .postString()
                 .url(Config.custList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN )
+                .addHeader("sessionKey", Config.USERID  + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -515,7 +605,6 @@ public class CustomerVisitAddActivity extends BaseActivity {
      * 添加拜访记录
      */
     public void addData() {
-
         Long custid = 0L;
         String customerno = "";
         String custname = "";
@@ -539,7 +628,7 @@ public class CustomerVisitAddActivity extends BaseActivity {
             custname = contactInfoVo.getData().getCustname();
             custaddress = contactInfoVo.getData().getFamilyaddress();
         }
-        int userid = Config.loginback.getUserId();//	用户ID 当前用户ID
+        int userid = Config.USERID;//	用户ID 当前用户ID
         //private String createdate;//	创建日期
         //private int creator;//创建人
         String signinaddress = locationTv.getText().toString().trim();//	签到地址
@@ -552,7 +641,7 @@ public class CustomerVisitAddActivity extends BaseActivity {
         String visitbegintime = visitTimeTv.getText().toString().trim();//拜访开始时间
         String visitendtime = visitTime2Tv.getText().toString().trim();//拜访结束时间
         String custphone = mobileTv.getText().toString().trim();//	客户电话
-        int creator = Config.loginback.getUserId();//	创建人
+        int creator = Config.USERID;//	创建人
 
         String json = new Gson().toJson(new AddContactReq(userid, custid, customerno, custname, custaddress, custmanagerid
                 , custmanagername, contpersonid, signinaddress, sigininlat, sigininlon
@@ -561,8 +650,8 @@ public class CustomerVisitAddActivity extends BaseActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.addCustVisit)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -570,8 +659,8 @@ public class CustomerVisitAddActivity extends BaseActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mCommittingDialog.isShowing()) mCommittingDialog.dismiss();
                                 ToastUtil.showNetError();
-                                mLoading.dismiss();
                             }
 
                             @Override
@@ -590,7 +679,7 @@ public class CustomerVisitAddActivity extends BaseActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-
+                                if(mCommittingDialog.isShowing()) mCommittingDialog.dismiss();
                             }
                         }
                 );
@@ -606,8 +695,8 @@ public class CustomerVisitAddActivity extends BaseActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.contactListData)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -723,4 +812,10 @@ public class CustomerVisitAddActivity extends BaseActivity {
     };
 
     /***********地图定位相关end************/
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        back_Iv.callOnClick();
+    }
 }

@@ -12,238 +12,267 @@
         android:layout_below="@+id/back_rl"
         android:layout_marginTop="10dip"
         android:orientation="vertical">
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:padding="8dip">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="订单id："
-                    android:textColor="@color/black_33"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/order_no_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dip"
-                    android:text=""
-                    android:textColor="@color/red"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:padding="8dip">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="合同号："
-                    android:textColor="@color/black_33"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/agree_no_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text=""
-                    android:textColor="@color/red"
-                    android:textSize="14sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
             android:background="@color/white"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="100dip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:padding="8dip"
-                android:text="客户名称："
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:text="订单id"
                 android:textColor="@color/black_33"
-                android:textSize="14sp" />
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
+
+            <TextView
+                android:id="@+id/order_no_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="right"
+                android:padding="8dip"
+                android:drawableRight="@mipmap/white_icon"
+                android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
+                android:textColorHint="@color/alpha30"
+                android:textColor="@color/black"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:text="合同号"
+                android:textColor="@color/black_33"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
+
+            <TextView
+                android:id="@+id/agree_no_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="right"
+                android:padding="8dip"
+                android:drawableRight="@mipmap/white_icon"
+                android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
+                android:textColorHint="@color/alpha30"
+                android:textColor="@color/black"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:text="客户名称"
+                android:textColor="@color/black_33"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
 
             <TextView
                 android:id="@+id/cust_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="right"
                 android:padding="8dip"
-                android:textColor="@color/black_33"
-                android:textSize="14sp" />
+                android:drawableRight="@mipmap/white_icon"
+                android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
+                android:textColorHint="@color/alpha30"
+                android:textColor="@color/black"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
             android:background="@color/white"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="100dip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:padding="8dip"
-                android:text="付款行："
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:text="付款行"
                 android:textColor="@color/black_33"
-                android:textSize="14sp" />
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
 
             <TextView
                 android:id="@+id/pay_bank_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="right"
                 android:padding="8dip"
-                android:textColor="@color/black_33"
-                android:textSize="14sp" />
+                android:drawableRight="@mipmap/white_icon"
+                android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
+                android:textColorHint="@color/alpha30"
+                android:textColor="@color/black"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
             android:background="@color/white"
             android:orientation="horizontal">
-            <LinearLayout
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:text="付款方式"
+                android:textColor="@color/black_33"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
+
+            <TextView
+                android:id="@+id/pay_type_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginTop="2dip"
                 android:background="@color/white"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:text="付款方式："
-                    android:textColor="@color/black_33"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/pay_type_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="8dip"
-                    android:textColor="@color/black_33"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="100dip"
-                android:layout_height="wrap_content"
                 android:gravity="right"
                 android:padding="8dip"
-                android:text="币种："
+                android:drawableRight="@mipmap/white_icon"
+                android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
+                android:textColorHint="@color/alpha30"
+                android:textColor="@color/black"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:text="币种"
                 android:textColor="@color/black_33"
-                android:textSize="14sp" />
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
 
             <TextView
                 android:id="@+id/money_type_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="right"
                 android:padding="8dip"
-                android:textColor="@color/black_33"
-                android:textSize="14sp" />
-
+                android:drawableRight="@mipmap/white_icon"
+                android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
+                android:textColorHint="@color/alpha30"
+                android:textColor="@color/black"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
-            android:layout_weight="1"
             android:background="@color/white"
             android:orientation="horizontal">
+
             <TextView
-                android:layout_width="100dip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:padding="8dip"
-                android:text="支付金额："
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:text="支付金额"
                 android:textColor="@color/black_33"
-                android:textSize="14sp" />
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
 
             <TextView
                 android:id="@+id/pay_amount_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="right"
                 android:padding="8dip"
-                android:textColor="@color/black_33"
-                android:textSize="14sp" />
-
+                android:drawableRight="@mipmap/white_icon"
+                android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
+                android:textColorHint="@color/alpha30"
+                android:textColor="@color/black"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
         </LinearLayout>
+
         <LinearLayout
+            android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
             android:background="@color/white"
             android:orientation="horizontal">
-            <LinearLayout
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:text="支付日期"
+                android:textColor="@color/black_33"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
+
+            <TextView
+                android:id="@+id/pay_date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginTop="2dip"
                 android:background="@color/white"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:text="支付日期："
-                    android:textColor="@color/black_33"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/pay_date_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="8dip"
-                    android:textColor="@color/black_33"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
-
+                android:gravity="right"
+                android:padding="8dip"
+                android:drawableRight="@mipmap/white_icon"
+                android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
+                android:textColorHint="@color/alpha30"
+                android:textColor="@color/black"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
         </LinearLayout>
 
         <LinearLayout
@@ -302,29 +331,36 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dip"
             android:background="@color/white"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="100dip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:padding="8dip"
-                android:text="对账日期："
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:text="对账日期"
                 android:textColor="@color/black_33"
-                android:textSize="14sp" />
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
 
             <TextView
                 android:id="@+id/check_date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="right"
                 android:padding="8dip"
-                android:textColor="@color/black_33"
-                android:textSize="14sp" />
+                android:drawableRight="@mipmap/white_icon"
+                android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
+                android:textColorHint="@color/alpha30"
+                android:textColor="@color/black"
+                android:textSize="@dimen/customer_visit_detail_text_size"/>
         </LinearLayout>
 
     </LinearLayout>

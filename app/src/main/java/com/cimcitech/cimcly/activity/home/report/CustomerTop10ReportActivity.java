@@ -135,8 +135,8 @@ public class CustomerTop10ReportActivity extends AppCompatActivity{
         OkHttpUtils
                 .post()
                 .url(Config.getCustomerTop10)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {

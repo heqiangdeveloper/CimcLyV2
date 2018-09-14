@@ -50,16 +50,12 @@ public class WaitInStorageReq {
     }
 
     public static class WaitInStorageReqBean {
-        public WaitInStorageReqBean(String createpeople, String sorderno) {
-            //this.sorderno = sorderno;
+        private String createpeople;
+        private String custName;
+        public WaitInStorageReqBean(String createpeople, String custName) {
+            this.custName = custName;
             this.createpeople = createpeople;
         }
-
-        /**
-         * creator : 2
-         */
-
-        private String createpeople;
 
         public String getCreatepeople() {
             return createpeople;
@@ -67,6 +63,14 @@ public class WaitInStorageReq {
 
         public void setCreatepeople(String createpeople) {
             this.createpeople = createpeople;
+        }
+
+        public String getCustName() {
+            return custName;
+        }
+
+        public void setCustName(String custName) {
+            this.custName = custName;
         }
     }
 }

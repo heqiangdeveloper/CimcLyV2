@@ -1,8 +1,11 @@
 package com.cimcitech.cimcly.activity.home.intention_track;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -14,12 +17,16 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.activity.home.customer_visit.CustomerVisitAddActivity;
+import com.cimcitech.cimcly.activity.main.EditValueActivity;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.bean.opport_unit.OpportSelectVo;
 import com.cimcitech.cimcly.bean.opport_unit.OpportUnitInfoVo;
@@ -57,10 +64,10 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
     TextView productVarietyTv;
     @Bind(R.id.product_model_tv)
     TextView productModelTv;
-    @Bind(R.id.product_number_et)
-    EditText productNumberEt;
-    @Bind(R.id.contract_amount_et)
-    EditText contractAmountEt;
+    @Bind(R.id.product_number_tv)
+    TextView productNumberTv;
+    @Bind(R.id.contract_amount_tv)
+    TextView contractAmountTv;
     @Bind(R.id.delivery_date_tv)
     TextView deliveryDateTv;
     @Bind(R.id.stage_tv)
@@ -83,6 +90,22 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
     LinearLayout title_Ll;
     @Bind(R.id.titleName_tv)
     TextView titleName_Tv;
+    @Bind(R.id.back_iv)
+    ImageView back_Iv;
+
+    private String intentionalThemeValue = "";
+    private String productCategoryValue = "";
+    private String productVarietyValue = "";
+    private String productModelValue = "";
+    private String productNumberValue = "";
+    private String contractAmountValue = "";
+    private String deliveryDateValue = "";
+    private String stageValue = "";
+    private String possibilityValue = "";
+    private String followUpTypeValue = "";
+    private String paymentMethodValue = "";
+    private String detailedRequirementsValue = "";
+    private String intentionalNumberValue = "";
 
     public int intValue = 0;
     private PopupWindow pop;
@@ -125,34 +148,74 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
         if (infoVo != null) {
             OpportUnitInfoVo.DataBean info = infoVo.getData();
             intentionalNumberTv.setText(info.getOpportno());
+            intentionalNumberValue = intentionalNumberTv.getText().toString();
+
             intentionalThemeEt.setText(info.getOpportsubject());
+            intentionalThemeValue = intentionalThemeEt.getText().toString().trim();
+
             productCategoryTv.setText(CustSelectUtils.getProductCategory(opportSelectVo, info.getProductcategory()));
+            productCategoryValue = productCategoryTv.getText().toString().trim();
 
             productVarietyTv.setText(CustSelectUtils.getProductVariety(opportSelectVo, info.getProductcategory(),
                     info.getProductvariety()));
+            productVarietyValue = productVarietyTv.getText().toString().trim();
 
             productModelTv.setText(info.getProductid() + "|" +
                     CustSelectUtils.getProductModel(opportSelectVo, info.getProductcategory(),
                             info.getProductvariety(),
                             info.getProductid()));
-            productNumberEt.setText(info.getProductcount() + "");
-            contractAmountEt.setText(info.getPlanmoney() + "");
-            deliveryDateTv.setText(DateTool.getDateStr(info.getPlansigndate()));
-            stageTv.setText(info.getStageValue());
-            possibilityTv.setText(info.getPossibilityValue());
-            paymentMethodTv.setText(CustSelectUtils.getPaymentmethod(opportSelectVo, infoVo.getData().getPaymentmethod()));
+            productModelValue = productModelTv.getText().toString().trim();
 
+            productNumberTv.setText(info.getProductcount() + "");
+            productNumberValue = productNumberTv.getText().toString().trim();
+
+            contractAmountTv.setText(info.getPlanmoney() + "");
+            contractAmountValue = contractAmountTv.getText().toString().trim();
+
+            deliveryDateTv.setText(DateTool.getDateStr(info.getPlansigndate()));
+            deliveryDateValue = deliveryDateTv.getText().toString().trim();
+
+            stageTv.setText(info.getStageValue());
+            stageValue = stageTv.getText().toString().trim();
+
+            possibilityTv.setText(info.getPossibilityValue());
+            possibilityValue = possibilityTv.getText().toString().trim();
+
+            paymentMethodTv.setText(CustSelectUtils.getPaymentmethod(opportSelectVo, infoVo.getData().getPaymentmethod()));
+            paymentMethodValue = paymentMethodTv.getText().toString().trim();
         }
     }
 
     @OnClick({R.id.back_iv, R.id.product_category_tv,
             R.id.product_variety_tv, R.id.product_model_tv, R.id.delivery_date_tv,
-            R.id.possibility_tv, R.id.payment_method_tv, R.id.add_bt, R.id.follow_up_type_tv})
+            R.id.possibility_tv, R.id.payment_method_tv, R.id.add_bt, R.id.follow_up_type_tv,
+            R.id.product_number_tv,R.id.contract_amount_tv})
     public void onclick(View v) {
         List<String> list;
         switch (v.getId()) {
             case R.id.back_iv:
-                finish();
+                if(isChanged()){
+                    String content = getResources().getString(R.string.content_changed_warning);
+                    new AlertDialog.Builder(IntentionTrackFollowUpActivity.this)
+                            .setMessage(content)
+                            .setCancelable(false)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).create().show();
+                }else{
+                    finish();
+                }
                 break;
             case R.id.product_model_tv:
                 intValue = 4;
@@ -214,6 +277,56 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
                     pop.showAtLocation(v, Gravity.CENTER, 0, 0);
                 }
                 break;
+            case R.id.product_number_tv:
+                startEditActivity("num","产品数量",productNumberTv.getText().toString().trim(),0);
+                break;
+            case R.id.contract_amount_tv:
+                startEditActivity("num","预计合同金额",contractAmountTv.getText().toString().trim(),1);
+                break;
+        }
+    }
+
+    public boolean isChanged(){
+        if(!intentionalNumberValue.equals(intentionalNumberTv.getText().toString()) ||
+                !intentionalThemeValue.equals(intentionalThemeEt.getText().toString()) ||
+                !productCategoryValue.equals(productCategoryTv.getText().toString()) ||
+                !productVarietyValue.equals(productVarietyTv.getText().toString()) ||
+                !productModelValue.equals(productModelTv.getText().toString()) ||
+                !productNumberValue.equals(productNumberTv.getText().toString()) ||
+                !contractAmountValue.equals(contractAmountTv.getText().toString()) ||
+                !deliveryDateValue.equals(deliveryDateTv.getText().toString()) ||
+                !stageValue.equals(stageTv.getText().toString()) ||
+                !possibilityValue.equals(possibilityTv.getText().toString()) ||
+                !paymentMethodValue.equals(paymentMethodTv.getText().toString()) ||
+                followUpTypeValue.length() != 0 ||
+                detailedRequirementsValue.length() != 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void startEditActivity(String type,String title,String content,int requestCode){
+        Intent intent2 = new Intent(IntentionTrackFollowUpActivity.this, EditValueActivity.class);
+        intent2.putExtra("type",type);
+        intent2.putExtra("title",title);
+        intent2.putExtra("content",content);
+        startActivityForResult(intent2,requestCode);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(RESULT_OK == resultCode){
+            String result = data.getStringExtra("result");
+            switch (requestCode){
+                case 0:
+                    productNumberTv.setText(result);
+                    break;
+                case 1:
+                    contractAmountTv.setText(result);
+                    break;
+            }
         }
     }
 
@@ -321,8 +434,8 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getOpportSelect)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {
@@ -352,11 +465,11 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
     }
 
     public boolean checkInput() {
-        if (productNumberEt.getText().toString().trim().equals("")) {
+        if (productNumberTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入产品数量");
             return false;
         }
-        if (contractAmountEt.getText().toString().trim().equals("")) {
+        if (contractAmountTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入预计合同金额");
             return false;
         }
@@ -382,15 +495,15 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
         else
             productid = infoVo.getData().getProductid();
         //数量
-        if (productNumberEt.getText().toString().trim().equals("")) {
+        if (productNumberTv.getText().toString().trim().equals("")) {
             productcount = infoVo.getData().getProductcount();
         } else {
-            productcount = Integer.parseInt(productNumberEt.getText().toString().trim());
+            productcount = Integer.parseInt(productNumberTv.getText().toString().trim());
         }
         //需求交付日
         String plansigndate = deliveryDateTv.getText().toString().trim();
         //预计合同金额
-        String planmoney = contractAmountEt.getText().toString().trim();
+        String planmoney = contractAmountTv.getText().toString().trim();
         //可能性
         String possibility = "";
         if (possibiltyBean != null)
@@ -402,7 +515,7 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
         //备注
         String remark = "";
         //修改人
-        int modify = Config.loginback.getUserId();
+        int modify = Config.USERID;
         //币种
         String currency = infoVo.getData().getCurrency();
         //意向类型
@@ -428,8 +541,8 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.updateOpportUnit)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -462,4 +575,8 @@ public class IntentionTrackFollowUpActivity extends BaseActivity {
                 );
     }
 
+    @Override
+    public void onBackPressed() {
+        back_Iv.callOnClick();
+    }
 }

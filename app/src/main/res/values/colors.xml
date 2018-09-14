@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="message_item_devid_color">#F4F4F4</color>
+    <color name="customer_visit_list_divide_color">#F1F1F1</color>
+    <color name="customer_visit_list_item_color">#666A6F</color>
+    <color name="color_circle_border">#706F7D</color>
+    <color name="color_schedule_orange">#f6af80</color>
+    <color name="color_schedule_pink">#E67986</color>
     <color name="tab_normal_color">#515051</color>
     <color name="contact_detail_more_item_clicked">#F0F0F0</color>
     <color name="colorPrimary">#3DA7F7</color>

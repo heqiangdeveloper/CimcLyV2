@@ -7,10 +7,19 @@ android {
         applicationId "com.cimcitech.cimcly"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 20
-        versionName "8.39"
+        versionCode 201
+        versionName "2.01"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        ndk {
+            //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+        }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: applicationId,
+                JPUSH_APPKEY : "13ba329518f5c5f3b0490d91", //JPush上注册的包名对应的appkey（*换成你的*）
+                JPUSH_CHANNEL: "developer-default" //暂时填写默认值即可.
+        ]
     }
     buildTypes {
         release {
@@ -45,4 +54,7 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
     compile project(':LibZxing')
     compile 'com.github.chaychan:BottomBarLayout:1.1.2'
+    compile files('libs/pinyin4j-2.5.0.jar')
+    compile 'cn.jiguang:jpush:2.1.8'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 }

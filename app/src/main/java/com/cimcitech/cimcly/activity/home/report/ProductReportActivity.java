@@ -309,8 +309,8 @@ public class ProductReportActivity extends AppCompatActivity{
         OkHttpUtils
                 .post()
                 .url(Config.getDiffProductOrder)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {

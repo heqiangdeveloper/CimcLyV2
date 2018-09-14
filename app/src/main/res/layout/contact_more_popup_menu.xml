@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="150dp"
     android:layout_height="match_parent"
     android:orientation="vertical"
               android:background="#fff"
-    android:paddingLeft="2dp"
-    android:minWidth="200dp">
+    android:paddingLeft="2dp">
     <TextView
+        android:visibility="gone"
         android:drawablePadding="@dimen/customer_visit_more_menu_item_padding"
         android:drawableLeft="@mipmap/add48"
         android:gravity="center_vertical"
@@ -21,6 +21,7 @@
         android:paddingLeft="@dimen/customer_visit_more_menu_item_padding"
         android:text="添加"/>
     <TextView
+        android:visibility="gone"
         android:drawablePadding="@dimen/customer_visit_more_menu_item_padding"
         android:drawableLeft="@mipmap/save_48"
         android:gravity="center_vertical"
@@ -35,6 +36,7 @@
         android:paddingLeft="@dimen/customer_visit_more_menu_item_padding"
         android:text="保存"/>
     <TextView
+        android:visibility="gone"
         android:drawablePadding="@dimen/customer_visit_more_menu_item_padding"
         android:drawableLeft="@mipmap/off48"
         android:gravity="center_vertical"
@@ -49,6 +51,7 @@
         android:clickable="true"
         android:text="作废"/>
     <TextView
+        android:visibility="gone"
         android:drawablePadding="@dimen/customer_visit_more_menu_item_padding"
         android:drawableLeft="@mipmap/delete_48"
         android:gravity="center_vertical"
@@ -63,6 +66,7 @@
         android:clickable="true"
         android:text="删除"/>
     <TextView
+        android:visibility="gone"
         android:drawablePadding="@dimen/customer_visit_more_menu_item_padding"
         android:drawableLeft="@mipmap/done48"
         android:gravity="center_vertical"
@@ -76,4 +80,74 @@
         android:layout_height="40dp"
         android:clickable="true"
         android:text="完成"/>
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/item_my_rl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:clickable="true">
+        <TextView
+            android:id="@+id/item_my_tv"
+            android:drawablePadding="@dimen/customer_visit_more_menu_item_padding"
+            android:drawableLeft="@mipmap/my"
+            android:gravity="center_vertical"
+            android:background="@drawable/customer_visit_more_item_bg"
+            android:layout_marginTop="0dp"
+            android:paddingLeft="@dimen/customer_visit_more_menu_item_padding"
+            android:textSize="@dimen/activity_customer_visit_title_size"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="我的"/>
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/item_my_checked_tv"
+            android:layout_alignParentRight="true"
+            android:drawablePadding="@dimen/customer_visit_more_menu_item_padding"
+            android:gravity="center_vertical"
+            android:layout_gravity="end"
+            android:background="@drawable/customer_visit_more_item_bg"
+            android:layout_marginTop="0dp"
+            android:paddingRight="@dimen/customer_visit_more_menu_item_padding"
+            android:textSize="@dimen/activity_customer_visit_title_size"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/checked_label"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/item_others_rl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:clickable="true">
+        <TextView
+            android:id="@+id/item_others_tv"
+            android:drawablePadding="@dimen/customer_visit_more_menu_item_padding"
+            android:drawableLeft="@mipmap/others"
+            android:gravity="center_vertical"
+            android:background="@drawable/customer_visit_more_item_bg"
+            android:layout_marginTop="0dp"
+            android:paddingLeft="@dimen/customer_visit_more_menu_item_padding"
+            android:textSize="@dimen/activity_customer_visit_title_size"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="我下属的"/>
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/item_others_checked_tv"
+            android:layout_alignParentRight="true"
+            android:drawablePadding="@dimen/customer_visit_more_menu_item_padding"
+            android:gravity="center_vertical"
+            android:background="@drawable/customer_visit_more_item_bg"
+            android:layout_marginTop="0dp"
+            android:paddingRight="@dimen/customer_visit_more_menu_item_padding"
+            android:textSize="@dimen/activity_customer_visit_title_size"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/checked_label"/>
+    </RelativeLayout>
 </LinearLayout>

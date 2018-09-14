@@ -2,6 +2,7 @@ package com.cimcitech.cimcly.activity.home.intention_track;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -37,6 +39,7 @@ import com.cimcitech.cimcly.bean.opport_unit.OpportUnitVo;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.GjsonUtil;
 import com.cimcitech.cimcly.utils.ToastUtil;
+import com.cimcitech.cimcly.widget.BaseActivity;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -50,9 +53,7 @@ import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.MediaType;
 
-public class IntentionTrackActivity extends AppCompatActivity implements View
-        .OnClickListener {
-
+public class IntentionTrackActivity extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.back_iv)
     ImageView back_Iv;
     @Bind(R.id.my_tv)
@@ -91,6 +92,21 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
     Spinner whoSpinner;
     @Bind(R.id.who_ll)
     LinearLayout who_Ll;
+    @Bind(R.id.popup_menu_layout)
+    LinearLayout popup_menu_Layout;
+    @Bind(R.id.item_my_rl)
+    RelativeLayout item_my_Rl;
+    @Bind(R.id.item_others_rl)
+    RelativeLayout item_others_Rl;
+    @Bind(R.id.item_my_checked_tv)
+    TextView item_my_checked_Tv;
+    @Bind(R.id.item_others_checked_tv)
+    TextView item_others_checked_Tv;
+    @Bind(R.id.item_my_tv)
+    TextView item_my_Tv;
+    @Bind(R.id.item_others_tv)
+    TextView item_others_Tv;
+
     private PopupWindow pop;
     private int pageNum = 1;
     private IntentionTrackAdapter adapter;
@@ -110,9 +126,12 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
         setContentView(R.layout.activity_intention_track2);
         ButterKnife.bind(this);
         initTitle();
-        initViewData();
+        initPopupMenu();
+        myData = true;
+        setItemChechedLableVisible();
         getCurrStageSelect();
-        setSpinnerListener();
+        initViewData();
+        updateData();
     }
 
     public void setSpinnerListener(){
@@ -132,12 +151,32 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
     }
 
     public void initTitle(){
-        more_Tv.setVisibility(View.GONE);
-        whoSpinner.setVisibility(View.VISIBLE);
+        more_Tv.setVisibility(View.VISIBLE);
         titleName_Tv.setText("意向跟踪");
         titleLl.setVisibility(View.VISIBLE);
         who_Ll.setVisibility(View.GONE);
         status_Ll.setVisibility(View.VISIBLE);
+        searchEt.setHint("请输入客户名称查询");
+    }
+
+    public void initPopupMenu(){
+        popup_menu_Layout.setVisibility(View.GONE);
+        item_my_Rl.setVisibility(View.VISIBLE);
+        item_others_Rl.setVisibility(View.VISIBLE);
+    }
+
+    public void setItemChechedLableVisible(){
+        if(myData){
+            item_my_checked_Tv.setVisibility(View.VISIBLE);
+            item_others_checked_Tv.setVisibility(View.GONE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.black));
+        }else {
+            item_my_checked_Tv.setVisibility(View.GONE);
+            item_others_checked_Tv.setVisibility(View.VISIBLE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.black));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
     }
 
     //刷新数据
@@ -168,21 +207,9 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
     }
 
     @OnClick({R.id.my_tv,R.id.xs_tv,R.id.add_ib,R.id.back_iv,R.id.status_bt,R.id
-            .status_bt_sanjiao,R.id.search_bt})
+            .status_bt_sanjiao,R.id.search_bt,R.id.more_tv,R.id.item_my_rl,R.id.item_others_rl})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.my_tv:
-                myData = true;
-                myView.setVisibility(View.VISIBLE);
-                xsView.setVisibility(View.INVISIBLE);
-                updateData();
-                break;
-            case R.id.xs_tv:
-                myData = false;
-                myView.setVisibility(View.INVISIBLE);
-                xsView.setVisibility(View.VISIBLE);
-                updateData();
-                break;
             case R.id.add_ib:
                 startActivity(new Intent(IntentionTrackActivity.this, IntentionTrackAddActivity.class));
                 break;
@@ -204,7 +231,21 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
                 updateData();
                 ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
+            case R.id.more_tv:
+                popup_menu_Layout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.item_my_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                myData = true;
+                updateData();
+                break;
+            case R.id.item_others_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                myData = false;
+                updateData();
+                break;
         }
+        setItemChechedLableVisible();
     }
 
     public void showContactUsPopWin(Context context, String title, List<String> list) {
@@ -345,15 +386,15 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
 
     public void getData() {
         String json = new Gson().toJson(new OpportUnitReq(pageNum, 10, "",
-                new OpportUnitReq.OpportUnityBean(Config.loginback.getUserId(),
+                new OpportUnitReq.OpportUnityBean(Config.USERID,
                         searchEt.getText().toString().trim()
                         , quotestatus)));
         Log.d("heqint","request json is: " + json);
         OkHttpUtils
                 .postString()
                 .url(Config.opportUnitList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -367,7 +408,6 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
                                 Log.d("heqint","response is: " + response);
                                 opportUnitVo = GjsonUtil.parseJsonWithGson(response, OpportUnitVo.class);
                                 if (opportUnitVo != null) {
@@ -398,14 +438,14 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
 
     public void getSubData() {
         String json = new Gson().toJson(new OpportUnitReq(pageNum, 10, "",
-                new OpportUnitReq.OpportUnityBean(Config.loginback.getUserId(),
+                new OpportUnitReq.OpportUnityBean(Config.USERID,
                         searchEt.getText().toString().trim()
                         , quotestatus)));
         OkHttpUtils
                 .postString()
                 .url(Config.opportUnitSubList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -461,8 +501,8 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
         OkHttpUtils
                 .post()
                 .url(Config.getCurrStageSelect)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {
@@ -480,11 +520,28 @@ public class IntentionTrackActivity extends AppCompatActivity implements View
                                         if (getCurrStageSelect.getData().size() > 0) {
                                             quotestatus = getCurrStageSelect.getData().get(0).getCodeid();
                                             statusBt.setText(getCurrStageSelect.getData().get(0).getCodevalue());
-                                            getData();
                                         }
                                 }
                             }
                         }
                 );
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            int x = (int) ev.getX();
+            int y = (int) ev.getY();
+
+            if (null != popup_menu_Layout && popup_menu_Layout.getVisibility() == View.VISIBLE) {
+                Rect hitRect = new Rect();
+                popup_menu_Layout.getGlobalVisibleRect(hitRect);
+                if (!hitRect.contains(x, y)) {
+                    popup_menu_Layout.setVisibility(View.GONE);
+                    return true;
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -39,6 +40,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.Poi;
 import com.cimcitech.cimcly.ApkApplication;
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackFollowUpActivity;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.baidu.LocationService;
 import com.cimcitech.cimcly.bean.work_weekly.ReportTypeVo;
@@ -74,8 +76,8 @@ public class WorkWeeklyAddActivity extends BaseActivity {
     TextView startTimeTv;
     @Bind(R.id.end_time_tv)
     TextView endTimeTv;
-    @Bind(R.id.performance_tv)
-    EditText performanceTv;
+    @Bind(R.id.performance_et)
+    EditText performanceEt;
     @Bind(R.id.nextworktask_tv)
     EditText nextworktaskTv;
     @Bind(R.id.work_type_tv)
@@ -98,6 +100,8 @@ public class WorkWeeklyAddActivity extends BaseActivity {
     TextView titleName_Tv;
     @Bind(R.id.title_ll)
     LinearLayout title_Ll;
+    @Bind(R.id.back_iv)
+    ImageView back_Iv;
 
     private ReportTypeVo reportTypeVo;
     private ReportTypeVo.DataBean itemType;
@@ -201,10 +205,30 @@ public class WorkWeeklyAddActivity extends BaseActivity {
     @OnClick({R.id.back_iv,R.id.add_bt, R.id.start_time_tv, R.id.end_time_tv, R.id.work_type_tv,
             R.id.location_tv})
     public void onclick(View view) {
-
         switch (view.getId()) {
             case R.id.back_iv:
-                finish();
+                if(isChanged()){
+                    String content = getResources().getString(R.string.content_changed_warning);
+                    new AlertDialog.Builder(WorkWeeklyAddActivity.this)
+                            .setMessage(content)
+                            .setCancelable(false)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).create().show();
+                }else{
+                    finish();
+                }
                 break;
             case R.id.add_bt:
                 if (!checkInput()) return;
@@ -237,6 +261,15 @@ public class WorkWeeklyAddActivity extends BaseActivity {
                 }
                 break;
         }
+    }
+
+    public boolean isChanged(){
+        if(!endTimeTv.getText().toString().equals(DateTool.getSystemDate()) ||
+                performanceEt.getText().toString().trim().length() != 0 ||
+                workTypeTv.getText().toString().trim().length() != 0){
+            return true;
+        }
+        return false;
     }
 
     public void getLocation(){
@@ -357,7 +390,7 @@ public class WorkWeeklyAddActivity extends BaseActivity {
             ToastUtil.showToast("请选择汇报地址");
             return false;
         }
-        if (performanceTv.getText().toString().trim().equals("")) {
+        if (performanceEt.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入工作完成情况");
             return false;
         }
@@ -414,11 +447,11 @@ public class WorkWeeklyAddActivity extends BaseActivity {
     private void addData() {
 
         String begintime = startTimeTv.getText().toString().trim();
-        int creator = Config.loginback.getUserId();
+        int creator = Config.USERID;
         String endtime = endTimeTv.getText().toString().trim();
         String nextworktask = nextworktaskTv.getText().toString().trim();
-        String performance = performanceTv.getText().toString().trim();
-        int userid = Config.loginback.getUserId();
+        String performance = performanceEt.getText().toString().trim();
+        int userid = Config.USERID;
         String reportType = itemType.getCodeid();
         double siginInLat = latitude;
         double siginInLon = longitude;
@@ -429,8 +462,8 @@ public class WorkWeeklyAddActivity extends BaseActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.addWorkWeekly)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey",Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -467,8 +500,8 @@ public class WorkWeeklyAddActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getReportType)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {
@@ -606,5 +639,10 @@ public class WorkWeeklyAddActivity extends BaseActivity {
         Message msg = new Message();
         msg.what = flag;
         handler.sendMessage(msg);
+    }
+
+    @Override
+    public void onBackPressed() {
+        back_Iv.callOnClick();
     }
 }

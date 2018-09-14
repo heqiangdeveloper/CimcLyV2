@@ -3,17 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/message_item_devid_color"
     android:fitsSystemWindows="true">
     <include layout="@layout/activity_customer_visit_detail2_title"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:layout_alignParentStart="true"
-
-        android:background="#f2f2f2"
         android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -23,6 +20,122 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="时间信息"
+                android:drawableLeft="@mipmap/time48"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="8dp"
+                    android:text="创建时间"
+                    android:textColor="@color/black_33"
+                    android:textSize="@dimen/customer_visit_detail_text_size"/>
+
+                <TextView
+                    android:id="@+id/create_time_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="2018-08-08"
+                    android:textColorHint="@color/alpha30"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/customer_visit_detail_text_size"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="起时间"
+                    android:textColor="@color/black_33"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
+
+                <TextView
+                    android:id="@+id/visit_time_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:inputType="numberDecimal"
+                    android:gravity="right"
+                    android:maxLength="11"
+                    android:padding="8dip"
+                    android:textColorHint="@color/alpha30"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="止时间"
+                    android:textColor="@color/black_33"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
+
+                <TextView
+                    android:id="@+id/visit_time_2_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:textColorHint="@color/alpha30"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="客户信息"
+                android:drawableLeft="@mipmap/customers48"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -36,7 +149,7 @@
                     android:gravity="right"
                     android:padding="8dip"
                     android:text="客户代码"
-                    android:textColor="@color/black"
+                    android:textColor="@color/black_33"
                     android:textSize="@dimen/customer_visit_detail_text_size" />
 
                 <TextView
@@ -54,38 +167,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="8dp"
-                    android:text="创建时间"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size"/>
-
-                <TextView
-                    android:id="@+id/create_time_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:textColorHint="@color/alpha30"
-                    android:textColor="@color/red"
-                    android:textSize="@dimen/customer_visit_detail_text_size"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -97,7 +179,7 @@
                     android:paddingBottom="8dp"
                     android:paddingLeft="8dp"
                     android:text="客户名称"
-                    android:textColor="@color/black"
+                    android:textColor="@color/black_33"
                     android:textSize="@dimen/customer_visit_detail_text_size"/>
 
                 <!--客户不能修改-->
@@ -128,7 +210,7 @@
                     android:gravity="right"
                     android:padding="8dip"
                     android:text="联系人"
-                    android:textColor="@color/black"
+                    android:textColor="@color/black_33"
                     android:textSize="@dimen/customer_visit_detail_text_size" />
 
                 <TextView
@@ -147,7 +229,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -157,7 +239,7 @@
                     android:gravity="right"
                     android:padding="8dip"
                     android:text="电话"
-                    android:textColor="@color/black"
+                    android:textColor="@color/black_33"
                     android:textSize="@dimen/customer_visit_detail_text_size" />
 
                 <TextView
@@ -169,74 +251,25 @@
                     android:gravity="right"
                     android:padding="8dip"
                     android:textColorHint="@color/alpha30"
-                    android:textColor="@color/black"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
 
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="地址信息"
+                android:drawableLeft="@mipmap/location48"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:text="起时间"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size" />
-
-                <TextView
-                    android:id="@+id/visit_time_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:inputType="numberDecimal"
-                    android:gravity="right"
-                    android:maxLength="11"
-                    android:padding="8dip"
-                    android:textColorHint="@color/alpha30"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:text="止时间"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size" />
-
-                <TextView
-                    android:id="@+id/visit_time_2_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:textColorHint="@color/alpha30"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -246,7 +279,7 @@
                     android:gravity="right"
                     android:padding="8dip"
                     android:text="客户地址"
-                    android:textColor="@color/black"
+                    android:textColor="@color/black_33"
                     android:textSize="@dimen/customer_visit_detail_text_size" />
 
                 <TextView
@@ -275,7 +308,7 @@
                     android:gravity="right"
                     android:padding="8dip"
                     android:text="签到"
-                    android:textColor="@color/black"
+                    android:textColor="@color/black_33"
                     android:textSize="@dimen/customer_visit_detail_text_size" />
 
                 <TextView
@@ -290,38 +323,35 @@
                     android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
-                android:background="@color/white"
-                android:orientation="horizontal">
+                android:text="拜访总结"
+                android:drawableLeft="@mipmap/note48"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:text="拜访总结"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size" />
-            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="horizontal">
                 <EditText
+                    android:background="@drawable/bg_edittext"
                     android:id="@+id/visit_summary_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
                     android:hint="请输入拜访总结"
-                    android:minLines="3"
+                    android:minLines="5"
                     android:gravity="left"
-                    android:padding="8dip"
+                    android:layout_margin="8dip"
                     android:textColorHint="@color/alpha30"
-                    android:textColor="@color/black"
+                    android:textColor="@color/black_33"
                     android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
         </LinearLayout>
@@ -333,10 +363,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
         android:layout_marginTop="?actionBarSize"
         android:layout_marginRight="10dp"
         android:elevation="20dp"
+        android:visibility="gone"
         android:translationZ="20dp"
         android:background="@color/white"
         android:layout_gravity="end|top">

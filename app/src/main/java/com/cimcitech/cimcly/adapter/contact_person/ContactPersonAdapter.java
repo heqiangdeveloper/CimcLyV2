@@ -12,11 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.bean.CustomerVisit;
-import com.cimcitech.cimcly.bean.MyClientVo;
-import com.cimcitech.cimcly.bean.client.Contact;
-import com.cimcitech.cimcly.bean.client.Customer;
-import com.cimcitech.cimcly.utils.DateTool;
+import com.cimcitech.cimcly.bean.contact.Contact;
 
 import java.util.List;
 
@@ -55,6 +51,8 @@ public class ContactPersonAdapter extends RecyclerView.Adapter<RecyclerView.View
         void onItemClick(View view, int position);
 
         void onItemLongClickListener(View view, int position);
+
+        void onTelClick(View view, int position);
     }
 
     private OnItemClickListener onItemClickListener;
@@ -67,10 +65,12 @@ public class ContactPersonAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
-            View view = inflater.inflate(R.layout.contact_person_item_view, parent, false);
+            View view = inflater.inflate(R.layout.contact_item_view2, parent, false);
             return new ItemViewHolder(view);
         } else if (viewType == TYPE_FOOTER) {
-            View view = inflater.inflate(R.layout.recycler_foot_view, parent, false);
+//            View view = inflater.inflate(R.layout.recycler_foot_view, parent, false);
+//            return new FootViewHolder(view);
+            View view = inflater.inflate(R.layout.recycler_end_view, parent, false);
             return new FootViewHolder(view);
         } else if (viewType == TYPE_END) {
             View view = inflater.inflate(R.layout.recycler_end_view, parent, false);
@@ -100,17 +100,49 @@ public class ContactPersonAdapter extends RecyclerView.Adapter<RecyclerView.View
                         return false;
                     }
                 });
+                //点击电话拨号
+                ((ItemViewHolder) holder).tel_Tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = holder.getLayoutPosition();
+                        onItemClickListener.onTelClick(((ItemViewHolder) holder).tel_Tv, position);
+                    }
+                });
             }
             final Contact item = data.get(position);
 
-            ((ItemViewHolder) holder).name_tv.setText(item.getPersonname() != null && !item.getPersonname().equals("") ?
-                    "姓名：" + item.getPersonname() : "姓名：");
-            ((ItemViewHolder) holder).client_tv.setText(item.getCustname() != null && !item.getCustname().equals("") ?
-                    "所属客户：" + item.getCustname() : "所属客户：");
-            ((ItemViewHolder) holder).mobile_tv.setText(item.getContmobile() != null && !item.getContmobile().equals("") ?
-                    "联系电话：" + item.getContmobile() : "联系电话：");
-            ((ItemViewHolder) holder).phone_tv.setText(item.getConttel() != null && !item.getConttel().equals("") ?
-                    "手机：" + item.getConttel() : "手机：");
+            String  name = item.getPersonname();
+            String nameIconStr;
+            if(null == name || name.trim().equals("")){
+                nameIconStr = "#";
+            }else{
+                nameIconStr = getNameStr(name);
+            }
+            ((ItemViewHolder) holder).icon_Tv.setText(nameIconStr);
+            ((ItemViewHolder) holder).contactName_Tv.setText(item.getPersonname() != null && !item.getPersonname().equals("") ?
+                    "" + item.getPersonname() : "");
+            ((ItemViewHolder) holder).custName_Tv.setText(item.getCustname() != null && !item.getCustname().equals("") ?
+                    "" + item.getCustname() : "");
+//            ((ItemViewHolder) holder).tel_Tv.setText(item.getConttel() != null && !item.getConttel()
+//                    .equals("") ? "" + item.getConttel() : "");
+            String mobile = item.getContmobile();
+            String tel = item.getConttel();
+            String phone = "";
+            if(tel != null && !tel.equals("")){
+                phone = tel;
+            }else if(mobile != null && !mobile.equals("")){
+                phone = mobile;
+            }
+            ((ItemViewHolder) holder).tel_Tv.setText(phone);
+
+            int section = getSectionForPosition(position);
+            //如果当前位置等于该分类首字母的Char的位置 ，则认为是第一次出现
+            if (position == getPositionForSection(section)) {
+                ((ItemViewHolder) holder).tag_Tv.setVisibility(View.VISIBLE);
+                ((ItemViewHolder) holder).tag_Tv.setText(data.get(position).getLetters());
+            } else {
+                ((ItemViewHolder) holder).tag_Tv.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -132,14 +164,26 @@ public class ContactPersonAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView name_tv, client_tv, mobile_tv, phone_tv;
+//        TextView name_tv, client_tv, mobile_tv, phone_tv;
+//
+//        public ItemViewHolder(View view) {
+//            super(view);
+//            name_tv = view.findViewById(R.id.name_tv);
+//            client_tv = view.findViewById(R.id.client_tv);
+//            mobile_tv = view.findViewById(R.id.mobile_tv);
+//            phone_tv = view.findViewById(R.id.phone_tv);
+//        }
+
+        TextView contactName_Tv,custName_Tv,isState_Tv,tel_Tv,tag_Tv,icon_Tv;
 
         public ItemViewHolder(View view) {
             super(view);
-            name_tv = view.findViewById(R.id.name_tv);
-            client_tv = view.findViewById(R.id.client_tv);
-            mobile_tv = view.findViewById(R.id.mobile_tv);
-            phone_tv = view.findViewById(R.id.phone_tv);
+            contactName_Tv = view.findViewById(R.id.contactName_tv);
+            custName_Tv = view.findViewById(R.id.custName_tv);
+            isState_Tv = view.findViewById(R.id.isState_tv);
+            tel_Tv = view.findViewById(R.id.tel_tv);
+            tag_Tv = view.findViewById(R.id.tag_tv);
+            icon_Tv = view.findViewById(R.id.icon_tv);
         }
     }
 
@@ -148,5 +192,46 @@ public class ContactPersonAdapter extends RecyclerView.Adapter<RecyclerView.View
         public FootViewHolder(View view) {
             super(view);
         }
+    }
+
+    public String getNameStr(String str){
+        String s = "";
+        if(str.length() <= 2){
+            s = str;
+        }else{
+            //若姓名超过2位，则取最后面的2位
+            s = str.substring(str.length() - 1 - 1,str.length());
+        }
+        return s;
+    }
+
+    /**
+     * 根据ListView的当前位置获取分类的首字母的char ascii值
+     */
+    public int getSectionForPosition(int position) {
+        return data.get(position).getLetters().charAt(0);
+    }
+
+    /**
+     * 根据分类的首字母的Char ascii值获取其第一次出现该首字母的位置
+     */
+    public int getPositionForSection(int section) {
+        for (int i = 0; i < getItemCount() -1; i++) {
+            String sortStr = data.get(i).getLetters();
+            char firstChar = sortStr.toUpperCase().charAt(0);
+            if (firstChar == section) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 提供给Activity刷新数据
+     * @param list
+     */
+    public void updateList(List<Contact> list){
+        this.data = list;
+        notifyDataSetChanged();
     }
 }

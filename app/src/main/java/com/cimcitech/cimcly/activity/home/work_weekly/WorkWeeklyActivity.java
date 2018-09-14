@@ -2,6 +2,7 @@ package com.cimcitech.cimcly.activity.home.work_weekly;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,8 +14,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -37,6 +40,7 @@ import com.cimcitech.cimcly.bean.work_weekly.WorkWeeklyVo;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.GjsonUtil;
 import com.cimcitech.cimcly.utils.ToastUtil;
+import com.cimcitech.cimcly.widget.BaseActivity;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -50,7 +54,7 @@ import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.MediaType;
 
-public class WorkWeeklyActivity extends AppCompatActivity {
+public class WorkWeeklyActivity extends BaseActivity {
     @Bind(R.id.my_tv)
     TextView myTv;
     @Bind(R.id.xs_tv)
@@ -86,6 +90,20 @@ public class WorkWeeklyActivity extends AppCompatActivity {
     TextView ww_top_category_Name;
     @Bind(R.id.ww_top_category_label)
     TextView ww_top_category_Label;
+    @Bind(R.id.item_my_rl)
+    RelativeLayout item_my_Rl;
+    @Bind(R.id.item_others_rl)
+    RelativeLayout item_others_Rl;
+    @Bind(R.id.item_my_tv)
+    TextView item_my_Tv;
+    @Bind(R.id.item_others_tv)
+    TextView item_others_Tv;
+    @Bind(R.id.item_my_checked_tv)
+    TextView item_my_checked_Tv;
+    @Bind(R.id.item_others_checked_tv)
+    TextView item_others_checked_Tv;
+    @Bind(R.id.popup_menu_layout)
+    LinearLayout popup_menu_Layout;
 
     private int pageNum = 1;
     private WorkWeeklyVo weeklyVo;
@@ -104,20 +122,41 @@ public class WorkWeeklyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_work_weekly2);
         ButterKnife.bind(this);
         initTitle();
+        initPopupMenu();
+        setItemChechedLableVisible();
         isMy = true;
-        initViewData();
         Config.type = 1;
-        setSpinnerListener();
-        //getData();
+        initViewData();
+        updateData();
     }
 
     public void initTitle(){
-        more_Tv.setVisibility(View.GONE);
-        whoSpinner.setVisibility(View.VISIBLE);
+        more_Tv.setVisibility(View.VISIBLE);
+        whoSpinner.setVisibility(View.GONE);
         titleName_Tv.setText("工作汇报");
         title_Ll.setVisibility(View.GONE);
         search_Ll.setVisibility(View.GONE);
         who_Ll.setVisibility(View.GONE);
+    }
+
+    public void setItemChechedLableVisible(){
+        if(isMy){
+            item_my_checked_Tv.setVisibility(View.VISIBLE);
+            item_others_checked_Tv.setVisibility(View.GONE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.black));
+        }else {
+            item_my_checked_Tv.setVisibility(View.GONE);
+            item_others_checked_Tv.setVisibility(View.VISIBLE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.black));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+    }
+
+    public void initPopupMenu(){
+        popup_menu_Layout.setVisibility(View.GONE);
+        item_my_Rl.setVisibility(View.VISIBLE);
+        item_others_Rl.setVisibility(View.VISIBLE);
     }
 
     public void setSpinnerListener(){
@@ -136,7 +175,8 @@ public class WorkWeeklyActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick({R.id.back_iv, R.id.my_tv, R.id.xs_tv, R.id.add_ib,R.id.ww_top_area})
+    @OnClick({R.id.back_iv, R.id.my_tv, R.id.xs_tv, R.id.add_ib,R.id.ww_top_area,
+            R.id.more_tv,R.id.item_my_rl,R.id.item_others_rl})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.ww_top_area:
@@ -171,7 +211,21 @@ public class WorkWeeklyActivity extends AppCompatActivity {
                 updateData();
                 ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
+            case R.id.more_tv:
+                popup_menu_Layout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.item_my_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                isMy = true;
+                updateData();
+                break;
+            case R.id.item_others_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                isMy = false;
+                updateData();
+                break;
         }
+        setItemChechedLableVisible();
     }
 
     public void showContactUsPopWin(Context context, String title, final List<String> list) {
@@ -179,7 +233,10 @@ public class WorkWeeklyActivity extends AppCompatActivity {
         View view = inflater.inflate(R.layout.dialog_message, null);
         //view.getBackground().setAlpha(100);
         // 创建PopupWindow对象
-        pop = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, false);
+        //获取屏幕的宽度
+        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        int width = wm.getDefaultDisplay().getWidth();
+        pop = new PopupWindow(view, width/2, ViewGroup.LayoutParams.MATCH_PARENT, false);
         View pop_reward_view = view.findViewById(R.id.pop_reward_view);
         TextView name_tv = view.findViewById(R.id.pop_item_name_tv);
         TextView label_tv = view.findViewById(R.id.pop_item_label_tv);
@@ -346,12 +403,12 @@ public class WorkWeeklyActivity extends AppCompatActivity {
 
     private void getData() {
         String json = new Gson().toJson(new WorkWeeklyReq(pageNum, 10,
-                new WorkWeeklyReq.WeeklyReport(Config.loginback.getUserId(), Config.type)));
+                new WorkWeeklyReq.WeeklyReport(Config.USERID, Config.type)));
         OkHttpUtils
                 .postString()
                 .url(Config.workWeekly)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -392,12 +449,12 @@ public class WorkWeeklyActivity extends AppCompatActivity {
 
     private void getSubData() {
         String json = new Gson().toJson(new WorkWeeklyReq(pageNum, 10,
-                new WorkWeeklyReq.WeeklyReport(Config.loginback.getUserId(), Config.type)));
+                new WorkWeeklyReq.WeeklyReport(Config.USERID, Config.type)));
         OkHttpUtils
                 .postString()
                 .url(Config.workWeeklySub)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -410,7 +467,6 @@ public class WorkWeeklyActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
                                 weeklyVo = GjsonUtil.parseJsonWithGson(response, WorkWeeklyVo.class);
                                 if(weeklyVo!=null) {
                                     if (weeklyVo.isSuccess()) {
@@ -437,5 +493,21 @@ public class WorkWeeklyActivity extends AppCompatActivity {
                 );
     }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            int x = (int) ev.getX();
+            int y = (int) ev.getY();
 
+            if (null != popup_menu_Layout && popup_menu_Layout.getVisibility() == View.VISIBLE) {
+                Rect hitRect = new Rect();
+                popup_menu_Layout.getGlobalVisibleRect(hitRect);
+                if (!hitRect.contains(x, y)) {
+                    popup_menu_Layout.setVisibility(View.GONE);
+                    return true;
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 }

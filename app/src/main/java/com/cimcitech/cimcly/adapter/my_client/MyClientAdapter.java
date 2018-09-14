@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.bean.CustomerVisit;
-import com.cimcitech.cimcly.bean.MyClientVo;
-import com.cimcitech.cimcly.bean.client.Customer;
-import com.cimcitech.cimcly.utils.DateTool;
+import com.cimcitech.cimcly.adapter.contact_person.ContactPersonAdapter;
+import com.cimcitech.cimcly.bean.client.Client;
+import com.cimcitech.cimcly.bean.contact.Contact;
 
 import java.util.List;
 
@@ -23,12 +22,12 @@ public class MyClientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
-    private List<Customer> data;
+    private List<Client> data;
     private LayoutInflater inflater;
     private static final int TYPE_END = 2;
     private boolean isNotMoreData = false;
 
-    public MyClientAdapter(Context context, List<Customer> data) {
+    public MyClientAdapter(Context context, List<Client> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
     }
@@ -62,10 +61,12 @@ public class MyClientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
-            View view = inflater.inflate(R.layout.my_client_item_view, parent, false);
+            View view = inflater.inflate(R.layout.my_client_item_view2, parent, false);
             return new ItemViewHolder(view);
         } else if (viewType == TYPE_FOOTER) {
-            View view = inflater.inflate(R.layout.recycler_foot_view, parent, false);
+//            View view = inflater.inflate(R.layout.recycler_foot_view, parent, false);
+//            return new FootViewHolder(view);
+            View view = inflater.inflate(R.layout.recycler_end_view, parent, false);
             return new FootViewHolder(view);
         } else if (viewType == TYPE_END) {
             View view = inflater.inflate(R.layout.recycler_end_view, parent, false);
@@ -96,10 +97,28 @@ public class MyClientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 });
             }
-            final Customer item = data.get(position);
-            ((ItemViewHolder) holder).client_name_tv.setText(item.getCustname() != null ? "客户名称：" + item.getCustname() : "客户名称：");
-            ((ItemViewHolder) holder).client_code_tv.setText(item.getCustomerno() != null ? "客户代码：" + item.getCustomerno() : "客户代码：");
-            ((ItemViewHolder) holder).seller_tv.setText(item.getOwnername() != null ? "销  售  员：" + item.getOwnername() : "销  售  员：");
+            final Client item = data.get(position);
+            String  name = item.getCustname();
+            String nameIconStr;
+            if(null == name || name.trim().equals("")){
+                nameIconStr = "#";
+            }else{
+                nameIconStr = getNameStr(name);
+            }
+            ((ItemViewHolder) holder).icon_Tv.setText(nameIconStr);
+
+            ((ItemViewHolder) holder).client_name_tv.setText(item.getCustname() != null ? "" + item.getCustname() : "");
+            ((ItemViewHolder) holder).client_code_tv.setText(item.getCustomerno() != null ? "" + item.getCustomerno() : "");
+            ((ItemViewHolder) holder).seller_tv.setText(item.getOwnername() != null ? "" + item.getOwnername() : "");
+
+            int section = getSectionForPosition(position);
+            //如果当前位置等于该分类首字母的Char的位置 ，则认为是第一次出现
+            if (position == getPositionForSection(section)) {
+                ((ItemViewHolder) holder).tag_Tv.setVisibility(View.VISIBLE);
+                ((ItemViewHolder) holder).tag_Tv.setText(data.get(position).getLetters());
+            } else {
+                ((ItemViewHolder) holder).tag_Tv.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -121,13 +140,15 @@ public class MyClientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView client_name_tv, client_code_tv, seller_tv;
+        TextView client_name_tv, client_code_tv, seller_tv,tag_Tv,icon_Tv;
 
         public ItemViewHolder(View view) {
             super(view);
             client_name_tv = view.findViewById(R.id.client_name_tv);
             client_code_tv = view.findViewById(R.id.client_code_tv);
             seller_tv = view.findViewById(R.id.seller_tv);
+            tag_Tv = view.findViewById(R.id.tag_tv);
+            icon_Tv = view.findViewById(R.id.icon_tv);
         }
     }
 
@@ -136,5 +157,47 @@ public class MyClientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public FootViewHolder(View view) {
             super(view);
         }
+    }
+
+    //取客户名称的前2位
+    public String getNameStr(String str){
+        String s = "";
+        if(str.length() <= 2){
+            s = str;
+        }else{
+            //若姓名超过2位，则取最后面的2位
+            s = str.substring(0,2);
+        }
+        return s;
+    }
+
+    /**
+     * 根据ListView的当前位置获取分类的首字母的char ascii值
+     */
+    public int getSectionForPosition(int position) {
+        return data.get(position).getLetters().charAt(0);
+    }
+
+    /**
+     * 根据分类的首字母的Char ascii值获取其第一次出现该首字母的位置
+     */
+    public int getPositionForSection(int section) {
+        for (int i = 0; i < getItemCount() -1; i++) {
+            String sortStr = data.get(i).getLetters();
+            char firstChar = sortStr.toUpperCase().charAt(0);
+            if (firstChar == section) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 提供给Activity刷新数据
+     * @param list
+     */
+    public void updateList(List<Client> list){
+        this.data = list;
+        notifyDataSetChanged();
     }
 }

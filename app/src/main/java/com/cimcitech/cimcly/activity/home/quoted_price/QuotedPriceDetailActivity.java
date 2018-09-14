@@ -184,7 +184,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
         initPopupMenu();
 
         quoteid = this.getIntent().getIntExtra("quoteid", 0);
-        infoVo = (OpportUnitInfoVo) this.getIntent().getSerializableExtra("infoVo");
+        //infoVo = (OpportUnitInfoVo) this.getIntent().getSerializableExtra("infoVo");
         protocolPriceTv.setFocusable(false);
         protocolPriceTv.setFocusableInTouchMode(false);
         chassisModelTv.setFocusable(false);
@@ -255,7 +255,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                 popup_menu_Layout.setVisibility(View.GONE);
                 if (!inputAndSelector()) return;
                 isSubmit = false;
-                mLoading.show();
+                mCommittingDialog.show();
                 updateData();
                 break;
             case R.id.item_finish_tv:
@@ -397,8 +397,8 @@ public class QuotedPriceDetailActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getEditQuoteBase)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("quoteId", quoteid + "")
                 .build()
                 .execute(
@@ -504,10 +504,10 @@ public class QuotedPriceDetailActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.quoteBaseSumbit)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("quoteId", quoteid + "")
-                .addParams("userId", Config.loginback.getUserId() + "")
+                .addParams("userId", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {
@@ -564,7 +564,7 @@ public class QuotedPriceDetailActivity extends BaseActivity {
         //
         String version = quotedPriceDetailVo.getData().getVersion();
         //当前用户
-        String creater = Config.loginback.getUserId() + "";
+        String creater = Config.USERID + "";
         //定金
         int deposit = Integer.parseInt(depositTv.getText().toString().trim());
 
@@ -588,8 +588,8 @@ public class QuotedPriceDetailActivity extends BaseActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.modifyQuoteBase)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -597,28 +597,26 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mCommittingDialog.isShowing()) mCommittingDialog.dismiss();
                                 ToastUtil.showNetError();
-                                mLoading.dismiss();
                                 sendMsg(submitData_hide);
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
+                                if(mCommittingDialog.isShowing()) mCommittingDialog.dismiss();
                                 try {
                                     JSONObject json = new JSONObject(response);
                                     if (json.getBoolean("success")) {
                                         if (isSubmit) {
                                             submitData();
                                         } else {
-                                            mLoading.dismiss();
                                             Log.d("hqw","save success...");
                                             Config.isQuotedPrice = true;
                                             ToastUtil.showToast("保存成功");
                                             finish();
                                         }
                                     } else {
-                                        mLoading.dismiss();
                                         Log.d("hqw","save fail...");
                                         if (isSubmit)
                                             ToastUtil.showToast("保存失败，无法提交");
@@ -626,10 +624,9 @@ public class QuotedPriceDetailActivity extends BaseActivity {
                                             ToastUtil.showToast("保存失败");
                                     }
                                 } catch (Exception e) {
-                                    mLoading.dismiss();
                                     e.printStackTrace();
                                 }
-                                //mLoading.dismiss();
+
                             }
                         }
                 );
@@ -649,8 +646,8 @@ public class QuotedPriceDetailActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getChassis)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {

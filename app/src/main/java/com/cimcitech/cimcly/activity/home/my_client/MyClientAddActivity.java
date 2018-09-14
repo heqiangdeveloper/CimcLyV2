@@ -1,11 +1,10 @@
 package com.cimcitech.cimcly.activity.home.my_client;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,20 +15,21 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackAddActivity;
+import com.cimcitech.cimcly.activity.main.EditValueActivity;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.bean.AreaVo;
 import com.cimcitech.cimcly.bean.CustSelectVo;
 import com.cimcitech.cimcly.bean.client.AddMyClientReq;
-import com.cimcitech.cimcly.bean.client.Contact;
+import com.cimcitech.cimcly.bean.contact.Contact;
 import com.cimcitech.cimcly.utils.AccountValidatorUtil;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.DateTool;
 import com.cimcitech.cimcly.utils.GjsonUtil;
+import com.cimcitech.cimcly.utils.MyNetworkUtils;
 import com.cimcitech.cimcly.utils.ToastUtil;
 import com.cimcitech.cimcly.widget.BaseActivity;
 import com.google.gson.Gson;
@@ -55,37 +55,37 @@ public class MyClientAddActivity extends BaseActivity {
     @Bind(R.id.customer_category_tv)
     TextView customerCategoryTv;
     @Bind(R.id.client_name_tv)
-    EditText clientNameTv;
-    @Bind(R.id.abbreviation_et)
-    EditText abbreviationEt;
-    @Bind(R.id.mobile_et)
-    EditText mobileEt;
-    @Bind(R.id.fax_et)
-    EditText faxEt;
+    TextView clientNameTv;
+    @Bind(R.id.abbreviation_tv)
+    TextView abbreviationTv;
+    @Bind(R.id.mobile_tv)
+    TextView mobileTv;
+    @Bind(R.id.fax_tv)
+    TextView faxTv;
     @Bind(R.id.country_tv)
     TextView countryTv;
     @Bind(R.id.province_tv)
     TextView provinceTv;
     @Bind(R.id.city_tv)
     TextView cityTv;
-    @Bind(R.id.address_et)
-    EditText addressEt;
-    @Bind(R.id.zip_code_et)
-    EditText zipCodeEt;
+    @Bind(R.id.address_tv)
+    TextView addressTv;
+    @Bind(R.id.zip_code_tv)
+    TextView zipCodeTv;
     @Bind(R.id.taxes_tv)
     TextView taxesTv;
     @Bind(R.id.invoice_tv)
-    EditText invoiceTv;
-    @Bind(R.id.user_name_et)
-    EditText userNameEt;
-    @Bind(R.id.user_mobile_et)
-    EditText userMobileEt;
-    @Bind(R.id.user_phone_et)
-    EditText userPhoneEt;
+    TextView invoiceTv;
+    @Bind(R.id.user_name_tv)
+    TextView userNameTv;
+    @Bind(R.id.user_mobile_tv)
+    TextView userMobileTv;
+    @Bind(R.id.user_phone_tv)
+    TextView userPhoneTv;
     @Bind(R.id.user_provinces_tv)
     TextView userProvincesTv;
-    @Bind(R.id.user_address_et)
-    EditText userAddressEt;
+    @Bind(R.id.user_address_tv)
+    TextView userAddressTv;
     @Bind(R.id.beizhu_et)
     EditText beizhuEt;
 
@@ -149,45 +149,54 @@ public class MyClientAddActivity extends BaseActivity {
     }
 
     @OnClick({R.id.customer_category_tv, R.id.country_tv, R.id.province_tv, R.id.city_tv,
-            R.id.taxes_tv, R.id.add_bt, R.id.back_iv, R.id.user_provinces_tv})
+            R.id.taxes_tv, R.id.add_bt, R.id.back_iv, R.id.user_provinces_tv,
+            R.id.client_name_tv,R.id.abbreviation_tv,R.id.mobile_tv,R.id.fax_tv,R.id.zip_code_tv,
+            R.id.address_tv,R.id.user_name_tv,R.id.user_mobile_tv,R.id.user_phone_tv,R.id
+            .user_address_tv,R.id.invoice_tv})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.customer_category_tv: //获取客户类别
                 intValue = 0;
-                if (custSelectVo.isSuccess()) {
+                if (null != custSelectVo && custSelectVo.isSuccess()) {
                     List<String> list = new ArrayList<>();
                     for (int i = 0; i < custSelectVo.getData().getCustType().size(); i++) {
                         list.add(custSelectVo.getData().getCustType().get(i).getCodevalue());
                     }
                     showContactUsPopWin(MyClientAddActivity.this, "选择客户类别", list);
                     pop.showAtLocation(view, Gravity.CENTER, 0, 0);
+                }else{
+                    ToastUtil.showToast("网络异常，请检查网络是否连接！");
                 }
                 break;
             case R.id.country_tv: //国家
                 intValue = 1;
-                if (custSelectVo.isSuccess()) {
+                if (null != custSelectVo && custSelectVo.isSuccess()) {
                     List<String> list = new ArrayList<>();
                     for (int i = 0; i < custSelectVo.getData().getRegion().size(); i++) {
                         list.add(custSelectVo.getData().getRegion().get(i).getCategoryname());
                     }
                     showContactUsPopWin(MyClientAddActivity.this, "选择国家", list);
                     pop.showAtLocation(view, Gravity.CENTER, 0, 0);
+                }else{
+                    ToastUtil.showToast("网络异常，请检查网络是否连接！");
                 }
                 break;
             case R.id.province_tv:
                 intValue = 2;//省份
-                if (custSelectVo.isSuccess()) {
+                if (null != custSelectVo &&  custSelectVo.isSuccess()) {
                     List<String> list = new ArrayList<>();
                     for (int i = 0; i < custSelectVo.getData().getRegion().get(0).getCateList().size(); i++) {
                         list.add(custSelectVo.getData().getRegion().get(0).getCateList().get(i).getCategoryname());
                     }
                     showContactUsPopWin(MyClientAddActivity.this, "选择省份", list);
                     pop.showAtLocation(view, Gravity.CENTER, 0, 0);
+                }else{
+                    ToastUtil.showToast("网络异常，请检查网络是否连接！");
                 }
                 break;
             case R.id.city_tv:
                 intValue = 3;//城市
-                if (custSelectVo.isSuccess()) {
+                if (null != custSelectVo && custSelectVo.isSuccess()) {
                     if (cateList != null) {
                         List<String> list = new ArrayList<>();
                         for (int i = 0; i < cateList.getCateList().size(); i++) {
@@ -198,17 +207,21 @@ public class MyClientAddActivity extends BaseActivity {
                     } else {
                         ToastUtil.showToast("请先选择省份");
                     }
+                }else{
+                    ToastUtil.showToast("网络异常，请检查网络是否连接！");
                 }
                 break;
             case R.id.taxes_tv: //税种
                 intValue = 4;
-                if (custSelectVo.isSuccess()) {
+                if (null != custSelectVo &&  custSelectVo.isSuccess()) {
                     List<String> list = new ArrayList<>();
                     for (int i = 0; i < custSelectVo.getData().getWeb().size(); i++) {
                         list.add(custSelectVo.getData().getWeb().get(i).getCodevalue());
                     }
                     showContactUsPopWin(MyClientAddActivity.this, "选择客户分区", list);
                     pop.showAtLocation(view, Gravity.CENTER, 0, 0);
+                }else{
+                    ToastUtil.showToast("网络异常，请检查网络是否连接！");
                 }
                 break;
             case R.id.add_bt:
@@ -223,18 +236,141 @@ public class MyClientAddActivity extends BaseActivity {
             case R.id.user_provinces_tv: //联系人信息 省、市
                 //if (areaVo != null)
                   //  if (areaVo.isSuccess()) {
-                if (Config.areaVo != null)
-                    if (Config.areaVo.isSuccess()) {
-                        List<String> list = new ArrayList<>();
-                        for (int i = 0; i < Config.areaVo.getData().size(); i++) {
-                            list.add(Config.areaVo.getData().get(i).getCategoryname());
-                        }
-                        String[] args = new String[list.size()];
-                        list.toArray(args);
-                        showAreaPopWin(list);
-                        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+                if(null != Config.areaVo){
+                    showAreaData(view);
+                }else{
+                    if(!MyNetworkUtils.isNetworkConnected(MyClientAddActivity.this)){
+                        ToastUtil.showToast("网络异常，请检查网络是否连接！");
+                    }else{
+                        getAreaData(view);
                     }
+                }
                 break;
+            case R.id.client_name_tv:
+                startEditActivity("str","客户名称",clientNameTv.getText().toString().trim(),0);
+                break;
+            case R.id.abbreviation_tv:
+                startEditActivity("str","客户简称",abbreviationTv.getText().toString().trim(),1);
+                break;
+            case R.id.mobile_tv:
+                startEditActivity("str","电话",mobileTv.getText().toString().trim(),2);
+                break;
+            case R.id.fax_tv:
+                startEditActivity("str","传真",faxTv.getText().toString().trim(),3);
+                break;
+            case R.id.zip_code_tv:
+                startEditActivity("num","邮编",zipCodeTv.getText().toString().trim(),4);
+                break;
+            case R.id.address_tv:
+                startEditActivity("str","详细地址",addressTv.getText().toString().trim(),5);
+                break;
+            case R.id.user_name_tv:
+                startEditActivity("str","姓名",userNameTv.getText().toString().trim(),6);
+                break;
+            case R.id.user_mobile_tv:
+                startEditActivity("str","电话",userMobileTv.getText().toString().trim(),7);
+                break;
+            case R.id.user_phone_tv:
+                startEditActivity("num","手机",userPhoneTv.getText().toString().trim(),8);
+                break;
+            case R.id.user_address_tv:
+                startEditActivity("str","地址",userAddressTv.getText().toString().trim(),9);
+                break;
+            case R.id.invoice_tv:
+                startEditActivity("str","发票抬头",invoiceTv.getText().toString().trim(),10);
+                break;
+        }
+    }
+
+    public void showAreaData(View view){
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < Config.areaVo.getData().size(); i++) {
+            list.add(Config.areaVo.getData().get(i).getCategoryname());
+        }
+        String[] args = new String[list.size()];
+        list.toArray(args);
+        showAreaPopWin(list);
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
+
+    /**
+     * 获取省市级联的省市信息
+     */
+    public void getAreaData(final View view) {
+        OkHttpUtils
+                .post()
+                .url(Config.getProviceAndCity)
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
+                .build()
+                .execute(
+                        new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+                                ToastUtil.showNetError();
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                try {
+                                    Config.areaVo = GjsonUtil.parseJsonWithGson(response, AreaVo.class);
+                                    showAreaData(view);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                );
+    }
+
+    public void startEditActivity(String type,String title,String content,int requestCode){
+        Intent intent2 = new Intent(MyClientAddActivity.this, EditValueActivity.class);
+        intent2.putExtra("type",type);
+        intent2.putExtra("title",title);
+        intent2.putExtra("content",content);
+        startActivityForResult(intent2,requestCode);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(RESULT_OK == resultCode){
+            String result = data.getStringExtra("result");
+            switch (requestCode){
+                case 0://客户名称
+                    clientNameTv.setText(result);
+                    break;
+                case 1://客户简称
+                    abbreviationTv.setText(result);
+                    break;
+                case 2://电话
+                    mobileTv.setText(result);
+                    break;
+                case 3://传真
+                    faxTv.setText(result);
+                    break;
+                case 4://邮编
+                    zipCodeTv.setText(result);
+                    break;
+                case 5://详细地址
+                    addressTv.setText(result);
+                    break;
+                case 6:
+                    userNameTv.setText(result);
+                    break;
+                case 7:
+                    userMobileTv.setText(result);
+                    break;
+                case 8:
+                    userPhoneTv.setText(result);
+                    break;
+                case 9:
+                    userAddressTv.setText(result);
+                    break;
+                case 10:
+                    invoiceTv.setText(result);
+                    break;
+            }
         }
     }
 
@@ -320,7 +456,7 @@ public class MyClientAddActivity extends BaseActivity {
         }
         //if (mobileEt.getText().toString().trim().equals("") || mobileEt.getText().toString()
                 //.trim().length() < 11) {
-        if (mobileEt.getText().toString().trim().equals("")) {
+        if (mobileTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入正确电话号码");
             return false;
         }
@@ -340,7 +476,7 @@ public class MyClientAddActivity extends BaseActivity {
             ToastUtil.showToast("请选择城市");
             return false;
         }
-        if (addressEt.getText().toString().trim().equals("")) {
+        if (addressTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入详细地址");
             return false;
         }
@@ -352,11 +488,11 @@ public class MyClientAddActivity extends BaseActivity {
             ToastUtil.showToast("请输入正确的手机号码");
             return false;
         }*/
-        if (userNameEt.getText().toString().trim().equals("")) {
+        if (userNameTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入联系人姓名");
             return false;
         }
-        if (userPhoneEt.getText().toString().trim().equals("")) {
+        if (userPhoneTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入联系人手机号码");
             return false;
         }
@@ -364,8 +500,8 @@ public class MyClientAddActivity extends BaseActivity {
             ToastUtil.showToast("请输入正确的联系人手机号码");
             return false;
         }*/
-        if (!zipCodeEt.getText().toString().trim().equals(""))
-            if (!AccountValidatorUtil.isPostCode(zipCodeEt.getText().toString().trim())) {
+        if (!zipCodeTv.getText().toString().trim().equals(""))
+            if (!AccountValidatorUtil.isPostCode(zipCodeTv.getText().toString().trim())) {
                 ToastUtil.showToast("请输入正确的邮政编码");
                 return false;
             }
@@ -381,9 +517,9 @@ public class MyClientAddActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getCustSelect)
-                .addParams("userId", Config.loginback.getUserId() + "")
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addParams("userId", Config.USERID + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {
@@ -423,50 +559,50 @@ public class MyClientAddActivity extends BaseActivity {
         if(region.getCategoryname().equals("中国")){
             String json_China = new Gson().toJson(new AddMyClientReq(
                     clientNameTv.getText().toString().trim(),
-                    addressEt.getText().toString().trim(),
-                    mobileEt.getText().toString().trim(),
+                    addressTv.getText().toString().trim(),
+                    mobileTv.getText().toString().trim(),
                     custType.getCodeid(),
-                    zipCodeEt.getText().toString().trim(),
+                    zipCodeTv.getText().toString().trim(),
                     web.getCodeid(),
-                    Config.loginback.getUserId(),
-                    Config.loginback.getUserId(),
-                    abbreviationEt.getText().toString().trim(),
-                    faxEt.getText().toString().trim(),
+                    Config.USERID,
+                    Config.USERID,
+                    abbreviationTv.getText().toString().trim(),
+                    faxTv.getText().toString().trim(),
                     region.getCategoryno(),
                     cateList.getCategoryno(),
                     city.getCategoryno(),
                     invoiceTv.getText().toString().trim(),
                     beizhuEt.getText().toString().trim(),
                     new Contact(
-                            userNameEt.getText().toString().trim(),
-                            userMobileEt.getText().toString().trim(),
-                            userPhoneEt.getText().toString().trim(),
-                            userProvinceStr, userCityStr, userAddressEt.getText().toString().trim(),
+                            userNameTv.getText().toString().trim(),
+                            userMobileTv.getText().toString().trim(),
+                            userPhoneTv.getText().toString().trim(),
+                            userProvinceStr, userCityStr, userAddressTv.getText().toString().trim(),
                             beizhuEt.getText().toString().trim())));
             json = json_China;
         }else {
             //外国地区,隐藏省，市
             String json_Overseas = new Gson().toJson(new AddMyClientReq(
                     clientNameTv.getText().toString().trim(),
-                    addressEt.getText().toString().trim(),
-                    mobileEt.getText().toString().trim(),
+                    addressTv.getText().toString().trim(),
+                    mobileTv.getText().toString().trim(),
                     custType.getCodeid(),
-                    zipCodeEt.getText().toString().trim(),
+                    zipCodeTv.getText().toString().trim(),
                     web.getCodeid(),
-                    Config.loginback.getUserId(),
-                    Config.loginback.getUserId(),
-                    abbreviationEt.getText().toString().trim(),
-                    faxEt.getText().toString().trim(),
+                    Config.USERID,
+                    Config.USERID,
+                    abbreviationTv.getText().toString().trim(),
+                    faxTv.getText().toString().trim(),
                     region.getCategoryno(),
                     null,
                     null,
                     invoiceTv.getText().toString().trim(),
                     beizhuEt.getText().toString().trim(),
                     new Contact(
-                            userNameEt.getText().toString().trim(),
-                            userMobileEt.getText().toString().trim(),
-                            userPhoneEt.getText().toString().trim(),
-                            userProvinceStr, userCityStr, userAddressEt.getText().toString().trim(),
+                            userNameTv.getText().toString().trim(),
+                            userMobileTv.getText().toString().trim(),
+                            userPhoneTv.getText().toString().trim(),
+                            userProvinceStr, userCityStr, userAddressTv.getText().toString().trim(),
                             beizhuEt.getText().toString().trim())));
             json = json_Overseas;
         }
@@ -474,8 +610,8 @@ public class MyClientAddActivity extends BaseActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.addCust)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -517,8 +653,8 @@ public class MyClientAddActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.isCustExist)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("custName", clientName)
                 .build()
                 .execute(

@@ -1,7 +1,9 @@
 package com.cimcitech.cimcly.activity.home.my_client;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -26,6 +29,8 @@ import com.cimcitech.cimcly.R;
 import com.cimcitech.cimcly.activity.home.customer_visit.CustomerVisitAddActivity;
 import com.cimcitech.cimcly.activity.home.contact_person.ContactPersonActivity;
 import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackAddActivity;
+import com.cimcitech.cimcly.activity.home.work_weekly.WorkWeeklyAddActivity;
+import com.cimcitech.cimcly.activity.main.EditValueActivity;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.bean.CustSelectVo;
 import com.cimcitech.cimcly.bean.client.AddMyClientReq;
@@ -66,27 +71,27 @@ public class MyClientUpdateActivity extends BaseActivity {
     @Bind(R.id.customer_category_tv)
     TextView customerCategoryTv;
     @Bind(R.id.client_name_tv)
-    EditText clientNameTv;
-    @Bind(R.id.abbreviation_et)
-    EditText abbreviationEt;
-    @Bind(R.id.mobile_et)
-    EditText mobileEt;
-    @Bind(R.id.fax_et)
-    EditText faxEt;
+    TextView clientNameTv;
+    @Bind(R.id.abbreviation_tv)
+    TextView abbreviationTv;
+    @Bind(R.id.mobile_tv)
+    TextView mobileTv;
+    @Bind(R.id.fax_tv)
+    TextView faxTv;
     @Bind(R.id.country_tv)
     TextView countryTv;
     @Bind(R.id.province_tv)
     TextView provinceTv;
     @Bind(R.id.city_tv)
     TextView cityTv;
-    @Bind(R.id.address_et)
-    EditText addressEt;
-    @Bind(R.id.zip_code_et)
-    EditText zipCodeEt;
+    @Bind(R.id.address_tv)
+    TextView addressTv;
+    @Bind(R.id.zip_code_tv)
+    TextView zipCodeTv;
     @Bind(R.id.taxes_tv)
     TextView taxesTv;
     @Bind(R.id.invoice_tv)
-    EditText invoiceTv;
+    TextView invoiceTv;
     @Bind(R.id.beizhu_et)
     EditText beizhuEt;
 
@@ -96,6 +101,8 @@ public class MyClientUpdateActivity extends BaseActivity {
     TextView more_Tv;
     @Bind(R.id.titleName_tv)
     TextView titleName_Tv;
+    @Bind(R.id.back_iv)
+    ImageView back_Iv;
 
     //modidied by qianghe on 2017/10/11 begin
     @Bind(R.id.province_Linear)
@@ -103,6 +110,20 @@ public class MyClientUpdateActivity extends BaseActivity {
     @Bind(R.id.city_Linear)
     LinearLayout cityLinear;
     //modidied by qianghe on 2017/10/11 end
+
+    private String customerCategoryValue = "";
+    private String abbreviationValue = "";
+    private String mobileValue = "";
+    private String faxValue = "";
+    private String countryValue = "";
+    private String provinceValue = "";
+    private String cityValue = "";
+    private String clientNameValue = "";
+    private String addressValue = "";
+    private String zipCodeValue = "";
+    private String taxesValue = "";
+    private String invoiceValue = "";
+    private String beizhuValue = "";
 
     private Long custid;
     private ClientVo customer;
@@ -158,10 +179,29 @@ public class MyClientUpdateActivity extends BaseActivity {
 
     @OnClick({R.id.save_tv, R.id.contact_person_tv, R.id.visit_tv, R.id.intention_tv,
             R.id.customer_category_tv, R.id.country_tv, R.id.province_tv, R.id.city_tv,
-            R.id.taxes_tv, R.id.back_iv})
+            R.id.taxes_tv, R.id.back_iv,R.id.abbreviation_tv,R.id.mobile_tv,R.id.fax_tv,
+            R.id.address_tv,R.id.zip_code_tv,R.id.invoice_tv})
     public void onclick(View view) {
         Intent intent = null;
         switch (view.getId()) {
+            case R.id.abbreviation_tv://客户简称
+                startEditActivity("str","客户简称",abbreviationTv.getText().toString().trim(),0);
+                break;
+            case R.id.mobile_tv:
+                startEditActivity("num","电话",mobileTv.getText().toString().trim(),1);
+                break;
+            case R.id.fax_tv:
+                startEditActivity("str","传真",faxTv.getText().toString().trim(),2);
+                break;
+            case R.id.address_tv:
+                startEditActivity("str","详细地址",addressTv.getText().toString().trim(),3);
+                break;
+            case R.id.zip_code_tv://邮编
+                startEditActivity("num","邮编",zipCodeTv.getText().toString().trim(),4);
+                break;
+            case R.id.invoice_tv://发票抬头
+                startEditActivity("str","发票抬头",invoiceTv.getText().toString().trim(),5);
+                break;
             case R.id.save_tv:
                 if (!checkInput())
                     return;
@@ -231,7 +271,28 @@ public class MyClientUpdateActivity extends BaseActivity {
                 }
                 break;
             case R.id.back_iv:
-                finish();
+                if(isChanged()){
+                    String content = getResources().getString(R.string.content_changed_warning);
+                    new AlertDialog.Builder(MyClientUpdateActivity.this)
+                            .setMessage(content)
+                            .setCancelable(false)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).create().show();
+                }else{
+                    finish();
+                }
                 break;
             case R.id.contact_person_tv:
                 intent = new Intent(MyClientUpdateActivity.this, ContactPersonActivity.class);
@@ -248,6 +309,62 @@ public class MyClientUpdateActivity extends BaseActivity {
                 intent.putExtra("customer", customer);
                 startActivity(intent);
                 break;
+        }
+    }
+
+    public boolean isChanged(){
+        if(!customerCategoryValue.equals(customerCategoryTv.getText().toString()) ||
+            !abbreviationValue.equals(abbreviationTv.getText().toString()) ||
+             !mobileValue.equals(mobileTv.getText().toString()) ||
+               !faxValue.equals(faxTv.getText().toString()) ||
+                 !countryValue.equals(countryTv.getText().toString()) ||
+                   !provinceValue.equals(provinceTv.getText().toString()) ||
+                    !cityValue.equals(cityTv.getText().toString()) ||
+                       !clientNameValue.equals(clientNameTv.getText().toString()) ||
+                          !addressValue.equals(addressTv.getText().toString()) ||
+                             !zipCodeValue.equals(zipCodeTv.getText().toString()) ||
+                                 !taxesValue.equals(taxesTv.getText().toString()) ||
+                                     !invoiceValue.equals(invoiceTv.getText().toString()) ||
+                                          !beizhuValue.equals(beizhuEt.getText().toString())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void startEditActivity(String type,String title,String content,int requestCode){
+        Intent intent2 = new Intent(MyClientUpdateActivity.this, EditValueActivity.class);
+        intent2.putExtra("type",type);
+        intent2.putExtra("title",title);
+        intent2.putExtra("content",content);
+        startActivityForResult(intent2,requestCode);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(RESULT_OK == resultCode){
+            String result = data.getStringExtra("result");
+            switch (requestCode){
+                case 0:
+                    abbreviationTv.setText(result);
+                    break;
+                case 1:
+                    mobileTv.setText(result);
+                    break;
+                case 2:
+                    faxTv.setText(result);
+                    break;
+                case 3:
+                    addressTv.setText(result);
+                    break;
+                case 4:
+                    zipCodeTv.setText(result);
+                    break;
+                case 5:
+                    invoiceTv.setText(result);
+                    break;
+            }
         }
     }
 
@@ -370,11 +487,12 @@ public class MyClientUpdateActivity extends BaseActivity {
                 }
             }
         }
-        if (mobileEt.getText().toString().trim().equals("") || mobileEt.getText().toString().trim().length() < 11) {
+        if (mobileTv.getText().toString().trim().equals("") || mobileTv.getText().toString().trim()
+                .length() < 11) {
             ToastUtil.showToast("请输入正确电话号码");
             return false;
         }
-        if (!AccountValidatorUtil.isMobile(mobileEt.getText().toString().trim())) {
+        if (!AccountValidatorUtil.isMobile(mobileTv.getText().toString().trim())) {
             ToastUtil.showToast("请输入正确电话号码");
             return false;
         }
@@ -382,7 +500,7 @@ public class MyClientUpdateActivity extends BaseActivity {
             ToastUtil.showToast("请请输入客户名称");
             return false;
         }
-        if (addressEt.getText().toString().trim().equals("")) {
+        if (addressTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请请输入详细地址");
             return false;
         }
@@ -443,15 +561,15 @@ public class MyClientUpdateActivity extends BaseActivity {
             String json_China = new Gson().toJson(new AddMyClientReq(
                     customer.getData().getCustid(),
                     clientNameTv.getText().toString().trim(),
-                    addressEt.getText().toString().trim(),
-                    mobileEt.getText().toString().trim(),
+                    addressTv.getText().toString().trim(),
+                    mobileTv.getText().toString().trim(),
                     custtypeStr,
-                    zipCodeEt.getText().toString().trim(),
+                    zipCodeTv.getText().toString().trim(),
                     webStr,
-                    Config.loginback.getUserId(),
-                    Config.loginback.getUserId(),
-                    abbreviationEt.getText().toString().trim(),
-                    faxEt.getText().toString().trim(),
+                    Config.USERID,
+                    Config.USERID,
+                    abbreviationTv.getText().toString().trim(),
+                    faxTv.getText().toString().trim(),
                     countryStr,
                     provinceStr,
                     cityStr,
@@ -462,15 +580,15 @@ public class MyClientUpdateActivity extends BaseActivity {
             String json_Overseas = new Gson().toJson(new AddMyClientReq(
                     customer.getData().getCustid(),
                     clientNameTv.getText().toString().trim(),
-                    addressEt.getText().toString().trim(),
-                    mobileEt.getText().toString().trim(),
+                    addressTv.getText().toString().trim(),
+                    mobileTv.getText().toString().trim(),
                     custtypeStr,
-                    zipCodeEt.getText().toString().trim(),
+                    zipCodeTv.getText().toString().trim(),
                     webStr,
-                    Config.loginback.getUserId(),
-                    Config.loginback.getUserId(),
-                    abbreviationEt.getText().toString().trim(),
-                    faxEt.getText().toString().trim(),
+                    Config.USERID,
+                    Config.USERID,
+                    abbreviationTv.getText().toString().trim(),
+                    faxTv.getText().toString().trim(),
                     countryStr,
                     null,
                     null,
@@ -482,8 +600,8 @@ public class MyClientUpdateActivity extends BaseActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.modifyCust)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -522,8 +640,8 @@ public class MyClientUpdateActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getCurrInfo)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("custId", custid + "")
                 .build()
                 .execute(
@@ -547,15 +665,26 @@ public class MyClientUpdateActivity extends BaseActivity {
     }
 
     public void initViewData() {
-
         setTextViewVaule(CustSelectUtils.getCustTypeName(custSelectVo, customer.getData().getCusttype()), customerCategoryTv);
+        customerCategoryValue = customerCategoryTv.getText().toString().trim();
+
         setTextViewVaule(customer.getData().getCustname(), clientNameTv);
-        setTextViewVaule(customer.getData().getShortname(), abbreviationEt);
-        setTextViewVaule(customer.getData().getCusttel(), mobileEt);
-        setEditTextVaule(customer.getData().getFax(), faxEt);
+        clientNameValue = clientNameTv.getText().toString().trim();
+
+        setTextViewVaule(customer.getData().getShortname(), abbreviationTv);
+        abbreviationValue = abbreviationTv.getText().toString().trim();
+
+        setTextViewVaule(customer.getData().getCusttel(), mobileTv);
+        mobileValue = mobileTv.getText().toString().trim();
+
+        setTextViewVaule(customer.getData().getFax(), faxTv);
+        faxValue = faxTv.getText().toString().trim();
+
         String countryNameStr = CustSelectUtils.getCountryName(custSelectVo, customer.getData()
                 .getCountry());
         setTextViewVaule(countryNameStr, countryTv);
+        countryValue = countryTv.getText().toString().trim();
+
         if(countryNameStr.equals("中国")){
             provinceTv.setVisibility(View.VISIBLE);
             cityTv.setVisibility(View.VISIBLE);
@@ -568,13 +697,24 @@ public class MyClientUpdateActivity extends BaseActivity {
             provinceTv.setVisibility(View.GONE);
             cityTv.setVisibility(View.GONE);
         }
+        provinceValue = provinceTv.getText().toString().trim();
+        cityValue = cityTv.getText().toString().trim();
 
-        setEditTextVaule(customer.getData().getCustaddress(), addressEt);
-        setEditTextVaule(customer.getData().getZipcode(), zipCodeEt);
+        setTextViewVaule(customer.getData().getCustaddress(), addressTv);
+        addressValue = addressTv.getText().toString().trim();
+
+        setTextViewVaule(customer.getData().getZipcode(), zipCodeTv);
+        zipCodeValue = zipCodeTv.getText().toString().trim();
+
         setTextViewVaule(CustSelectUtils.getWebName(custSelectVo, customer.getData().getWeb()), taxesTv);
-        setEditTextVaule(customer.getData().getMakeup(), invoiceTv);
+        taxesValue = taxesTv.getText().toString().trim();
+
+        setTextViewVaule(customer.getData().getMakeup(), invoiceTv);
+        invoiceValue = invoiceTv.getText().toString().trim();
+
         //备注
         setEditTextVaule(customer.getData().getSummary(), beizhuEt);
+        beizhuValue = beizhuEt.getText().toString().trim();
 
         mLoading.dismiss();
     }
@@ -584,9 +724,9 @@ public class MyClientUpdateActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getCustSelect)
-                .addParams("userId", Config.loginback.getUserId() + "")
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addParams("userId", Config.USERID + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {
@@ -608,5 +748,10 @@ public class MyClientUpdateActivity extends BaseActivity {
                             }
                         }
                 );
+    }
+
+    @Override
+    public void onBackPressed() {
+        back_Iv.callOnClick();
     }
 }

@@ -169,10 +169,10 @@ public class QRCodeOutFactoryActivity extends AppCompatActivity{
         OkHttpUtils
                 .post()
                 .url(Config.carOutFactoryAction)
-                .addParams("userId", Config.loginback.getUserId() + "")
+                .addParams("userId", Config.USERID + "")
                 .addParams("vehicleNos", vehiclenos)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 //.content(json)
                 //.mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()

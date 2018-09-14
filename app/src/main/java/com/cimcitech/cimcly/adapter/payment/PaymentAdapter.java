@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
-import com.cimcitech.cimcly.bean.client.Customer;
 import com.cimcitech.cimcly.bean.payment.PaymentCustomer;
 
 import java.util.List;

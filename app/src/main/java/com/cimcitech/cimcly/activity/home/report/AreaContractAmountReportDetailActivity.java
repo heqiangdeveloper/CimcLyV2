@@ -282,8 +282,8 @@ public class AreaContractAmountReportDetailActivity extends AppCompatActivity im
         OkHttpUtils
                 .postString()
                 .url(Config.getContractDetailList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -331,8 +331,8 @@ public class AreaContractAmountReportDetailActivity extends AppCompatActivity im
         OkHttpUtils
                 .post()
                 .url(Config.getContStatus)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {

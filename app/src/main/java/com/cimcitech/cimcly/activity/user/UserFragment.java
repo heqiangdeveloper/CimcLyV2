@@ -22,34 +22,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
 import com.cimcitech.cimcly.activity.main.LoginActivity;
 import com.cimcitech.cimcly.bean.ApkUpdateVo;
-import com.cimcitech.cimcly.bean.ListPagers;
-import com.cimcitech.cimcly.bean.Result;
-import com.cimcitech.cimcly.bean.client.Customer;
-import com.cimcitech.cimcly.bean.client.MyClientReq;
 import com.cimcitech.cimcly.utils.ApkUpdateUtil;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.GjsonUtil;
 import com.cimcitech.cimcly.utils.ToastUtil;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -57,7 +46,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
-import okhttp3.MediaType;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -131,14 +119,8 @@ public class UserFragment extends Fragment {
     };
 
     private void getUserInfo() {
-        userNameTv.setText(Config.userName);
-        if (sp.getString("user_name", "") != "") {
-            //String name = sp.getString("user_name", "");
-            String pwd = sp.getString("password", "");
-            //System.out.println(name + pwd);
-            //userNameTv.setText(sp.getString("user_name", ""));
-
-        }
+        Log.d("configlog","Config.USERNAME is: " + Config.USERNAME);
+        userNameTv.setText(Config.USERNAME);
     }
 
     @Override
@@ -227,6 +209,7 @@ public class UserFragment extends Fragment {
                         }).create().show();
                 break;
             case R.id.about_tv:
+                Log.d("configlog","Config.USERNAME is: " + Config.USERNAME);
                 startActivity(new Intent(getActivity(), AboutActivity.class));
                 break;
             case R.id.check_version_tv:
@@ -265,7 +248,7 @@ public class UserFragment extends Fragment {
 
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                //ModifyUserInfoPreference();//清除登录信息
+                                ModifyUserInfoPreference();//清除登录信息
                                 startActivity(new Intent(getActivity(), LoginActivity.class));
                                 getActivity().finish();
                             }
@@ -386,8 +369,8 @@ public class UserFragment extends Fragment {
         OkHttpUtils
                 .post()
                 .url(Config.updateApk)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {
@@ -405,4 +388,12 @@ public class UserFragment extends Fragment {
                 );
     }
 
+    public void ModifyUserInfoPreference(){
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("password", "");
+        editor.putInt("userId", 0);
+        editor.putString("token","");
+        editor.putString("appAuth","");
+        editor.commit();
+    }
 }

@@ -321,7 +321,7 @@ public class OrderContractDetailActivity extends BaseActivity {
                         || Integer.parseInt(countTv.getText().toString().trim()) <= 0) {
                     ToastUtil.showToast("上装数量必须大于0");
                 } else {
-                    mLoading.show();
+                    mCommittingDialog.show();
                     sContOrderSubmit();
                 }
                 break;
@@ -335,8 +335,8 @@ public class OrderContractDetailActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.orderContractInfo)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("sOrderId", sOrderId + "")
                 .build()
                 .execute(
@@ -365,8 +365,8 @@ public class OrderContractDetailActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getOrderStandard)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("sOrderId", sOrderId + "")
                 .build()
                 .execute(
@@ -439,10 +439,10 @@ public class OrderContractDetailActivity extends BaseActivity {
             more_Tv.setVisibility(View.VISIBLE);
         } else
             more_Tv.setVisibility(View.GONE);
-        contractnoTv.setText(data.getContractno());
-        ownerTv.setText(data.getOwnerName());
-        ordernoTv.setText(data.getOrderno());
-        fstateTv.setText(data.getfStateName());
+        contractnoTv.setText("合同编号：" + data.getContractno());
+        ownerTv.setText("销售人员：" + data.getOwnerName());
+        ordernoTv.setText("销售订单号：" + (data.getOrderno() == null ? "无":data.getOrderno()));
+        fstateTv.setText("合同状态：" + data.getfStateName());
 
         if (data.getCount() == 0) {
             boudle = data.getTotalprice() / 1;//合同金额/上装数量
@@ -516,10 +516,10 @@ public class OrderContractDetailActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.sContOrderCancel)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("sOrderId", detailVo.getData().getSorderid() + "")
-                .addParams("userId", Config.loginback.getUserId() + "")
+                .addParams("userId", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {
@@ -552,21 +552,22 @@ public class OrderContractDetailActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.sContOrderSubmit)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("sOrderId", detailVo.getData().getSorderid() + "")
-                .addParams("userId", Config.loginback.getUserId() + "")
+                .addParams("userId", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mCommittingDialog.isShowing()) mCommittingDialog.dismiss();
                                 ToastUtil.showNetError();
-                                mLoading.dismiss();
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
+                                if(mCommittingDialog.isShowing()) mCommittingDialog.dismiss();
                                 try {
                                     JSONObject json = new JSONObject(response);
                                     if (json.getBoolean("success")) {
@@ -578,7 +579,6 @@ public class OrderContractDetailActivity extends BaseActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                mLoading.dismiss();
                             }
                         }
                 );
@@ -597,8 +597,8 @@ public class OrderContractDetailActivity extends BaseActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.sContOrderSave)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()

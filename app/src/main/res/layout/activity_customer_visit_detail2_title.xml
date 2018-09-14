@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#f2f2f2"
+    android:background="@color/white"
     android:fitsSystemWindows="true"
     android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -30,7 +30,7 @@
                 android:fitsSystemWindows="true"
                 android:id="@+id/back_iv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:paddingLeft="10dip"
@@ -44,13 +44,12 @@
                 android:layout_centerInParent="true"
                 android:text="拜访详情"
                 android:textColor="@color/white"
-                android:textSize="@dimen/activity_customer_visit_title_size"
-                android:textStyle="bold"/>
+                android:textSize="@dimen/main_title_size"/>
 
             <TextView
                 android:id="@+id/more_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -58,7 +57,7 @@
                 android:paddingRight="10dip"
                 android:text="●●●"
                 android:textColor="@color/white"
-                android:textSize="10sp"
+                android:textSize="6sp"
                 android:visibility="gone"/>
             <Spinner
                 android:background="@color/colorPrimaryDark"
@@ -186,4 +185,20 @@
                 android:textColor="@color/colorPrimaryDark" />
         </LinearLayout>
     </LinearLayout>
+    <com.cimcitech.cimcly.widget.ClearEditText
+        android:id="@+id/filter_edit"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/search_bar_margin"
+        android:layout_marginRight="@dimen/search_bar_margin"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/search24"
+        android:drawablePadding="10dp"
+        android:hint="按姓名搜索联系人"
+        android:textColor="@color/black"
+        android:textColorHint="#969696"
+        android:maxLines="1"
+        android:textSize="@dimen/customer_visit_detail_text_size" />
 </android.support.design.widget.AppBarLayout>

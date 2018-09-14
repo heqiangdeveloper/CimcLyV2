@@ -171,8 +171,8 @@ public class IntentionTrackDetailActivity extends BaseActivity {
             OkHttpUtils
                     .post()
                     .url(Config.closeOpportUnit)
-                    .addHeader("checkTokenKey", Config.loginback.getToken())
-                    .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                    .addHeader("checkTokenKey", Config.TOKEN)
+                    .addHeader("sessionKey", Config.USERID + "")
                     .addParams("opportId", opportId + "")
                     .build()
                     .execute(
@@ -205,8 +205,8 @@ public class IntentionTrackDetailActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.opportUnitInfo)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey",Config.USERID + "")
                 .addParams("opportId", opportId + "")
                 .build()
                 .execute(

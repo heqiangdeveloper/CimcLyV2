@@ -2,6 +2,7 @@
 package com.cimcitech.cimcly.activity.home.car_in_storage;
 
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 
 import com.cimcitech.cimcly.ApkApplication;
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.activity.home.car_out_factory.CarOutFactoryActivity;
 import com.cimcitech.cimcly.adapter.car_in_storage.AlreadyInStorageAdapter;
 import com.cimcitech.cimcly.adapter.car_in_storage.WaitInStorageAdapter;
 import com.cimcitech.cimcly.bean.ListPagers;
@@ -34,6 +37,7 @@ import com.cimcitech.cimcly.bean.Result;
 import com.cimcitech.cimcly.bean.depart_request.RequestFeedbackBean;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.ToastUtil;
+import com.cimcitech.cimcly.widget.BaseActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -53,7 +57,7 @@ import okhttp3.MediaType;
 /**
  * 我的客户
  */
-public class CarInStorageActivity extends AppCompatActivity {
+public class CarInStorageActivity extends BaseActivity {
     @Bind(R.id.add_bt)
     Button addBt;
     @Bind(R.id.my_tv)
@@ -86,6 +90,20 @@ public class CarInStorageActivity extends AppCompatActivity {
     Spinner whoSpinner;
     @Bind(R.id.who_ll)
     LinearLayout who_Ll;
+    @Bind(R.id.item_my_rl)
+    RelativeLayout item_my_Rl;
+    @Bind(R.id.item_others_rl)
+    RelativeLayout item_others_Rl;
+    @Bind(R.id.item_my_tv)
+    TextView item_my_Tv;
+    @Bind(R.id.item_others_tv)
+    TextView item_others_Tv;
+    @Bind(R.id.item_my_checked_tv)
+    TextView item_my_checked_Tv;
+    @Bind(R.id.item_others_checked_tv)
+    TextView item_others_checked_Tv;
+    @Bind(R.id.popup_menu_layout)
+    LinearLayout popup_menu_Layout;
 
     private int pageNum = 1;
     private Result<ListPagers<WaitInStorageInfo>> status;
@@ -98,6 +116,8 @@ public class CarInStorageActivity extends AppCompatActivity {
     public static boolean isWaitInStorage = true;
     private final int REFRESH_DATA = 1;
     private ArrayAdapter<String> arr_adapter;
+    private String carInStorageLabel ;//“入库”
+    private String carOutStorageLabel ;//“退库”
 
     private Handler mHandler = new Handler(){
         @Override
@@ -123,34 +143,60 @@ public class CarInStorageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_car_in_storage2);
         ButterKnife.bind(this);
         initTitle();
+        initPopupMenu();
         isWaitInStorage = true;
         initViewData();
         getData();
-        setSpinnerListener();
     }
 
     public void initTitle(){
-        more_Tv.setVisibility(View.GONE);
-        whoSpinner.setVisibility(View.VISIBLE);
+        more_Tv.setVisibility(View.VISIBLE);
+        whoSpinner.setVisibility(View.GONE);
         titleName_Tv.setText("车辆入库");
         title_Ll.setVisibility(View.VISIBLE);
         status_Ll.setVisibility(View.GONE);
         who_Ll.setVisibility(View.GONE);
+        searchEt.setHint("请输入客户名称查询");
 
         //myTv.setText("待入库");
         //xsTv.setText("已入库");
-
+        carInStorageLabel = getResources().getString(R.string.car_in_storage);
+        carOutStorageLabel = getResources().getString(R.string.car_out_storage);
         //数据
         List<String> data_list = new ArrayList<String>();
         data_list.add("待入库");
         data_list.add("已入库");
 
+        item_my_Tv.setText("待入库");
+        item_others_Tv.setText("已入库");
+
+        addBt.setText(carInStorageLabel);
         //适配器
         arr_adapter= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, data_list);
         //设置样式
         arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //加载适配器
         whoSpinner.setAdapter(arr_adapter);
+    }
+
+    public void setItemChechedLableVisible(){
+        if(isWaitInStorage){
+            item_my_checked_Tv.setVisibility(View.VISIBLE);
+            item_others_checked_Tv.setVisibility(View.GONE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.black));
+        }else {
+            item_my_checked_Tv.setVisibility(View.GONE);
+            item_others_checked_Tv.setVisibility(View.VISIBLE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.black));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+    }
+
+    public void initPopupMenu(){
+        popup_menu_Layout.setVisibility(View.GONE);
+        item_my_Rl.setVisibility(View.VISIBLE);
+        item_others_Rl.setVisibility(View.VISIBLE);
     }
 
     public void setSpinnerListener(){
@@ -162,6 +208,7 @@ public class CarInStorageActivity extends AppCompatActivity {
                 tv.setTextColor(Color.WHITE);
                 String whos = (String) whoSpinner.getAdapter().getItem(position);
                 isWaitInStorage = whos.equals("待入库") ? true:false;
+                addBt.setText(isWaitInStorage? "入库":"退库");
                 updateData();
             }
 
@@ -306,7 +353,8 @@ public class CarInStorageActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.back_iv, R.id.my_tv, R.id.xs_tv, R.id.add_bt, R.id.search_bt})
+    @OnClick({R.id.back_iv, R.id.my_tv, R.id.xs_tv, R.id.add_bt, R.id.search_bt,
+            R.id.more_tv,R.id.item_my_rl,R.id.item_others_rl})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back_iv:
@@ -338,7 +386,23 @@ public class CarInStorageActivity extends AppCompatActivity {
                 updateData();
                 ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
+            case R.id.more_tv:
+                popup_menu_Layout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.item_my_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                isWaitInStorage = true;
+                addBt.setText(carInStorageLabel);
+                updateData();
+                break;
+            case R.id.item_others_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                isWaitInStorage = false;
+                addBt.setText(carOutStorageLabel);
+                updateData();
+                break;
         }
+        setItemChechedLableVisible();
     }
 
     public void submitCarInStorage(){
@@ -384,10 +448,10 @@ public class CarInStorageActivity extends AppCompatActivity {
         OkHttpUtils
                 .post()
                 .url(Config.waitInStorageAction)
-                .addParams("userId", Config.loginback.getUserId() + "")
+                .addParams("userId", Config.USERID + "")
                 .addParams("vehicleNos", vehiclenos)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 //.content(json)
                 //.mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -417,10 +481,10 @@ public class CarInStorageActivity extends AppCompatActivity {
         OkHttpUtils
                 .post()
                 .url(Config.outStorageAction)
-                //.addParams("userId", Config.loginback.getUserId() + "")
+                //.addParams("userId", Config.USERID + "")
                 .addParams("vehicleNos", vehiclenos)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 //.content(json)
                 //.mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -500,13 +564,13 @@ public class CarInStorageActivity extends AppCompatActivity {
     public void getData() {
         //recyclerView.setAdapter(adapter_InStorage);//绑定数据源
         String json = new Gson().toJson(new WaitInStorageReq(pageNum, 10, "",
-                new WaitInStorageReq.WaitInStorageReqBean(Config.loginback.getUserId() + "",
+                new WaitInStorageReq.WaitInStorageReqBean(Config.USERID + "",
                         searchEt.getText().toString().trim())));
         OkHttpUtils
                 .postString()
                 .url(Config.waitInStorageList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -519,7 +583,6 @@ public class CarInStorageActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                Log.d("hqlog","response is：" + response);
                                 Type userlistType = new TypeToken<Result<ListPagers<WaitInStorageInfo>>>() {
                                 }.getType();
                                 status = new Gson().fromJson(response, userlistType);
@@ -555,13 +618,13 @@ public class CarInStorageActivity extends AppCompatActivity {
     public void getSubData() {
         //recyclerView.setAdapter(adapter_OutFactory);//绑定数据源
         String json = new Gson().toJson(new WaitInStorageReq(pageNum, 10, "",
-                new WaitInStorageReq.WaitInStorageReqBean(Config.loginback.getUserId() + "",
+                new WaitInStorageReq.WaitInStorageReqBean(Config.USERID + "",
                         searchEt.getText().toString().trim())));
         OkHttpUtils
                 .postString()
                 .url(Config.alreadyInStorageList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -600,5 +663,23 @@ public class CarInStorageActivity extends AppCompatActivity {
                             }
                         }
                 );
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            int x = (int) ev.getX();
+            int y = (int) ev.getY();
+
+            if (null != popup_menu_Layout && popup_menu_Layout.getVisibility() == View.VISIBLE) {
+                Rect hitRect = new Rect();
+                popup_menu_Layout.getGlobalVisibleRect(hitRect);
+                if (!hitRect.contains(x, y)) {
+                    popup_menu_Layout.setVisibility(View.GONE);
+                    return true;
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

@@ -2,6 +2,7 @@ package com.cimcitech.cimcly.activity.home.intention_track;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,8 +11,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -28,6 +31,7 @@ import android.widget.TextView;
 
 import com.cimcitech.cimcly.ApkApplication;
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.activity.main.MainActivity;
 import com.cimcitech.cimcly.adapter.intention_track.IntentionTrackAdapter;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.bean.GetCurrStageSelect;
@@ -87,6 +91,21 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
     Spinner whoSpinner;
     @Bind(R.id.who_ll)
     LinearLayout who_Ll;
+    @Bind(R.id.popup_menu_layout)
+    LinearLayout popup_menu_Layout;
+    @Bind(R.id.item_my_rl)
+    RelativeLayout item_my_Rl;
+    @Bind(R.id.item_others_rl)
+    RelativeLayout item_others_Rl;
+
+    @Bind(R.id.item_my_tv)
+    TextView item_my_Tv;
+    @Bind(R.id.item_my_checked_tv)
+    TextView item_my_checked_Tv;
+    @Bind(R.id.item_others_tv)
+    TextView item_others_Tv;
+    @Bind(R.id.item_others_checked_tv)
+    TextView item_others_checked_Tv;
 
     private PopupWindow pop;
     private int pageNum = 1;
@@ -101,26 +120,60 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
     private GetCurrStageSelect getCurrStageSelect;
     private String quotestatus;
 
+    MainActivity.MyOnTouchListener myOnTouchListener;
+    private GestureDetector mGestureDetector;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_intention_track2, container, false);
         ButterKnife.bind(this, view);
         initTitle();
+        initPopupMenu();
         back_Iv.setVisibility(View.INVISIBLE);
-        initViewData();
-        getData();
         getCurrStageSelect();
-        setSpinnerListener();
+        myData = true;
+        initViewData();
+        //setSpinnerListener();
+        updateData();
         return view;
     }
 
     public void initTitle(){
-        more_Tv.setVisibility(View.GONE);
-        whoSpinner.setVisibility(View.VISIBLE);
+        more_Tv.setVisibility(View.VISIBLE);
+        whoSpinner.setVisibility(View.GONE);
         title_Ll.setVisibility(View.VISIBLE);
         titleName_Tv.setText("意向跟踪");
         who_Ll.setVisibility(View.GONE);
+
+        mGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener());
+        myOnTouchListener = new MainActivity.MyOnTouchListener() {
+
+            @Override
+            public boolean onTouch(MotionEvent ev) {
+                boolean result = mGestureDetector.onTouchEvent(ev);
+                if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+                    int x = (int) ev.getX();
+                    int y = (int) ev.getY();
+
+                    if (null != popup_menu_Layout && popup_menu_Layout.getVisibility() == View.VISIBLE) {
+                        Rect hitRect = new Rect();
+                        popup_menu_Layout.getGlobalVisibleRect(hitRect);
+                        if (!hitRect.contains(x, y)) {
+                            popup_menu_Layout.setVisibility(View.GONE);
+                            return true;
+                        }
+                    }
+                }
+                return true;
+            }
+        };
+        ((MainActivity) getActivity()).registerMyOnTouchListener(myOnTouchListener);
+    }
+
+    public void initPopupMenu(){
+        popup_menu_Layout.setVisibility(View.GONE);
+        item_my_Rl.setVisibility(View.VISIBLE);
+        item_others_Rl.setVisibility(View.VISIBLE);
     }
 
     public void setSpinnerListener(){
@@ -167,7 +220,8 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
         }
     }
 
-    @OnClick({R.id.add_ib,R.id.my_tv,R.id.xs_tv,R.id.status_bt,R.id.search_bt})
+    @OnClick({R.id.add_ib,R.id.my_tv,R.id.xs_tv,R.id.status_bt,R.id.search_bt,R.id.more_tv,
+              R.id.item_my_rl,R.id.item_others_rl})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.my_tv:
@@ -199,8 +253,37 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
                 updateData();
                 ApkApplication.imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
+            case R.id.more_tv:
+                popup_menu_Layout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.item_my_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                myData = true;
+                updateData();
+                break;
+            case R.id.item_others_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                myData = false;
+                updateData();
+                break;
+        }
+        setItemChechedLableVisible();
+    }
+
+    public void setItemChechedLableVisible(){
+        if(myData){
+            item_my_checked_Tv.setVisibility(View.VISIBLE);
+            item_others_checked_Tv.setVisibility(View.GONE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.black));
+        }else {
+            item_my_checked_Tv.setVisibility(View.GONE);
+            item_others_checked_Tv.setVisibility(View.VISIBLE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.black));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
         }
     }
+
 
     public void showContactUsPopWin(Context context, String title, List<String> list) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -342,20 +425,20 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
         String json = "";
         if(searchEt != null){
             json = new Gson().toJson(new OpportUnitReq(pageNum, 10, "",
-                    new OpportUnitReq.OpportUnityBean(Config.loginback.getUserId(),
+                    new OpportUnitReq.OpportUnityBean(Config.USERID,
                             searchEt.getText().toString().trim()
                             , quotestatus)));
         }else {
             json = new Gson().toJson(new OpportUnitReq(pageNum, 10, "",
-                    new OpportUnitReq.OpportUnityBean(Config.loginback.getUserId(),
+                    new OpportUnitReq.OpportUnityBean(Config.USERID,
                             ""
                             , quotestatus)));
         }
         OkHttpUtils
                 .postString()
                 .url(Config.opportUnitList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -363,6 +446,8 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(null != swipeRefreshLayout)
+                                    swipeRefreshLayout.setRefreshing(false);
                                 ToastUtil.showNetError();
                             }
 
@@ -387,6 +472,9 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
                                         if(null != swipeRefreshLayout)
                                             swipeRefreshLayout.setRefreshing(false);
                                         adapter.notifyItemRemoved(adapter.getItemCount());
+                                    }else{
+                                        if(null != swipeRefreshLayout)
+                                            swipeRefreshLayout.setRefreshing(false);
                                     }
                                 } else {
                                     adapter.notifyDataSetChanged();
@@ -400,14 +488,14 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
 
     public void getSubData() {
         String json = new Gson().toJson(new OpportUnitReq(pageNum, 10, "",
-                new OpportUnitReq.OpportUnityBean(Config.loginback.getUserId(),
+                new OpportUnitReq.OpportUnityBean(Config.USERID,
                         searchEt.getText().toString().trim()
                         , quotestatus)));
         OkHttpUtils
                 .postString()
                 .url(Config.opportUnitSubList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -415,6 +503,8 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(null != swipeRefreshLayout)
+                                    swipeRefreshLayout.setRefreshing(false);
                                 ToastUtil.showNetError();
                             }
 
@@ -464,8 +554,8 @@ public class IntentionTrackFragment extends Fragment implements View.OnClickList
         OkHttpUtils
                 .post()
                 .url(Config.getCurrStageSelect)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {

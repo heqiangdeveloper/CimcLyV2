@@ -173,8 +173,8 @@ public class PaymentDetailActivity extends AppCompatActivity {
         OkHttpUtils
                 .post()
                 .url(Config.PaymentDetailUrl)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("sOrderId", sorderId + "")
                 .build()
                 .execute(

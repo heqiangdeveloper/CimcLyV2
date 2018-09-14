@@ -110,6 +110,9 @@ public class HomeGridAdapter extends BaseAdapter {
         }
     }
 
+    /*
+    *   流程： 检验--入库--发车申请--出厂
+     */
     public void addADData(){
         ImageLists.add(R.mipmap.v2__apps_ic__legwork);
         TextLists.add("客户拜访");
@@ -131,20 +134,23 @@ public class HomeGridAdapter extends BaseAdapter {
         TextLists.add("回款跟踪");
         ImageLists.add(R.mipmap.v3__mine_setting_company);
         TextLists.add("生产进度");
+        ImageLists.add(R.mipmap.v3__apps_test);
+        TextLists.add("手动检验");
+        ImageLists.add(R.mipmap.qrcode_test_icon);
+        TextLists.add("扫码检验");
         ImageLists.add(R.mipmap.v4_app_ic_car_in);
         TextLists.add("车辆入库");
+        ImageLists.add(R.mipmap.v4_app_ic_qrcode_in);
+        TextLists.add("扫码入库");
         ImageLists.add(R.mipmap.v4_app_ic_departrequest);
         TextLists.add("发车申请");
         ImageLists.add(R.mipmap.v4_app_ic_car_out);
         TextLists.add("车辆出厂");
-        ImageLists.add(R.mipmap.v4_app_ic_qrcode_in);
-        TextLists.add("扫码入库");
         ImageLists.add(R.mipmap.v4_app_ic_qrcode_out);
         TextLists.add("扫码出厂");
         ImageLists.add(R.mipmap.v2__apps_ic__crm_order);
         TextLists.add("报表");
-        ImageLists.add(R.mipmap.v3__apps_test);
-        TextLists.add("检验");
+
     }
 
     public void addMWData(){
@@ -168,7 +174,9 @@ public class HomeGridAdapter extends BaseAdapter {
         ImageLists.add(R.mipmap.v3__mine_setting_company);
         TextLists.add("生产进度");
         ImageLists.add(R.mipmap.v3__apps_test);
-        TextLists.add("检验");
+        TextLists.add("手动检验");
+        ImageLists.add(R.mipmap.qrcode_test_icon);
+        TextLists.add("扫码检验");
     }
 
     public void addLDData(){

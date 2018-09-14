@@ -75,8 +75,8 @@ public class ProductionDetailActivity extends AppCompatActivity {
         OkHttpUtils
                 .post()
                 .url(Config.productionDetailUrl)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("prodOrderDetId", prodOrderDetId + "")
                 .build()
                 .execute(

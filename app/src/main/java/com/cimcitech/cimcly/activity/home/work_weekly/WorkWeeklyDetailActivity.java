@@ -112,8 +112,8 @@ public class WorkWeeklyDetailActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.workWeeklyInfo)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("repId", repId + "")
                 .build()
                 .execute(
@@ -148,13 +148,13 @@ public class WorkWeeklyDetailActivity extends BaseActivity {
                 detailVo.getData().getRepid(),
                 nextworktaskTv.getText().toString().trim(),
                 performanceTv.getText().toString().trim(),
-                Config.loginback.getUserId()));
+                Config.USERID));
 
         OkHttpUtils
                 .postString()
                 .url(Config.updateWorkWeekly)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()

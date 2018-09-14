@@ -298,8 +298,8 @@ public class QuotedPriceAddActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getNewQuoteBase)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("custId", infoVo.getData().getCustid() + "")
                 .addParams("opportId", infoVo.getData().getOpportid() + "")
                 .addParams("productId", infoVo.getData().getProductid())
@@ -407,8 +407,8 @@ public class QuotedPriceAddActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getChassis)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {
@@ -485,7 +485,7 @@ public class QuotedPriceAddActivity extends BaseActivity {
         //
         String version = quotedPriceDetailVo.getData().getVersion();
         //当前用户
-        String creater = Config.loginback.getUserId() + "";
+        String creater = Config.USERID + "";
         //定金
         int deposit = Integer.parseInt(depositTv.getText().toString().trim());
 
@@ -507,8 +507,8 @@ public class QuotedPriceAddActivity extends BaseActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.addQuoteBase)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()

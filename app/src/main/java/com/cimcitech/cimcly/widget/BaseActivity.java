@@ -31,7 +31,7 @@ public class BaseActivity extends AppCompatActivity {
     public static final String TAG = "gao_chun";
 
     //在基类中初始化Dialog
-    public Dialog mLoading;
+    public Dialog mLoading,mLoginDialog,mCommittingDialog;
 
     /* (non-Javadoc)
      * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -44,5 +44,7 @@ public class BaseActivity extends AppCompatActivity {
             DialogUtils.showToast(this,R.string.text_network_unavailable);
         }*/
         mLoading = DialogUtils.createLoadingDialog(this);
+        mLoginDialog = DialogUtils.createLoginDialog(this);
+        mCommittingDialog = DialogUtils.createCommittingDialog(this);
     }
 }

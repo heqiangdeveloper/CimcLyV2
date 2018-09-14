@@ -27,7 +27,7 @@
                 android:textSize="14sp" />
 
             <EditText
-                android:id="@+id/questiontheme_tv"
+                android:id="@+id/questiontheme_et"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="8dip"
@@ -70,9 +70,11 @@
                 android:layout_marginBottom="8dip"
                 android:layout_marginRight="10dip"
                 android:layout_marginTop="8dip"
+                android:hint="请选择反馈类型"
                 android:background="@drawable/bg_edittext"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dip"
+                android:textColorHint="@color/alpha50"
                 android:textColor="@color/black_3"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -91,7 +93,7 @@
             android:layout_marginTop="20dip">
 
             <EditText
-                android:id="@+id/questiondetail_tv"
+                android:id="@+id/questiondetail_et"
                 android:layout_width="match_parent"
                 android:layout_height="140dip"
                 android:layout_margin="10dip"
@@ -112,13 +114,13 @@
             android:background="@color/alpha50" />
 
         <Button
-            android:id="@+id/login_bt"
+            android:id="@+id/commit_bt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dip"
             android:layout_marginRight="15dip"
             android:layout_marginTop="25dip"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/shape_feedback_button_off"
             android:text="提交"
             android:textColor="#FFFFFF"
             android:textSize="15sp" />

@@ -30,11 +30,13 @@
                 android:numColumns="4" />
 
             <ImageView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="1dip"
                 android:background="#f2f2f2" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -68,11 +70,13 @@
             </LinearLayout>
 
             <ImageView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="2dip"
                 android:background="#f2f2f2" />
 
             <ListView
+                android:visibility="gone"
                 android:id="@+id/listContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

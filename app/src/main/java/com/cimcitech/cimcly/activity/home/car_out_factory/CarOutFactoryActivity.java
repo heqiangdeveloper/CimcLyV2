@@ -117,6 +117,7 @@ public class CarOutFactoryActivity extends AppCompatActivity {
         title_Ll.setVisibility(View.VISIBLE);
         status_Ll.setVisibility(View.GONE);
         who_Ll.setVisibility(View.GONE);
+        searchEt.setHint("请输入客户名称查询");
     }
 
     //刷新数据
@@ -206,10 +207,10 @@ public class CarOutFactoryActivity extends AppCompatActivity {
         OkHttpUtils
                 .post()
                 .url(Config.carOutFactoryAction)
-                .addParams("userId", Config.loginback.getUserId() + "")
+                .addParams("userId", Config.USERID + "")
                 .addParams("vehicleNos", vehiclenos)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 //.content(json)
                 //.mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -323,13 +324,13 @@ public class CarOutFactoryActivity extends AppCompatActivity {
 
     public void getData() {
         String json = new Gson().toJson(new WaitInStorageReq(pageNum, 10, "",
-                new WaitInStorageReq.WaitInStorageReqBean(Config.loginback.getUserId() + "",
+                new WaitInStorageReq.WaitInStorageReqBean(Config.USERID + "",
                         searchEt.getText().toString().trim())));
         OkHttpUtils
                 .postString()
                 .url(Config.alreadyRequestList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -337,6 +338,7 @@ public class CarOutFactoryActivity extends AppCompatActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                swipeRefreshLayout.setRefreshing(false);
                                 ToastUtil.showNetError();
                             }
 
@@ -366,6 +368,7 @@ public class CarOutFactoryActivity extends AppCompatActivity {
                                     adapter.notifyDataSetChanged();
                                     swipeRefreshLayout.setRefreshing(false);
                                 }
+                                swipeRefreshLayout.setRefreshing(false);
                             }
                         }
                 );
@@ -376,13 +379,13 @@ public class CarOutFactoryActivity extends AppCompatActivity {
     public void getSubData() {
         //adapter = new CarInStorageAdapter(CarInStorageActivity.this, data);
         String json = new Gson().toJson(new WaitInStorageReq(pageNum, 10, "",
-                new WaitInStorageReq.WaitInStorageReqBean(Config.loginback.getUserId() + "",
+                new WaitInStorageReq.WaitInStorageReqBean(Config.USERID + "",
                         searchEt.getText().toString().trim())));
         OkHttpUtils
                 .postString()
                 .url(Config.alreadyInStorageList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()

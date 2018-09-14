@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--item布局，自定义View-->
+<com.cimcitech.cimcly.widget.LeftSlideView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black">
+    <RelativeLayout
+        android:id="@+id/content_rl"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@android:color/white"
+        >
+        <!--"设置"，"删除"按钮使用了TextView而不是Button，是因为５.０以上版本使用Button会显示在上层产出错误显示-->
+        <TextView
+            android:id="@+id/tv_set"
+            android:layout_height="match_parent"
+            android:layout_width="80dp"
+            android:gravity="center"
+            android:layout_toRightOf="@+id/layout_content"
+            android:text="标为未读"
+            android:textSize="@dimen/main_title_size"
+            android:background="@drawable/orange_background"
+            android:textColor="#DDFFFFFF"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_height="match_parent"
+            android:layout_width="80dp"
+            android:gravity="center"
+            android:layout_toRightOf="@+id/tv_set"
+            android:text="删 除"
+            android:textSize="@dimen/main_title_size"
+            android:background="@drawable/pink_background"
+            android:textColor="#DDFFFFFF"
+            />
+
+
+
+        <RelativeLayout
+            android:id="@+id/layout_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:padding="2dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/icon_iv"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:background="@mipmap/quoted_jpush_icon"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dip"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:padding="2dp"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:padding="2dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white">
+
+                        <TextView
+                            android:id="@+id/msg_title_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:text="标题"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/main_title_size"
+                            android:layout_marginRight="30dp"/>
+                        <TextView
+                            android:id="@+id/msg_time_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="6月25日"
+                            android:textColor="@color/black_33"
+                            android:textSize="@dimen/message_top_item_text_size" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:padding="2dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:id="@+id/msg_content_desc_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:text="内容描述.."
+                            android:textColor="@color/black_33"
+                            android:textSize="@dimen/message_top_item_text_size"
+                            android:layout_marginRight="30dp"/>
+                        <Button
+                            android:id="@+id/msg_count_bt"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_alignParentRight="true"
+                            android:text="1"
+                            android:background="@mipmap/red_circle"
+                            android:textColor="@color/white"
+                            android:textSize="10sp" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/message_item_devid_color"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</com.cimcitech.cimcly.widget.LeftSlideView>

@@ -65,14 +65,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="15dip"
+                    android:background="@color/white"
                     android:src="@mipmap/login_account_icon" />
 
                 <EditText
-                    android:id="@+id/user_name_tv"
+                    android:id="@+id/login_name_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/transparent"
+                    android:background="@color/white"
                     android:ellipsize="end"
                     android:textColor="@color/colorPrimary"
                     android:hint="请输入用户名"
@@ -81,6 +82,7 @@
                     android:textSize="16sp" />
 
                 <ImageView
+                    android:background="@color/white"
                     android:id="@+id/clear_name_iv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -89,6 +91,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/gray"/>
@@ -102,6 +105,7 @@
                 android:background="@color/transparent">
 
                 <ImageView
+                    android:background="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="15dip"
@@ -112,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@null"
+                    android:background="@color/white"
                     android:ellipsize="end"
                     android:hint="请输入密码"
                     android:textColor="@color/colorPrimary"
@@ -122,6 +126,7 @@
                     android:textSize="16sp" />
 
                 <ImageView
+                    android:background="@color/white"
                     android:id="@+id/clear_password_iv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -130,6 +135,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/gray"/>

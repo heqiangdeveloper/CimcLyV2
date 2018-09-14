@@ -315,15 +315,15 @@ public class CustomerVisitFragment extends Fragment {
     public void getData() {
         if(null != searchEt){//防止快速切换Fragment导致的FC
             String json = new Gson().toJson(new RuquMyVisit(pageNum, 10, "",
-                    new RuquMyVisit.CustomerVisitBean(Config.loginback.getUserId(),
+                    new RuquMyVisit.CustomerVisitBean(Config.USERID,
                             searchEt.getText().toString().trim())));
 
             Log.e("CustomerVisitActivity", json);
             OkHttpUtils
                     .postString()
                     .url(Config.custVisit)
-                    .addHeader("checkTokenKey", Config.loginback.getToken())
-                    .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                    .addHeader("checkTokenKey", Config.TOKEN)
+                    .addHeader("sessionKey", Config.USERID + "")
                     .content(json)
                     .mediaType(MediaType.parse("application/json; charset=utf-8"))
                     .build()
@@ -369,13 +369,13 @@ public class CustomerVisitFragment extends Fragment {
 
     public void getSubData() {
         String json = new Gson().toJson(new RuquMyVisit(pageNum, 10, "",
-                new RuquMyVisit.CustomerVisitBean(Config.loginback.getUserId())));
+                new RuquMyVisit.CustomerVisitBean(Config.USERID)));
         Log.e("CustomerVisitActivity", json);
         OkHttpUtils
                 .postString()
                 .url(Config.custSubVisit)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()

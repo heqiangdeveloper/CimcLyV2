@@ -1,24 +1,17 @@
 package com.cimcitech.cimcly.activity.home.test;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.Call;
 
 public class QRCodeTestMainActivity extends AppCompatActivity{
     @Bind(R.id.qrcode_tv)
@@ -58,7 +51,7 @@ public class QRCodeTestMainActivity extends AppCompatActivity{
                 startActivity(i1);
                 break;
             case R.id.write_tv://手工填写车工号
-                Intent i2 = new Intent(QRCodeTestMainActivity.this,QRCodeWriteTestActivity.class);
+                Intent i2 = new Intent(QRCodeTestMainActivity.this,WriteTestActivity.class);
                 startActivity(i2);
                 break;
         }

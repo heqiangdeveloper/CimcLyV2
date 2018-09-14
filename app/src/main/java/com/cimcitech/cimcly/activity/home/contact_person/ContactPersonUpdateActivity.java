@@ -1,6 +1,8 @@
 package com.cimcitech.cimcly.activity.home.contact_person;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -20,6 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackFollowUpActivity;
+import com.cimcitech.cimcly.activity.home.my_client.MyClientAddActivity;
+import com.cimcitech.cimcly.activity.main.EditValueActivity;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.bean.AreaVo;
 import com.cimcitech.cimcly.bean.client.ClientNameVo;
@@ -55,16 +61,16 @@ public class ContactPersonUpdateActivity extends BaseActivity {
     TextView timeTv;
     @Bind(R.id.client_tv)
     TextView clientTv;
-    @Bind(R.id.name_et)
-    EditText nameEt;
-    @Bind(R.id.mobile_et)
-    EditText mobileEt;
-    @Bind(R.id.phone_et)
-    EditText phoneEt;
+    @Bind(R.id.name_tv)
+    TextView nameTv;
+    @Bind(R.id.mobile_tv)
+    TextView mobileTv;
+    @Bind(R.id.phone_tv)
+    TextView phoneTv;
     @Bind(R.id.area_tv)
     TextView areaTv;
     @Bind(R.id.address_tv)
-    EditText addressTv;
+    TextView addressTv;
     @Bind(R.id.add_bt)
     Button addBt;
     @Bind(R.id.title_ll)
@@ -73,8 +79,9 @@ public class ContactPersonUpdateActivity extends BaseActivity {
     TextView more_Tv;
     @Bind(R.id.titleName_tv)
     TextView titleName_Tv;
+    @Bind(R.id.back_iv)
+    ImageView back_Iv;
 
-    private AreaVo areaVo;
     private ContactInfoVo contactInfoVo;
     private PopupWindow pop, popupWindow;
     private AreaVo.Province userProvince;
@@ -82,6 +89,14 @@ public class ContactPersonUpdateActivity extends BaseActivity {
     private ListView listView2;
     private ClientNameVo clientVo;
     private ClientNameVo.Data item;
+    private AreaVo areaVo;
+
+    private String clientValue = "";
+    private String nameValue = "";
+    private String mobileValue = "";
+    private String phoneValue = "";
+    private String areaValue = "";
+    private String addressValue = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +105,7 @@ public class ContactPersonUpdateActivity extends BaseActivity {
         ButterKnife.bind(this);
         initTitle();
         contactInfoVo = (ContactInfoVo) this.getIntent().getSerializableExtra("contactInfoVo");
+        getAreaData();
         getClientData();
         initViewData();
     }
@@ -104,10 +120,18 @@ public class ContactPersonUpdateActivity extends BaseActivity {
         if (contactInfoVo != null) {
             clientNo.setText(contactInfoVo.getData().getCustid());
             clientTv.setText(contactInfoVo.getData().getCustname());
-            nameEt.setText(contactInfoVo.getData().getPersonname());
-            mobileEt.setText(contactInfoVo.getData().getConttel() != null ?
+            clientValue = clientTv.getText().toString();
+
+            nameTv.setText(contactInfoVo.getData().getPersonname());
+            nameValue = nameTv.getText().toString();
+
+            mobileTv.setText(contactInfoVo.getData().getConttel() != null ?
                     contactInfoVo.getData().getConttel() + "" : "");
-            phoneEt.setText(contactInfoVo.getData().getContmobile());
+            mobileValue = mobileTv.getText().toString();
+
+            phoneTv.setText(contactInfoVo.getData().getContmobile());
+            phoneValue = phoneTv.getText().toString();
+
             String prov = contactInfoVo.getData().getFamilyarea();
             String city = contactInfoVo.getData().getFamilycity();
             if(prov != null && city != null){
@@ -115,29 +139,57 @@ public class ContactPersonUpdateActivity extends BaseActivity {
             }else{
                 areaTv.setText("");
             }
+            areaValue = areaTv.getText().toString();
+
             addressTv.setText(contactInfoVo.getData().getFamilyaddress());
+            addressValue = addressTv.getText().toString();
+
             timeTv.setText(DateTool.getDateStr(contactInfoVo.getData().getCreatedate()));
         }
     }
 
-    @OnClick({R.id.back_iv, R.id.client_tv, R.id.add_bt, R.id.area_tv})
+    @OnClick({R.id.back_iv, R.id.client_tv, R.id.add_bt, R.id.area_tv,
+             R.id.name_tv,R.id.mobile_tv,R.id.phone_tv,R.id.address_tv})
     public void onclick(View v) {
         switch (v.getId()) {
             case R.id.back_iv:
-                finish();
+                if(isChanged()){
+                    String content = getResources().getString(R.string.content_changed_warning);
+                    new AlertDialog.Builder(ContactPersonUpdateActivity.this)
+                            .setMessage(content)
+                            .setCancelable(false)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).create().show();
+                }else{
+                    finish();
+                }
                 break;
             case R.id.area_tv:
-                if (Config.areaVo != null)
-                    if (Config.areaVo.isSuccess()) {
-                        List<String> list = new ArrayList<>();
-                        for (int i = 0; i < Config.areaVo.getData().size(); i++) {
-                            list.add(Config.areaVo.getData().get(i).getCategoryname());//省份名称
-                        }
-                        String[] args = new String[list.size()];
-                        list.toArray(args);
-                        showAreaPopWin(list);
-                        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+                if (Config.areaVo == null && null != areaVo) {
+                    Config.areaVo = areaVo;
+                }
+                if (null != Config.areaVo  && Config.areaVo.isSuccess()) {
+                    List<String> list = new ArrayList<>();
+                    for (int i = 0; i < Config.areaVo.getData().size(); i++) {
+                        list.add(Config.areaVo.getData().get(i).getCategoryname());//省份名称
                     }
+                    String[] args = new String[list.size()];
+                    list.toArray(args);
+                    showAreaPopWin(list);
+                    popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+                }
                 break;
             case R.id.add_bt:
                 if (!checkInput())
@@ -156,6 +208,91 @@ public class ContactPersonUpdateActivity extends BaseActivity {
                 showPopWin(ContactPersonUpdateActivity.this, "选择客户", list);
                 pop.showAtLocation(v, Gravity.CENTER, 0, 0);
                 break;
+            case R.id.name_tv:
+                startEditActivity("str","姓名",nameTv.getText().toString().trim(),0);
+                break;
+            case R.id.mobile_tv://电话
+                startEditActivity("str","联系电话",mobileTv.getText().toString().trim(),1);
+                break;
+            case R.id.phone_tv://手机
+                startEditActivity("num","手机",phoneTv.getText().toString().trim(),2);
+                break;
+            case R.id.address_tv:
+                startEditActivity("str","详细地址",addressTv.getText().toString().trim(),3);
+                break;
+        }
+    }
+
+    public boolean isChanged(){
+        if(!clientValue.equals(clientTv.getText().toString().trim()) ||
+                !nameValue.equals(nameTv.getText().toString()) ||
+                !mobileValue.equals(mobileTv.getText().toString().trim())||
+                !phoneValue.equals(phoneTv.getText().toString()) ||
+                !areaValue.equals(areaTv.getText().toString().trim()) ||
+                !addressValue.equals(addressTv.getText().toString().trim())){
+           return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void getAreaData() {
+        /*if( Config.loginback == null){
+            Config.loginback.setToken("2FD08ED0-E53B-48B1-B8E6-E6B4290A2770");
+        }*/
+        OkHttpUtils
+                .post()
+                .url(Config.getProviceAndCity)
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
+                .build()
+                .execute(
+                        new StringCallback() {
+                            @Override
+                            public void onError(Call call, Exception e, int id) {
+                                ToastUtil.showNetError();
+                            }
+
+                            @Override
+                            public void onResponse(String response, int id) {
+                                // ToastUtil.showToast(response);
+                                try {
+                                    areaVo = GjsonUtil.parseJsonWithGson(response, AreaVo.class);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                );
+    }
+
+    public void startEditActivity(String type,String title,String content,int requestCode){
+        Intent intent2 = new Intent(ContactPersonUpdateActivity.this, EditValueActivity.class);
+        intent2.putExtra("type",type);
+        intent2.putExtra("title",title);
+        intent2.putExtra("content",content);
+        startActivityForResult(intent2,requestCode);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(RESULT_OK == resultCode){
+            String result = data.getStringExtra("result");
+            switch (requestCode){
+                case 0:
+                    nameTv.setText(result);
+                    break;
+                case 1:
+                    mobileTv.setText(result);
+                    break;
+                case 2:
+                    phoneTv.setText(result);
+                    break;
+                case 3:
+                    addressTv.setText(result);
+                    break;
+            }
         }
     }
 
@@ -164,19 +301,20 @@ public class ContactPersonUpdateActivity extends BaseActivity {
             ToastUtil.showToast("请选择所属客户");
             return false;
         }
-        if (nameEt.getText().toString().trim().equals("")) {
+        if (nameTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入姓名");
             return false;
         }
-        if (mobileEt.getText().toString().trim().equals("")) {
+        if (mobileTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入联系电话");
             return false;
         }
-        if (phoneEt.getText().toString().trim().equals("") || phoneEt.getText().toString().trim().length() < 11) {
+        if (phoneTv.getText().toString().trim().equals("") || phoneTv.getText().toString().trim()
+                .length() < 11) {
             ToastUtil.showToast("请输入正确手机号码");
             return false;
         }
-        if (!AccountValidatorUtil.isMobile(phoneEt.getText().toString().trim())) {
+        if (!AccountValidatorUtil.isMobile(phoneTv.getText().toString().trim())) {
             ToastUtil.showToast("请输入正确手机号码");
             return false;
         }
@@ -276,12 +414,12 @@ public class ContactPersonUpdateActivity extends BaseActivity {
 
     //获取我的客户名称列表
     public void getClientData() {
-        String json = new Gson().toJson(new OpprtCustReq(Config.loginback.getUserId() + ""));
+        String json = new Gson().toJson(new OpprtCustReq(Config.USERID + ""));
         OkHttpUtils
                 .postString()
                 .url(Config.custList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -336,20 +474,20 @@ public class ContactPersonUpdateActivity extends BaseActivity {
         Long getCustid = item == null ? Long.parseLong(contactInfoVo.getData().getCustid())
                 : item.getCustid();
         int contpersonid = contactInfoVo.getData().getContpersonid();
-        String personname = nameEt.getText().toString().trim();
-        String conttel = mobileEt.getText().toString().trim();
-        String contmobile = phoneEt.getText().toString().trim();
+        String personname = nameTv.getText().toString().trim();
+        String conttel = mobileTv.getText().toString().trim();
+        String contmobile = phoneTv.getText().toString().trim();
 
         String familyaddress = addressTv.getText().toString().trim();
-        int modify = Config.loginback.getUserId();
+        int modify = Config.USERID;
 
         String json = new Gson().toJson(new UpdatePersonReq(contpersonid, getCustid, personname,
                 conttel, contmobile, familyarea, familycity, familyaddress, modify));
         OkHttpUtils
                 .postString()
                 .url(Config.modifyCont)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -385,5 +523,10 @@ public class ContactPersonUpdateActivity extends BaseActivity {
                             }
                         }
                 );
+    }
+
+    @Override
+    public void onBackPressed() {
+        back_Iv.callOnClick();
     }
 }

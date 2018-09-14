@@ -2,10 +2,12 @@ package com.cimcitech.cimcly.activity.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.cimcitech.cimcly.R;
 import com.cimcitech.cimcly.bean.LoginVo;
+import com.cimcitech.cimcly.utils.Base64Utils;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.GjsonUtil;
 import com.cimcitech.cimcly.utils.ToastUtil;
@@ -28,9 +31,8 @@ import butterknife.OnClick;
 import okhttp3.Call;
 
 public class LoginActivity extends BaseActivity {
-
-    @Bind(R.id.user_name_tv)
-    EditText userNameTv;
+    @Bind(R.id.login_name_tv)
+    EditText loginNameTv;
     @Bind(R.id.password_tv)
     EditText passwordTv;
     @Bind(R.id.login_bt)
@@ -44,8 +46,9 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        sp = this.getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);//如果存在则打开它，否则创建新的Preferences
 
-        userNameTv.addTextChangedListener(new TextWatcher() {
+        loginNameTv.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -53,7 +56,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(userNameTv.getText().toString().trim().length() != 0 &&
+                if(loginNameTv.getText().toString().trim().length() != 0 &&
                         passwordTv.getText().toString().trim().length() != 0){
                     loginBtnOn();
                 }else{
@@ -75,7 +78,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(userNameTv.getText().toString().trim().length() != 0 &&
+                if(loginNameTv.getText().toString().trim().length() != 0 &&
                         passwordTv.getText().toString().trim().length() != 0){
                     loginBtnOn();
                 }else{
@@ -89,40 +92,61 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        sp = this.getSharedPreferences(Config.KEY_LOGIN_AUTO, MODE_PRIVATE);//如果存在则打开它，否则创建新的Preferences
-        getUserInfo();
+        String loginname = sp.getString("login_name","");
+        String username = sp.getString("user_name","");
+        String password = sp.getString("password","");
+        String token = sp.getString("token","");
+        String appAuth = sp.getString("appAuth","");
+        int userId = sp.getInt("userId",0);
+        //如果是已登录过的，直接跳过登录界面
+        if(loginname.length() != 0 && password.length() != 0 && token.length() != 0 && appAuth.length() != 0 && userId!= 0){
+            saveConfigs(loginname,username,token,appAuth,userId);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }else{
+            if (loginname != "") {
+                loginNameTv.setText(loginname);
+            }else{
+                loginNameTv.setText("");
+            }
+            passwordTv.setText("");
+            if(loginNameTv.getText().toString().trim().length() != 0){
+                loginNameTv.setSelection(loginNameTv.getText().toString().trim().length());
+            }
+        }
     }
+
+    /**
+     * 常用账号（正式环境） admin   zh0205#ly
+     */
 
     public void loginBtnOn(){
         loginBt.setBackgroundResource(R.drawable.shape_login_button_on);
         loginBt.setClickable(true);
+        loginBt.setTextColor(Color.WHITE);
     }
 
     public void loginBtnOff(){
         loginBt.setBackgroundResource(R.drawable.shape_login_button_off);
         loginBt.setClickable(false);
+        loginBt.setTextColor(getResources().getColor(R.color.colorPrimary));
     }
 
-    @OnClick({R.id.clear_name_iv, R.id.clear_password_iv})
+    @OnClick({R.id.clear_name_iv, R.id.clear_password_iv,R.id.login_bt})
     public void onclick(View v) {
         switch (v.getId()) {
             case R.id.clear_name_iv:
-                userNameTv.setText("");
+                loginNameTv.setText("");
                 break;
             case R.id.clear_password_iv:
                 passwordTv.setText("");
                 break;
-        }
-    }
-
-    private void getUserInfo() {
-        if (sp.getString("user_name", "") != "") {
-            String name = sp.getString("user_name", "");
-            String pwd = sp.getString("password", "");
-            //System.out.println(name + pwd);
-            userNameTv.setText(sp.getString("user_name", ""));
-            passwordTv.setText(sp.getString("password", ""));
-            userNameTv.setSelection(userNameTv.getText().toString().length());
+            case R.id.login_bt:
+                if (!checkInput()) return;
+                mLoginDialog.show();
+                getData();
+                break;
         }
     }
 
@@ -130,15 +154,15 @@ public class LoginActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.USER_LOGIN_URL)
-                .addParams("userName", userNameTv.getText().toString().trim())
+                .addParams("userName", loginNameTv.getText().toString().trim())
                 .addParams("passwd", passwordTv.getText().toString().trim())
                 .build()
                 .execute(
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                mLoginDialog.dismiss();
                                 ToastUtil.showNetError();
-                                mLoading.dismiss();
                             }
 
                             @Override
@@ -149,18 +173,20 @@ public class LoginActivity extends BaseActivity {
                                     Log.d("heqlogin",response);
                                     if (loginVo != null) {
                                         if (loginVo.isSuccess()) {
-                                            Config.isLogin = true;
-                                            Config.loginback = loginVo.getData();
-                                            saveUserInfo();
+                                            String loginname = loginNameTv.getText().toString().trim();
+                                            String username = loginVo.getData().getUserName();
+                                            String token = loginVo.getData().getToken();
+                                            String appAuth = loginVo.getData().getAppAuth();
+                                            int userId = loginVo.getData().getUserId();
+                                            String password = passwordTv.getText().toString().trim();
+                                            saveUserInfo(loginname,username,password,token,appAuth,userId);
+                                            saveConfigs(loginname,username,token,appAuth,userId);
                                             Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                            Config.AppAuthStr = loginVo.getData().getAppAuth();
-                                            Config.userName = loginVo.getData().getUserName();
-                                            //Config.isLeader = true;
                                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                            //String s = loginVo.getData().getAppAuth();
-                                            //intent.putExtra("AppAuth", s);
                                             startActivity(intent);
                                             finish();
+                                        }else{
+                                            ToastUtil.showToast("账号或密码错误，请检查！");
                                         }
                                     } else {
                                         ToastUtil.showToast("登录失败");
@@ -168,31 +194,38 @@ public class LoginActivity extends BaseActivity {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                mLoading.dismiss();
+                                mLoginDialog.dismiss();
                             }
                         }
                 );
     }
 
-    @OnClick(R.id.login_bt)
-    public void onclick() {
-        if (!checkInput()) return;
-        mLoading.show();
-        getData();
-    }
-
     /***
      * 保存账户与密码
      */
-    private void saveUserInfo() {
+    private void saveUserInfo(String loginname,String username,String password,String token,
+                              String appAuth,int userId) {
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("user_name", userNameTv.getText().toString().trim());
-        editor.putString("password", passwordTv.getText().toString().trim());
+        editor.putString("login_name", loginname);
+        editor.putString("user_name", username);
+        editor.putString("password",Base64Utils.encodeString(password));
+        editor.putInt("userId",userId);
+        editor.putString("token", token);
+        editor.putString("appAuth", appAuth);
         editor.commit();
     }
 
+    //保存全局变量
+    private void saveConfigs(String loginname,String username,String token,String appAuth,int userId){
+        Config.LOGINNAME = loginname;
+        Config.USERNAME = username;
+        Config.TOKEN = token;
+        Config.APPAUTH = appAuth;
+        Config.USERID = userId;
+    }
+
     public boolean checkInput() {
-        String username = userNameTv.getText().toString().trim();
+        String username = loginNameTv.getText().toString().trim();
         String password = passwordTv.getText().toString().trim();
         if (password.equals("")) {
             Toast.makeText(LoginActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();

@@ -24,7 +24,120 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="时间信息"
+                android:drawableLeft="@mipmap/time48"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="8dp"
+                    android:text="创建时间"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/customer_visit_detail_text_size"/>
+
+                <TextView
+                    android:id="@+id/time_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:textColorHint="@color/alpha30"
+                    android:textColor="@color/black_33"
+                    android:textSize="@dimen/customer_visit_detail_text_size"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="预计签单日"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
+
+                <TextView
+                    android:id="@+id/delivery_date_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="right"
+                    android:maxLength="11"
+                    android:padding="8dip"
+                    android:textColorHint="@color/alpha30"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
+            </LinearLayout>
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="客户信息"
+                android:drawableLeft="@mipmap/customers48"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="客户名称"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
+
+                <TextView
+                    android:id="@+id/client_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:padding="8dip"
+                    android:gravity="right"
+                    android:textColorHint="@color/alpha30"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -51,41 +164,22 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="8dp"
-                    android:text="创建时间"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size"/>
-
-                <TextView
-                    android:id="@+id/time_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:textColorHint="@color/alpha30"
-                    android:textColor="@color/red"
-                    android:textSize="@dimen/customer_visit_detail_text_size"/>
-            </LinearLayout>
+                android:text="业务员信息"
+                android:drawableLeft="@mipmap/salesman"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -113,40 +207,21 @@
                     android:textSize="@dimen/customer_visit_detail_text_size" />
 
             </LinearLayout>
-
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="意向信息"
+                android:drawableLeft="@mipmap/intention48"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:text="客户名称"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size" />
-
-                <TextView
-                    android:id="@+id/client_name_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:padding="8dip"
-                    android:gravity="right"
-                    android:textColorHint="@color/alpha30"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -184,6 +259,45 @@
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
+                    android:text="意向合同金额"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
+
+                <TextView
+                    android:id="@+id/contract_amount_et"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:textColorHint="@color/alpha30"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
+            </LinearLayout>
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="产品信息"
+                android:drawableLeft="@mipmap/product"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
                     android:text="产品类别"
                     android:textColor="@color/black"
                     android:textSize="@dimen/customer_visit_detail_text_size" />
@@ -204,7 +318,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -233,7 +347,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -262,7 +376,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -289,10 +403,22 @@
                     android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
 
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="状态信息"
+                android:drawableLeft="@mipmap/status48"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -301,12 +427,12 @@
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="意向合同金额"
+                    android:text="状态"
                     android:textColor="@color/black"
                     android:textSize="@dimen/customer_visit_detail_text_size" />
 
                 <TextView
-                    android:id="@+id/contract_amount_et"
+                    android:id="@+id/status_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -317,40 +443,21 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
-
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="其他"
+                android:drawableLeft="@mipmap/more48"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:text="预计签单日"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size" />
-
-                <TextView
-                    android:id="@+id/delivery_date_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:gravity="right"
-                    android:maxLength="11"
-                    android:padding="8dip"
-                    android:textColorHint="@color/alpha30"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -405,34 +512,7 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
-                android:background="@color/white"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:text="状态"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size" />
-
-                <TextView
-                    android:id="@+id/status_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:textColorHint="@color/alpha30"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/customer_visit_detail_text_size" />
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
     <LinearLayout

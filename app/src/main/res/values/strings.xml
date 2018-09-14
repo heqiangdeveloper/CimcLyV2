@@ -64,4 +64,22 @@
     </string-array>
     <string name="message_top_category_label_open">∧</string>
     <string name="message_top_category_label_close">∨</string>
+
+    <string name="message_dialog_is_opend">标为已读</string>
+    <string name="message_dialog_not_opend">标为未读</string>
+    <string name="message_dialog_remove">移除</string>
+
+    <string name="message_contract_result">通过</string>
+    <string name="checked_label">✔</string>
+
+    <string name="car_in_storage">入库</string>
+    <string name="car_out_storage">退库</string>
+
+    <string name="already_in_storage">已入库</string>
+    <string name="already_request">已申请</string>
+    <string name="apply_request">发车申请</string>
+    <string name="content_changed_warning">信息还未提交或保存，是否退出？</string>
+    <string name="customer_visit_title_label">的拜访记录</string>
+    <string name="customer_visit_cust_label">拜访客户:</string>
+    <string name="customer_visit_content_label">拜访总结:</string>
 </resources>

@@ -1,8 +1,11 @@
 package com.cimcitech.cimcly.activity.home.intention_track;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -21,6 +25,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
+import com.cimcitech.cimcly.activity.home.customer_visit.CustomerVisitDetailActivity;
+import com.cimcitech.cimcly.activity.main.EditValueActivity;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.bean.client.ClientNameVo;
 import com.cimcitech.cimcly.bean.client.ClientVo;
@@ -65,18 +71,18 @@ public class IntentionTrackAddActivity extends BaseActivity {
     TextView clientNameTv;
     @Bind(R.id.contact_person_tv)
     TextView contactPersonTv;
-    @Bind(R.id.intentional_theme_et)
-    EditText intentionalThemeEt;
+    @Bind(R.id.intentional_theme_tv)
+    TextView intentionalThemeTv;
     @Bind(R.id.product_category_tv)
     TextView productCategoryTv;
     @Bind(R.id.product_variety_tv)
     TextView productVarietyTv;
     @Bind(R.id.product_model_tv)
     TextView productModelTv;
-    @Bind(R.id.product_number_et)
-    EditText productNumberEt;
-    @Bind(R.id.contract_amount_et)
-    EditText contractAmountEt;
+    @Bind(R.id.product_number_tv)
+    TextView productNumberTv;
+    @Bind(R.id.contract_amount_tv)
+    TextView contractAmountTv;
     @Bind(R.id.delivery_date_tv)
     TextView deliveryDateTv;
     @Bind(R.id.order_type_tv)
@@ -99,6 +105,8 @@ public class IntentionTrackAddActivity extends BaseActivity {
     LinearLayout title_Ll;
     @Bind(R.id.who_spinner)
     Spinner whoSpinner;
+    @Bind(R.id.back_iv)
+    ImageView back_Iv;
 
     public int intValue = 0;
     private PopupWindow pop;
@@ -168,12 +176,34 @@ public class IntentionTrackAddActivity extends BaseActivity {
 
     @OnClick({R.id.back_iv, R.id.client_name_tv, R.id.contact_person_tv, R.id.product_category_tv,
             R.id.product_variety_tv, R.id.product_model_tv, R.id.delivery_date_tv, R.id.order_type_tv,
-            R.id.possibility_tv, R.id.payment_method_tv, R.id.currency_tv, R.id.add_bt})
+            R.id.possibility_tv, R.id.payment_method_tv, R.id.currency_tv, R.id.add_bt,
+            R.id.intentional_theme_tv,R.id.product_number_tv,R.id.contract_amount_tv})
     public void onclick(View v) {
         List<String> list;
         switch (v.getId()) {
             case R.id.back_iv:
-                finish();
+                if(isChanged()){
+                    String content = getResources().getString(R.string.content_changed_warning);
+                    new AlertDialog.Builder(IntentionTrackAddActivity.this)
+                            .setMessage(content)
+                            .setCancelable(false)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).create().show();
+                }else{
+                    finish();
+                }
                 break;
             case R.id.client_name_tv:
                 intValue = 0;
@@ -283,9 +313,69 @@ public class IntentionTrackAddActivity extends BaseActivity {
                 break;
             case R.id.add_bt:
                 if (!checkInput()) return;
-                mLoading.show();
+                mCommittingDialog.show();
                 AddOpportUnitData();
                 break;
+            case R.id.intentional_theme_tv:
+                startEditActivity("str","意向主题",intentionalThemeTv.getText().toString().trim(),0);
+                break;
+            case R.id.product_number_tv:
+                startEditActivity("num","产品数量",productNumberTv.getText().toString().trim(),1);
+                break;
+            case R.id.contract_amount_tv:
+                startEditActivity("num","预计合同金额",contractAmountTv.getText().toString().trim(),2);
+                break;
+        }
+    }
+
+    public boolean isChanged(){
+        String deliveryDateStr = DateTool.getSystemDate();
+        if(!deliveryDateStr.equals(deliveryDateTv.getText()) ||
+                intentionalThemeTv.getText().toString().trim().length() != 0 ||
+                clientNameTv.getText().toString().trim().length() != 0 ||
+                clientNo.getText().toString().trim().length() != 0 ||
+                contactPersonTv.getText().toString().trim().length() != 0 ||
+                productCategoryTv.getText().toString().trim().length() != 0 ||
+                productCategoryTv.getText().toString().trim().length() != 0 ||
+                productNumberTv.getText().toString().trim().length() != 0 ||
+                productModelTv.getText().toString().trim().length() != 0 ||
+                contractAmountTv.getText().toString().trim().length() != 0 ||
+                paymentMethodTv.getText().toString().trim().length() != 0 ||
+                currencyTv.getText().toString().trim().length() != 0 ||
+                orderTypeTv.getText().toString().trim().length() != 0 ||
+                possibilityTv.getText().toString().trim().length() != 0 ||
+                detailedRequirementsEt.getText().toString().trim().length() != 0 ||
+                remarksInformationEt.getText().toString().trim().length() != 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void startEditActivity(String type,String title,String content,int requestCode){
+        Intent intent2 = new Intent(IntentionTrackAddActivity.this, EditValueActivity.class);
+        intent2.putExtra("type",type);
+        intent2.putExtra("title",title);
+        intent2.putExtra("content",content);
+        startActivityForResult(intent2,requestCode);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(RESULT_OK == resultCode){
+            String result = data.getStringExtra("result");
+            switch (requestCode){
+                case 0:
+                    intentionalThemeTv.setText(result);
+                    break;
+                case 1:
+                    productNumberTv.setText(result);
+                    break;
+                case 2:
+                    contractAmountTv.setText(result);
+                    break;
+            }
         }
     }
 
@@ -298,7 +388,7 @@ public class IntentionTrackAddActivity extends BaseActivity {
             ToastUtil.showToast("请选择联系人");
             return false;
         }
-        if (intentionalThemeEt.getText().toString().trim().equals("")) {
+        if (intentionalThemeTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入意向主题");
             return false;
         }
@@ -314,11 +404,11 @@ public class IntentionTrackAddActivity extends BaseActivity {
             ToastUtil.showToast("请选择产品型号");
             return false;
         }
-        if (productNumberEt.getText().toString().trim().equals("")) {
+        if (productNumberTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入产品数量");
             return false;
         }
-        if (contractAmountEt.getText().toString().trim().equals("")) {
+        if (contractAmountTv.getText().toString().trim().equals("")) {
             ToastUtil.showToast("请输入预计合同金额");
             return false;
         }
@@ -486,12 +576,12 @@ public class IntentionTrackAddActivity extends BaseActivity {
      * 获取客户名称列表
      */
     public void getClientData() {
-        String json = new Gson().toJson(new OpprtCustReq(Config.loginback.getUserId() + ""));
+        String json = new Gson().toJson(new OpprtCustReq(Config.USERID + ""));
         OkHttpUtils
                 .postString()
                 .url(Config.custList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -526,8 +616,8 @@ public class IntentionTrackAddActivity extends BaseActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.contactListData)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -557,8 +647,8 @@ public class IntentionTrackAddActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getOpportSelect)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {
@@ -595,20 +685,20 @@ public class IntentionTrackAddActivity extends BaseActivity {
         else if (customer != null)
             custid = customer.getData().getCustid();    //客户id
 
-        String opportsubject = intentionalThemeEt.getText().toString().trim();    //意向主题
+        String opportsubject = intentionalThemeTv.getText().toString().trim();    //意向主题
         String productid = codeValueListBean.getCodetype();    //产品型号
         String plansigndate = deliveryDateTv.getText().toString().trim();    //需求交付日
-        String planmoney = contractAmountEt.getText().toString().trim();    //预计合同金额
+        String planmoney = contractAmountTv.getText().toString().trim();    //预计合同金额
         String possibility = possibiltyBean.getCodeid();    //可能性
         String detail = detailedRequirementsEt.getText().toString().trim();  //详细需求
         String remark = remarksInformationEt.getText().toString().trim();    //备注
-        int creator = Config.loginback.getUserId();    //创建者
+        int creator = Config.USERID;    //创建者
         String currency = currencyBean.getCodeid();    //币种
         String opporttype = opportTypeBean.getCodeid();    //意向类型
         String paymentmethod = payMethodBean.getCodeid();    //付款方式
         String productcategory = productBean.getCodetype();//产品类别
         String productvariety = codeValueListBeanX.getCodetype();//品种
-        int productcount = Integer.parseInt(productNumberEt.getText().toString().trim());
+        int productcount = Integer.parseInt(productNumberTv.getText().toString().trim());
 
         String json = new Gson().toJson(new OpportUnitAddReq(custid, opportsubject, productid,
                 plansigndate, planmoney, possibility, detail, remark, creator, currency, opporttype, paymentmethod,
@@ -617,8 +707,8 @@ public class IntentionTrackAddActivity extends BaseActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.addOpportUnit)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -626,13 +716,13 @@ public class IntentionTrackAddActivity extends BaseActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mCommittingDialog.isShowing()) mCommittingDialog.dismiss();
                                 ToastUtil.showNetError();
-                                mLoading.dismiss();
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
+                                if(mCommittingDialog.isShowing()) mCommittingDialog.dismiss();
                                 try {
                                     //contactNameVo = GjsonUtil.parseJsonWithGson(response, ContactNameVo.class);
                                     JSONObject jsonObject = new JSONObject(response);
@@ -642,7 +732,6 @@ public class IntentionTrackAddActivity extends BaseActivity {
                                         finish();
                                     } else
                                         ToastUtil.showToast("添加失败");
-                                    mLoading.dismiss();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -650,5 +739,11 @@ public class IntentionTrackAddActivity extends BaseActivity {
                             }
                         }
                 );
+    }
+
+    @Override
+    public void onBackPressed() {
+        back_Iv.callOnClick();
+        //super.onBackPressed();
     }
 }

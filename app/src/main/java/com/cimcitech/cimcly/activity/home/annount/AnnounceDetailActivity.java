@@ -96,8 +96,8 @@ public class AnnounceDetailActivity extends AppCompatActivity {
         OkHttpUtils
                 .post()
                 .url(Config.announceDetail)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("annId", annId + "")
                 .build()
                 .execute(

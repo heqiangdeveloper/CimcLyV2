@@ -130,9 +130,7 @@
                     android:layout_marginRight="10dip"
                     android:layout_weight="1"
                     android:drawableRight="@mipmap/point_start"
-                    android:ellipsize="end"
                     android:gravity="right|center_vertical"
-                    android:maxLines="1"
                     android:textSize="@dimen/customer_visit_detail_text_size"
                     android:textColor="@color/black_33" />
             </LinearLayout>
@@ -155,7 +153,7 @@
                     android:textSize="@dimen/customer_visit_detail_text_size" />
 
                 <EditText
-                    android:id="@+id/performance_tv"
+                    android:id="@+id/performance_et"
                     android:layout_width="match_parent"
                     android:layout_height="250dip"
                     android:layout_margin="10dip"

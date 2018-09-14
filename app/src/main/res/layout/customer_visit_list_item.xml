@@ -5,75 +5,70 @@
     android:layout_marginBottom="5dip"
     android:layout_marginLeft="10dip"
     android:layout_marginRight="10dip"
-    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
+        android:layout_marginLeft="@dimen/customer_visit_list_text_size"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:background="@color/white">
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/customer_visit_item_icon"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="10dp">
+                <TextView
+                    android:id="@+id/customer_visit_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_16"
+                    android:text="我的拜访记录"/>
+                <TextView
+                    android:id="@+id/customer_visit_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2018-03-21"/>
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/user_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="10dip"
-            android:text="123"
-            android:textColor="@color/black_3"
-            android:textStyle="bold" />
+            android:text="客户名123"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black_33"
+            android:textSize="@dimen/text_size_14"/>
 
         <TextView
-            android:id="@+id/time_tv"
+            android:layout_marginTop="5dp"
+            android:id="@+id/content_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dip"
             android:layout_weight="1"
-            android:gravity="right"
-            android:padding="10dip"
-            android:text="123"
-            android:textColor="@color/black_3" />
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="这次的拜访记录内容。。。"
+            android:textColor="@color/black_33"
+            android:textSize="@dimen/text_size_14"/>
     </LinearLayout>
-
-    <ImageView
-        android:visibility="gone"
+    <View
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-        android:layout_height="0.1dip"
-        android:background="@color/alpha30" />
-
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/salesman_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:padding="10dip"
-        android:text="张三"
-        android:textColor="@color/black_3" />
-
-    <ImageView
-        android:id="@+id/div_line"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="0.1dip"
-        android:background="@color/alpha30" />
-
-    <TextView
-        android:id="@+id/content_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:padding="10dip"
-        android:text="123"
-        android:textColor="@color/black_3" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:background="@color/alpha30" />
-
+        android:layout_height="0.1dp"
+        android:background="@color/colorPrimary"/>
 </LinearLayout>

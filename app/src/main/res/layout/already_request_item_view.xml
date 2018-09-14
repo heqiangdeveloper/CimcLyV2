@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_layout"
     android:orientation="horizontal"
     android:layout_margin="10dp">
 
@@ -142,6 +141,9 @@
                 android:text="价格:"
                 android:textColor="@color/black_33" />
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/colorPrimary"/>
     </LinearLayout>
 </LinearLayout>

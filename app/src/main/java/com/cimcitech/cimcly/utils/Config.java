@@ -15,22 +15,19 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
  */
 
 public class Config {
-
-    public static  String  userName = "";
-
-    public static  boolean isLeader = false;
-
-    public static  String AppAuthStr  = "";
-
-    public static boolean isLogin = false;
-
-    public static Loginback loginback;
+    public static String LOGINNAME = "";//登录名
+    public static String USERNAME = "";//真实姓名
+    public static int USERID = 0;
+    public static String TOKEN = "";
+    public static String APPAUTH = "";
 
     public static AreaVo areaVo;
 
     public static String KEY_LOGIN_AUTO = "key_login_auto";
 
     public static Context context;
+
+    public static int unReadMsg = 0;
 
     public static boolean isSubordinate = false;
     public static boolean isAddMyClient = false;
@@ -44,12 +41,13 @@ public class Config {
     public static boolean isDepartRequest = false;
     public static boolean isQuotedPrice = false;
     public static int type = 1; //周报类型  1.今天 2.本周 3.历史
+    public static int contractType = 0; //合同审批类型  0.全部 1.通过 2.未通过
 
     public static final String IP = "http://test.lingyu.com:8081/ly";  //测试
 
     //public static final String IP = "http://zh.lingyu.com:8081/ly";  //正式
 
-    //public static final String IP = "http://10.43.10.207:8080/ly";//本机
+    //public static final String IP = "http://10.43.10.41:80/ly";//本机
 
     //public static final String IP = "http://10.43.10.35" + ":8080/ly";
 

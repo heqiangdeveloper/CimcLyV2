@@ -1,9 +1,4 @@
 package com.cimcitech.cimcly.bean.contact;
-
-/**
- * Created by cimcitech on 2017/8/2.
- */
-
 public class ContactVo {
 
     private Object address;

@@ -1,9 +1,12 @@
 package com.cimcitech.cimcly.activity.home.feed_back;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +17,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +24,6 @@ import com.cimcitech.cimcly.R;
 import com.cimcitech.cimcly.adapter.PopupWindowAdapter;
 import com.cimcitech.cimcly.bean.feed_back.FeedBackReq;
 import com.cimcitech.cimcly.bean.feed_back.QuestionTypeVo;
-import com.cimcitech.cimcly.bean.order_contract.OrderContractSaveVo;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.GjsonUtil;
 import com.cimcitech.cimcly.utils.ToastUtil;
@@ -42,14 +43,14 @@ import okhttp3.Call;
 import okhttp3.MediaType;
 
 public class FeedBackActivity extends AppCompatActivity {
-    @Bind(R.id.questiontheme_tv)
-    EditText questionthemeTv;
+    @Bind(R.id.questiontheme_et)
+    EditText questionthemeEt;
     @Bind(R.id.questiontype_tv)
     TextView questiontypeTv;
-    @Bind(R.id.questiondetail_tv)
-    EditText questiondetailTv;
-    @Bind(R.id.login_bt)
-    Button loginBt;
+    @Bind(R.id.questiondetail_et)
+    EditText questiondetailEt;
+    @Bind(R.id.commit_bt)
+    Button commit_Bt;
     @Bind(R.id.title_ll)
     LinearLayout title_Ll;
     @Bind(R.id.more_tv)
@@ -68,6 +69,10 @@ public class FeedBackActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initTitle();
         getData();
+        commit_Bt.setClickable(false);
+        addTextWatcher(questionthemeEt);
+        //addTextWatcher(questiontypeEt);
+        addTextWatcher(questiondetailEt);
     }
 
     public void initTitle(){
@@ -76,22 +81,60 @@ public class FeedBackActivity extends AppCompatActivity {
         title_Ll.setVisibility(View.GONE);
     }
 
-    @OnClick({R.id.back_iv, R.id.login_bt, R.id.questiontype_tv})
+    public void addTextWatcher(EditText et ){
+        et.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(questionthemeEt.getText().toString().trim().length() != 0 &&
+                        questiontypeTv.getText().toString().trim().length() != 0 &&
+                        questiondetailEt.getText().toString().trim().length() != 0){
+                    commitBtnOn();
+                }else{
+                    commitBtnOff();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    public void commitBtnOn(){
+        commit_Bt.setBackgroundResource(R.drawable.shape_feedback_button_on);
+        commit_Bt.setClickable(true);
+        commit_Bt.setTextColor(Color.WHITE);
+    }
+
+    public void commitBtnOff(){
+        commit_Bt.setBackgroundResource(R.drawable.shape_feedback_button_off);
+        commit_Bt.setClickable(false);
+        commit_Bt.setTextColor(Color.parseColor("#CECECE"));
+    }
+
+
+    @OnClick({R.id.back_iv, R.id.commit_bt, R.id.questiontype_tv})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back_iv:
                 finish();
                 break;
-            case R.id.login_bt:
-                if (questionthemeTv.getText().toString().trim().equals("")) {
+            case R.id.commit_bt:
+                if (questionthemeEt.getText().toString().trim().equals("")) {
                     ToastUtil.showToast("请输入反馈主题");
                     return;
                 }
-                if (typeItem == null) {
+                if (questiontypeTv.getText().toString().trim().equals("")) {
                     ToastUtil.showToast("请选择反馈类型");
                     return;
                 }
-                if (questiondetailTv.getText().toString().trim().equals("")) {
+                if (questiondetailEt.getText().toString().trim().equals("")) {
                     ToastUtil.showToast("请输入您的宝贵意见");
                     return;
                 }
@@ -147,18 +190,18 @@ public class FeedBackActivity extends AppCompatActivity {
     //修改
     public void submitData() {
 
-        String questiontheme = questionthemeTv.getText().toString().trim();
+        String questiontheme = questionthemeEt.getText().toString().trim();
         String questiontype = typeItem.getCodeid();
-        int userid = Config.loginback.getUserId();
-        String questiondetail = questiondetailTv.getText().toString().trim();
+        int userid = Config.USERID;
+        String questiondetail = questiondetailEt.getText().toString().trim();
 
         String json = new Gson().toJson(new FeedBackReq(questiontheme, questiontype, userid, questiondetail));
 
         OkHttpUtils
                 .postString()
                 .url(Config.addFeedback)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -192,8 +235,8 @@ public class FeedBackActivity extends AppCompatActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getQuestionType)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {

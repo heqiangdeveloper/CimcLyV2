@@ -1,8 +1,18 @@
 package com.cimcitech.cimcly.activity.home.customer_visit;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +22,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.baidu.mapapi.NetworkUtil;
 import com.cimcitech.cimcly.R;
 import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackAddActivity;
 import com.cimcitech.cimcly.bean.customer_visit.CustomerVisitInfoVo;
@@ -20,6 +32,7 @@ import com.cimcitech.cimcly.bean.customer_visit.UpdateCustomerVisitInfoReq;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.DateTool;
 import com.cimcitech.cimcly.utils.GjsonUtil;
+import com.cimcitech.cimcly.utils.MyNetworkUtils;
 import com.cimcitech.cimcly.utils.ToastUtil;
 import com.cimcitech.cimcly.widget.BaseActivity;
 import com.google.gson.Gson;
@@ -29,7 +42,9 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -92,6 +107,7 @@ public class CustomerVisitDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_customer_visit_detail_new);
         ButterKnife.bind(this);
         initTitle();
+
         initPopupMenu();
         cvid = this.getIntent().getIntExtra("cvid", 0);
         getData();
@@ -116,22 +132,27 @@ public class CustomerVisitDetailActivity extends BaseActivity {
         item_add_Tv.setText("新建意向订单");
     }
 
-    @OnClick({R.id.back_iv,R.id.more_tv, R.id.item_save_tv,R.id.item_add_tv})
+    @OnClick({R.id.back_iv,R.id.more_tv, R.id.item_save_tv,R.id.item_add_tv,R.id.mobile_tv})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.item_add_tv:
                 popup_menu_Layout.setVisibility(View.GONE);
-                Intent intent = new Intent(CustomerVisitDetailActivity.this, IntentionTrackAddActivity.class);
+                final Intent intent = new Intent(CustomerVisitDetailActivity.this, IntentionTrackAddActivity.class);
                 intent.putExtra("CustomerVisitInfo", info);
                 startActivity(intent);
                 break;
             case R.id.item_save_tv:
                 popup_menu_Layout.setVisibility(View.GONE);
-                if (visitSummaryTv.getText().toString().trim().equals("")) {
-                    ToastUtil.showToast("请输入拜访总结");
-                } else {
-                    mLoading.show();
-                    updateData();
+                if(null != info && MyNetworkUtils.isNetworkConnected(CustomerVisitDetailActivity
+                        .this)){
+                    if (visitSummaryTv.getText().toString().trim().equals("")) {
+                        ToastUtil.showToast("请输入拜访总结");
+                    } else {
+                        mCommittingDialog.show();
+                        updateData();
+                    }
+                }else{
+                    ToastUtil.showToast("网络连接已断开，请确认！");
                 }
                 break;
             case R.id.back_iv:
@@ -140,6 +161,75 @@ public class CustomerVisitDetailActivity extends BaseActivity {
             case R.id.more_tv:
                 popup_menu_Layout.setVisibility(View.VISIBLE);
                 break;
+            case R.id.mobile_tv:
+                final String mobileNumber = mobileTv.getText().toString().trim();
+                if(mobileNumber.length() != 0){
+                    String content = "呼叫 " + mobileNumber;
+                    new AlertDialog.Builder(CustomerVisitDetailActivity.this)
+                            //.setTitle("提示")
+                            .setMessage(content)
+                            .setCancelable(false)
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    requestDialPermission(mobileNumber);
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            }).create().show();
+                }
+                break;
+        }
+    }
+
+    public void requestDialPermission(String number){
+        List<String> permissionList = new ArrayList<>();
+        if(ContextCompat.checkSelfPermission(CustomerVisitDetailActivity.this, Manifest.permission
+                .CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
+            permissionList.add(Manifest.permission.CALL_PHONE);
+        }
+        if(!permissionList.isEmpty()){
+            String [] permissions = permissionList.toArray(new String[permissionList.size()]);
+            ActivityCompat.requestPermissions(CustomerVisitDetailActivity.this,permissions,1);
+        }else {
+            Dial(number);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case 1:
+                if(grantResults.length > 0){
+                    for(int result : grantResults){
+                        if(result != PackageManager.PERMISSION_GRANTED){
+                            Toast.makeText(CustomerVisitDetailActivity.this,"必须同意打电话权限",Toast.LENGTH_SHORT
+                            ).show();
+                            return;
+                        }
+                    }
+                    Dial(mobileTv.getText().toString().trim());
+                }else {
+                    Toast.makeText(CustomerVisitDetailActivity.this,"发送未知错误",Toast.LENGTH_SHORT
+                    ).show();
+                }
+                break;
+        }
+    }
+
+    public void Dial(String number){
+        Intent intentPhone = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));
+        try{
+            startActivity(intentPhone);
+        }catch (Exception e){
+            //do nothing
         }
     }
 
@@ -179,8 +269,8 @@ public class CustomerVisitDetailActivity extends BaseActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getCustVisitInfo)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .addParams("cvId", cvid + "")
                 .build()
                 .execute(
@@ -196,9 +286,9 @@ public class CustomerVisitDetailActivity extends BaseActivity {
                                 try {
                                     info = GjsonUtil.parseJsonWithGson(response, CustomerVisitInfoVo.class);
                                     if(info!=null)
-                                    if (info.isSuccess()) {
-                                        initViewData();
-                                    }
+                                        if (info.isSuccess()) {
+                                            initViewData();
+                                        }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -234,8 +324,8 @@ public class CustomerVisitDetailActivity extends BaseActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.modifyCustVisit)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -243,13 +333,13 @@ public class CustomerVisitDetailActivity extends BaseActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mCommittingDialog.isShowing()) mCommittingDialog.dismiss();
                                 ToastUtil.showNetError();
-                                mLoading.dismiss();
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
+                                if(mCommittingDialog.isShowing()) mCommittingDialog.dismiss();
                                 try {
                                     JSONObject json = new JSONObject(response);
                                     if (json.getBoolean("success")) {
@@ -258,7 +348,6 @@ public class CustomerVisitDetailActivity extends BaseActivity {
                                     } else {
                                         ToastUtil.showToast("保存失败");
                                     }
-                                    mLoading.dismiss();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

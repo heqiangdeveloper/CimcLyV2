@@ -30,6 +30,7 @@ import com.cimcitech.cimcly.activity.home.quoted_price.QuotedPriceActivity;
 import com.cimcitech.cimcly.activity.home.report.ReportMainActivity;
 import com.cimcitech.cimcly.activity.home.test.QRCodeTestActivity;
 import com.cimcitech.cimcly.activity.home.test.QRCodeTestMainActivity;
+import com.cimcitech.cimcly.activity.home.test.WriteTestActivity;
 import com.cimcitech.cimcly.activity.home.work_weekly.WorkWeeklyActivity;
 import com.cimcitech.cimcly.activity.home.intention_track.IntentionTrackActivity;
 import com.cimcitech.cimcly.adapter.HomeGridAdapter;
@@ -70,7 +71,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_home2, container, false);
         ButterKnife.bind(this, view);
         initViewData();
-        getData();
+        //getData();//去掉公告
         return view;
     }
 
@@ -94,8 +95,8 @@ public class HomeFragment extends Fragment {
 
     public void initViewData() {
         if(null != mContext){
-            listContent.setOnItemClickListener(new listContentItemListener());
-            String appAuthStr = Config.AppAuthStr;
+            //listContent.setOnItemClickListener(new listContentItemListener());
+            String appAuthStr = Config.APPAUTH;
             gridAdapter = new HomeGridAdapter(mContext,appAuthStr);
             homeGrid.setAdapter(gridAdapter);
             homeGrid.setSelector(R.drawable.hide_listview_yellow_selector);
@@ -153,8 +154,11 @@ public class HomeFragment extends Fragment {
                         case "报表":
                             startActivity(new Intent(mContext, ReportMainActivity.class));
                             break;
-                        case "检验":
-                            startActivity(new Intent(mContext, QRCodeTestMainActivity.class));
+                        case "扫码检验":
+                            startActivity(new Intent(mContext, QRCodeTestActivity.class));
+                            break;
+                        case "手动检验":
+                            startActivity(new Intent(mContext, WriteTestActivity.class));
                             break;
                     }
                 }
@@ -173,8 +177,8 @@ public class HomeFragment extends Fragment {
         OkHttpUtils
                 .postString()
                 .url(Config.announceList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()

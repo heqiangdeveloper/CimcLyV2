@@ -1,5 +1,6 @@
 package com.cimcitech.cimcly.activity.home.production;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -24,6 +26,7 @@ import com.cimcitech.cimcly.bean.Result;
 import com.cimcitech.cimcly.bean.production.ProductionInfo;
 import com.cimcitech.cimcly.bean.production.ProductionReq;
 import com.cimcitech.cimcly.utils.Config;
+import com.cimcitech.cimcly.widget.BaseActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -42,7 +45,7 @@ import okhttp3.MediaType;
 /**
  * 我的客户
  */
-public class ProductionActivity extends AppCompatActivity {
+public class ProductionActivity extends BaseActivity {
     @Bind(R.id.my_tv)
     TextView myTv;
     @Bind(R.id.xs_tv)
@@ -73,6 +76,20 @@ public class ProductionActivity extends AppCompatActivity {
     Spinner whoSpinner;
     @Bind(R.id.who_ll)
     LinearLayout who_Ll;
+    @Bind(R.id.item_my_rl)
+    RelativeLayout item_my_Rl;
+    @Bind(R.id.item_others_rl)
+    RelativeLayout item_others_Rl;
+    @Bind(R.id.item_my_tv)
+    TextView item_my_Tv;
+    @Bind(R.id.item_others_tv)
+    TextView item_others_Tv;
+    @Bind(R.id.item_my_checked_tv)
+    TextView item_my_checked_Tv;
+    @Bind(R.id.item_others_checked_tv)
+    TextView item_others_checked_Tv;
+    @Bind(R.id.popup_menu_layout)
+    LinearLayout popup_menu_Layout;
 
     private int pageNum = 1;
     private Result<ListPagers<ProductionInfo>> status;
@@ -90,19 +107,42 @@ public class ProductionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_production2);
         ButterKnife.bind(this);
         initTitle();
+        initPopupMenu();
+        setItemChechedLableVisible();
         myData = true;
         initViewData();
+        mLoading.show();
         getData();
-        setSpinnerListener();
     }
 
     public void initTitle(){
-        more_Tv.setVisibility(View.GONE);
-        whoSpinner.setVisibility(View.VISIBLE);
+        more_Tv.setVisibility(View.VISIBLE);
+        whoSpinner.setVisibility(View.GONE);
         titleName_Tv.setText("生产进度");
         title_Ll.setVisibility(View.VISIBLE);
         status_Ll.setVisibility(View.GONE);
         who_Ll.setVisibility(View.GONE);
+        searchEt.setHint("请输入订单号查询");
+    }
+
+    public void setItemChechedLableVisible(){
+        if(myData){
+            item_my_checked_Tv.setVisibility(View.VISIBLE);
+            item_others_checked_Tv.setVisibility(View.GONE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.black));
+        }else {
+            item_my_checked_Tv.setVisibility(View.GONE);
+            item_others_checked_Tv.setVisibility(View.VISIBLE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.black));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+    }
+
+    public void initPopupMenu(){
+        popup_menu_Layout.setVisibility(View.GONE);
+        item_my_Rl.setVisibility(View.VISIBLE);
+        item_others_Rl.setVisibility(View.VISIBLE);
     }
 
     public void setSpinnerListener(){
@@ -148,7 +188,8 @@ public class ProductionActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.back_iv, R.id.my_tv, R.id.xs_tv, R.id.search_bt})
+    @OnClick({R.id.back_iv, R.id.my_tv, R.id.xs_tv, R.id.search_bt,
+            R.id.more_tv,R.id.item_my_rl,R.id.item_others_rl})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back_iv:
@@ -173,7 +214,21 @@ public class ProductionActivity extends AppCompatActivity {
                     updateData();
                 }
                 break;
-            }
+            case R.id.more_tv:
+                popup_menu_Layout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.item_my_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                myData = true;
+                updateData();
+                break;
+            case R.id.item_others_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                myData = false;
+                updateData();
+                break;
+        }
+        setItemChechedLableVisible();
     }
 
     public void initViewData() {
@@ -280,15 +335,15 @@ public class ProductionActivity extends AppCompatActivity {
 
     public void getData() {
         String json = new Gson().toJson(new ProductionReq(pageNum, 10, "",
-                new ProductionReq.ProductionBean(Config.loginback.getUserId() + "",
+                new ProductionReq.ProductionBean(Config.USERID + "",
                         searchEt.getText().toString().trim())));
         Log.d("heqjd","payment request is：" + json);
-        Log.d("heqjd","token is：" + Config.loginback.getToken());
+        Log.d("heqjd","token is：" + Config.TOKEN);
         OkHttpUtils
                 .postString()
                 .url(Config.productionUrl)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -296,12 +351,13 @@ public class ProductionActivity extends AppCompatActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mLoading.isShowing()) mLoading.dismiss();
                                 Log.e("MyClientActivity", "请求失败");
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
-                                Log.d("heqpm","payment response is：" + response);
+                                if(mLoading.isShowing()) mLoading.dismiss();
                                 Type userlistType = new TypeToken<Result<ListPagers<ProductionInfo>>>
                                         (){}.getType();
                                 status = new Gson().fromJson(response, userlistType);
@@ -330,14 +386,14 @@ public class ProductionActivity extends AppCompatActivity {
      */
     public void getSubordinateData() {
         String json = new Gson().toJson(new ProductionReq(pageNum, 10, "",
-                new ProductionReq.ProductionBean(Config.loginback.getUserId() + "",
+                new ProductionReq.ProductionBean(Config.USERID + "",
                         searchEt.getText().toString().trim())));
         Log.d("heqpm","subpayment request is：" + json);
         OkHttpUtils
                 .postString()
                 .url(Config.subProductionUrl)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -345,12 +401,13 @@ public class ProductionActivity extends AppCompatActivity {
                         new StringCallback() {
                             @Override
                             public void onError(Call call, Exception e, int id) {
+                                if(mLoading.isShowing()) mLoading.dismiss();
                                 Log.e("MyClientActivity", "请求失败");
                             }
 
                             @Override
                             public void onResponse(String response, int id) {
-                                Log.d("heqpm","subpayment response is：" + response);
+                                if(mLoading.isShowing()) mLoading.dismiss();
                                 Type userlistType = new TypeToken<Result<ListPagers<ProductionInfo>>>() {
                                 }.getType();
                                 status = new Gson().fromJson(response, userlistType);
@@ -372,5 +429,23 @@ public class ProductionActivity extends AppCompatActivity {
                             }
                         }
                 );
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            int x = (int) ev.getX();
+            int y = (int) ev.getY();
+
+            if (null != popup_menu_Layout && popup_menu_Layout.getVisibility() == View.VISIBLE) {
+                Rect hitRect = new Rect();
+                popup_menu_Layout.getGlobalVisibleRect(hitRect);
+                if (!hitRect.contains(x, y)) {
+                    popup_menu_Layout.setVisibility(View.GONE);
+                    return true;
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

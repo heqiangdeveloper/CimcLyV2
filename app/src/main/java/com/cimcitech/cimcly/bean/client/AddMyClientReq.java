@@ -1,11 +1,12 @@
 package com.cimcitech.cimcly.bean.client;
 
+import com.cimcitech.cimcly.bean.contact.Contact;
+
 /**
  * Created by lyw on 2017/7/28.
  */
 
 public class AddMyClientReq {
-
     private String custname;
     private String custaddress;
     private String custtel;

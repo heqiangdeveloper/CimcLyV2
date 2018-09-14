@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-    <include layout="@layout/activity_work_weekly_title"/>
+    <include layout="@layout/activity_customer_visit_detail2_title"/>
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/recycler_view_layout"
@@ -30,6 +30,21 @@
         </android.support.v4.widget.SwipeRefreshLayout>
     </android.support.design.widget.CoordinatorLayout>
 
+    <!--more-->
+    <LinearLayout
+        android:id="@+id/popup_menu_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="?actionBarSize"
+        android:layout_marginRight="10dp"
+        android:elevation="20dp"
+        android:visibility="gone"
+        android:translationZ="20dp"
+        android:background="@color/white"
+        android:layout_gravity="end|top">
+        <include layout="@layout/contact_more_popup_menu"/>
+    </LinearLayout>
     <Button
         android:id="@+id/apply_bt"
         android:layout_width="match_parent"

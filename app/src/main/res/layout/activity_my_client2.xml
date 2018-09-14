@@ -4,32 +4,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:fitsSystemWindows="true">
     <include layout="@layout/activity_customer_visit_detail2_title"/>
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/recycler_view_layout"
+    <RelativeLayout
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/search_bar"
-        android:layout_marginBottom="2dp"
-        android:background="@android:color/white"
-        android:visibility="visible"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical" />
-        </android.support.v4.widget.SwipeRefreshLayout>
-    </android.support.design.widget.CoordinatorLayout>
+            android:scrollbars="vertical" />
+        <TextView
+            android:id="@+id/dialog"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:background="#9DDE76"
+            android:gravity="center"
+            android:textColor="#ffffffff"
+            android:textSize="30dp"
+            android:visibility="invisible" />
+        <com.cimcitech.cimcly.widget.SideBar
+            android:id="@+id/sideBar"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="60dp"
+            android:background="@color/white"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+    <!--more-->
+    <LinearLayout
+        android:id="@+id/popup_menu_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="?actionBarSize"
+        android:layout_marginRight="10dp"
+        android:elevation="20dp"
+        android:visibility="gone"
+        android:translationZ="20dp"
+        android:background="@color/white"
+        android:layout_gravity="end|top">
+        <include layout="@layout/contact_more_popup_menu"/>
+    </LinearLayout>
     <ImageButton
         android:id="@+id/add_ib"
         android:src="@mipmap/icon_contact_add"

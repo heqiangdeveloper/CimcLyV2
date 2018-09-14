@@ -129,8 +129,8 @@ public class ProductContractAmountReportActivity extends AppCompatActivity{
         OkHttpUtils
                 .post()
                 .url(Config.getProductContractAmount)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {

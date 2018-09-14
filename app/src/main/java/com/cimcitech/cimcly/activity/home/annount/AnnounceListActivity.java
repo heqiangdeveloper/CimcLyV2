@@ -188,8 +188,8 @@ public class AnnounceListActivity extends AppCompatActivity {
         OkHttpUtils
                 .postString()
                 .url(Config.announceList)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()

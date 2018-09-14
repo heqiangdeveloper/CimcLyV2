@@ -1,6 +1,7 @@
 package com.cimcitech.cimcly.activity.home.payment;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -25,6 +27,7 @@ import com.cimcitech.cimcly.bean.Result;
 import com.cimcitech.cimcly.bean.payment.PaymentCustomer;
 import com.cimcitech.cimcly.bean.payment.PaymentReq;
 import com.cimcitech.cimcly.utils.Config;
+import com.cimcitech.cimcly.widget.BaseActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -43,7 +46,7 @@ import okhttp3.MediaType;
 /**
  * 我的客户
  */
-public class PaymentActivity extends AppCompatActivity {
+public class PaymentActivity extends BaseActivity {
     @Bind(R.id.my_tv)
     TextView myTv;
     @Bind(R.id.xs_tv)
@@ -74,6 +77,21 @@ public class PaymentActivity extends AppCompatActivity {
     LinearLayout who_Ll;
     @Bind(R.id.who_spinner)
     Spinner whoSpinner;
+    @Bind(R.id.item_my_rl)
+    RelativeLayout item_my_Rl;
+    @Bind(R.id.item_others_rl)
+    RelativeLayout item_others_Rl;
+    @Bind(R.id.item_my_tv)
+    TextView item_my_Tv;
+    @Bind(R.id.item_others_tv)
+    TextView item_others_Tv;
+    @Bind(R.id.item_my_checked_tv)
+    TextView item_my_checked_Tv;
+    @Bind(R.id.item_others_checked_tv)
+    TextView item_others_checked_Tv;
+    @Bind(R.id.popup_menu_layout)
+    LinearLayout popup_menu_Layout;
+
     private int pageNum = 1;
     private Result<ListPagers<PaymentCustomer>> status;
     private List<PaymentCustomer> data = new ArrayList<>();
@@ -90,18 +108,40 @@ public class PaymentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_payment2);
         ButterKnife.bind(this);
         initTitle();
+        initPopupMenu();
+        setItemChechedLableVisible();
         initViewData();
         getData();
-        setSpinnerListener();
     }
 
     public void initTitle(){
-        more_Tv.setVisibility(View.GONE);
-        whoSpinner.setVisibility(View.VISIBLE);
+        more_Tv.setVisibility(View.VISIBLE);
+        whoSpinner.setVisibility(View.GONE);
         titleName_Tv.setText("回款跟踪");
         title_Ll.setVisibility(View.VISIBLE);
         who_Ll.setVisibility(View.GONE);
         status_Ll.setVisibility(View.GONE);
+        searchEt.setHint("请输入客户名称查询");
+    }
+
+    public void setItemChechedLableVisible(){
+        if(myData){
+            item_my_checked_Tv.setVisibility(View.VISIBLE);
+            item_others_checked_Tv.setVisibility(View.GONE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.black));
+        }else {
+            item_my_checked_Tv.setVisibility(View.GONE);
+            item_others_checked_Tv.setVisibility(View.VISIBLE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.black));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+    }
+
+    public void initPopupMenu(){
+        popup_menu_Layout.setVisibility(View.GONE);
+        item_my_Rl.setVisibility(View.VISIBLE);
+        item_others_Rl.setVisibility(View.VISIBLE);
     }
 
     public void setSpinnerListener(){
@@ -147,7 +187,8 @@ public class PaymentActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.back_iv, R.id.my_tv, R.id.xs_tv, R.id.search_bt})
+    @OnClick({R.id.back_iv, R.id.my_tv, R.id.xs_tv, R.id.search_bt,
+            R.id.more_tv,R.id.item_my_rl,R.id.item_others_rl})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back_iv:
@@ -170,7 +211,21 @@ public class PaymentActivity extends AppCompatActivity {
                     updateData();
                 }
                 break;
-            }
+            case R.id.more_tv:
+                popup_menu_Layout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.item_my_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                myData = true;
+                updateData();
+                break;
+            case R.id.item_others_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                myData = false;
+                updateData();
+                break;
+        }
+        setItemChechedLableVisible();
     }
 
     public void initViewData() {
@@ -193,7 +248,11 @@ public class PaymentActivity extends AppCompatActivity {
                         data.clear(); //清除数据
                         pageNum = 1;
                         isLoading = false;
-                        getData(); //获取数据
+                        if(myData){
+                            getData();
+                        }else{
+                            getSubordinateData();
+                        }
                     }
                 }, 1000);
             }
@@ -235,7 +294,11 @@ public class PaymentActivity extends AppCompatActivity {
                                 //上拉加载
                                 if (status.getData().isHasNextPage()) {
                                     pageNum++;
-                                    getData();//添加数据
+                                    if(myData){
+                                        getData();
+                                    }else{
+                                        getSubordinateData();
+                                    }
                                 }
                                 isLoading = false;
                             }
@@ -262,15 +325,15 @@ public class PaymentActivity extends AppCompatActivity {
 
     public void getData() {
         String json = new Gson().toJson(new PaymentReq(pageNum, 10, "",
-                new PaymentReq.PaymentBean(Config.loginback.getUserId() + "",
+                new PaymentReq.PaymentBean(Config.USERID + "",
                         searchEt.getText().toString().trim())));
         Log.d("heqpm","payment request is：" + json);
-        Log.d("heqpm","token is：" + Config.loginback.getToken());
+        Log.d("heqpm","token is：" + Config.TOKEN);
         OkHttpUtils
                 .postString()
                 .url(Config.PaymentUrl)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -284,7 +347,6 @@ public class PaymentActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                Log.d("heqpm","payment response is：" + response);
                                 Type userlistType = new TypeToken<Result<ListPagers<PaymentCustomer>>>() {
                                 }.getType();
                                 status = new Gson().fromJson(response, userlistType);
@@ -313,14 +375,14 @@ public class PaymentActivity extends AppCompatActivity {
      */
     public void getSubordinateData() {
         String json = new Gson().toJson(new PaymentReq(pageNum, 10, "",
-                new PaymentReq.PaymentBean(Config.loginback.getUserId() + "",
+                new PaymentReq.PaymentBean(Config.USERID + "",
                         searchEt.getText().toString().trim())));
         Log.d("heqpm","subpayment request is：" + json);
         OkHttpUtils
                 .postString()
                 .url(Config.subPaymentUrl)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -333,7 +395,6 @@ public class PaymentActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                Log.d("heqpm","subpayment response is：" + response);
                                 Type userlistType = new TypeToken<Result<ListPagers<PaymentCustomer>>>() {
                                 }.getType();
                                 status = new Gson().fromJson(response, userlistType);
@@ -355,5 +416,23 @@ public class PaymentActivity extends AppCompatActivity {
                             }
                         }
                 );
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            int x = (int) ev.getX();
+            int y = (int) ev.getY();
+
+            if (null != popup_menu_Layout && popup_menu_Layout.getVisibility() == View.VISIBLE) {
+                Rect hitRect = new Rect();
+                popup_menu_Layout.getGlobalVisibleRect(hitRect);
+                if (!hitRect.contains(x, y)) {
+                    popup_menu_Layout.setVisibility(View.GONE);
+                    return true;
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

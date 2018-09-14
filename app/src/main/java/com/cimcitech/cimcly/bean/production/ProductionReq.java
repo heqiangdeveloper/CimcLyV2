@@ -51,18 +51,12 @@ public class ProductionReq {
 
 
     public static class ProductionBean {
+        private String createpeople;
+        private String sorderno;
         public ProductionBean(String createpeople, String sorderno) {
             this.sorderno = sorderno;
             this.createpeople = createpeople;
         }
-
-        /**
-         * creator : 2
-         */
-
-        private String createpeople;
-
-        private String sorderno;
 
         public String getCreatepeople() {
             return createpeople;

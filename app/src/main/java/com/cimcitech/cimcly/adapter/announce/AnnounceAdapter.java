@@ -2,7 +2,6 @@ package com.cimcitech.cimcly.adapter.announce;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.cimcitech.cimcly.R;
 import com.cimcitech.cimcly.bean.announce.AnnounceVo;
-import com.cimcitech.cimcly.bean.client.Customer;
 import com.cimcitech.cimcly.utils.DateTool;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;

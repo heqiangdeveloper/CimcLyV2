@@ -2,6 +2,7 @@ package com.cimcitech.cimcly.activity.home.order_contract;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -37,6 +39,7 @@ import com.cimcitech.cimcly.bean.order_contract.OrderContractVo;
 import com.cimcitech.cimcly.utils.Config;
 import com.cimcitech.cimcly.utils.GjsonUtil;
 import com.cimcitech.cimcly.utils.ToastUtil;
+import com.cimcitech.cimcly.widget.BaseActivity;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -53,7 +56,7 @@ import okhttp3.MediaType;
 /****
  * 销售订单合同
  */
-public class OrderContractActivity extends AppCompatActivity {
+public class OrderContractActivity extends BaseActivity {
     @Bind(R.id.my_tv)
     TextView myTv;
     @Bind(R.id.xs_tv)
@@ -86,6 +89,20 @@ public class OrderContractActivity extends AppCompatActivity {
     Spinner whoSpinner;
     @Bind(R.id.who_ll)
     LinearLayout who_Ll;
+    @Bind(R.id.item_my_rl)
+    RelativeLayout item_my_Rl;
+    @Bind(R.id.item_others_rl)
+    RelativeLayout item_others_Rl;
+    @Bind(R.id.item_my_tv)
+    TextView item_my_Tv;
+    @Bind(R.id.item_others_tv)
+    TextView item_others_Tv;
+    @Bind(R.id.item_my_checked_tv)
+    TextView item_my_checked_Tv;
+    @Bind(R.id.item_others_checked_tv)
+    TextView item_others_checked_Tv;
+    @Bind(R.id.popup_menu_layout)
+    LinearLayout popup_menu_Layout;
 
     private int pageNum = 1;
     private OrderContractVo orderContractVo;
@@ -106,17 +123,41 @@ public class OrderContractActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_contract2);
         ButterKnife.bind(this);
         initTitle();
+        initPopupMenu();
+        setItemChechedLableVisible();
+        myData = true;
         initViewData();
         getContStatus();
-        setSpinnerListener();
+        updateData();
     }
 
     public void initTitle(){
-        more_Tv.setVisibility(View.GONE);
-        whoSpinner.setVisibility(View.VISIBLE);
+        more_Tv.setVisibility(View.VISIBLE);
+        whoSpinner.setVisibility(View.GONE);
         titleName_Tv.setText("销售订单合同");
         title_Ll.setVisibility(View.VISIBLE);
         who_Ll.setVisibility(View.GONE);
+        searchEt.setHint("请输入客户名称查询");
+    }
+
+    public void setItemChechedLableVisible(){
+        if(myData){
+            item_my_checked_Tv.setVisibility(View.VISIBLE);
+            item_others_checked_Tv.setVisibility(View.GONE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.black));
+        }else {
+            item_my_checked_Tv.setVisibility(View.GONE);
+            item_others_checked_Tv.setVisibility(View.VISIBLE);
+            item_my_Tv.setTextColor(getResources().getColor(R.color.black));
+            item_others_Tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+    }
+
+    public void initPopupMenu(){
+        popup_menu_Layout.setVisibility(View.GONE);
+        item_my_Rl.setVisibility(View.VISIBLE);
+        item_others_Rl.setVisibility(View.VISIBLE);
     }
 
     public void setSpinnerListener(){
@@ -154,7 +195,7 @@ public class OrderContractActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.back_iv, R.id.my_tv, R.id.xs_tv, R.id.search_bt, R.id.status_bt,
-            R.id.status_bt_sanjiao})
+            R.id.status_bt_sanjiao,R.id.more_tv,R.id.item_my_rl,R.id.item_others_rl})
     public void onclick(View view) {
         switch (view.getId()) {
             case R.id.back_iv:
@@ -187,7 +228,21 @@ public class OrderContractActivity extends AppCompatActivity {
                 showContactUsPopWin(OrderContractActivity.this, "选择合同状态查询", list);
                 pop.showAtLocation(view, Gravity.CENTER, 0, 0);
                 break;
+            case R.id.more_tv:
+                popup_menu_Layout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.item_my_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                myData = true;
+                updateData();
+                break;
+            case R.id.item_others_rl:
+                popup_menu_Layout.setVisibility(View.GONE);
+                myData = false;
+                updateData();
+                break;
         }
+        setItemChechedLableVisible();
     }
 
     public void initViewData() {
@@ -286,13 +341,13 @@ public class OrderContractActivity extends AppCompatActivity {
 
     public void getData() {
         String json = new Gson().toJson(new OrderContractReq(pageNum, 10,
-                new OrderContractReq.SContOrder(Config.loginback.getUserId(),
+                new OrderContractReq.SContOrder(Config.USERID,
                         searchEt.getText().toString(), quotestatus)));
         OkHttpUtils
                 .postString()
                 .url(Config.orderContract)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -305,7 +360,6 @@ public class OrderContractActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
                                 orderContractVo = GjsonUtil.parseJsonWithGson(response, OrderContractVo.class);
                                 if (orderContractVo != null) {
                                     if (orderContractVo.isSuccess()) {
@@ -334,14 +388,14 @@ public class OrderContractActivity extends AppCompatActivity {
 
     public void getSubData() {
         String json = new Gson().toJson(new OrderContractReq(pageNum, 10,
-                new OrderContractReq.SContOrder(Config.loginback.getUserId(),
+                new OrderContractReq.SContOrder(Config.USERID,
                         searchEt.getText().toString(), quotestatus)));
         Log.d("testlog","json is: " + json);
         OkHttpUtils
                 .postString()
                 .url(Config.orderContractSub)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .content(json)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -354,7 +408,6 @@ public class OrderContractActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(String response, int id) {
-                                //ToastUtil.showToast(response);
                                 orderContractVo = GjsonUtil.parseJsonWithGson(response, OrderContractVo.class);
                                 if (orderContractVo != null) {
                                     if (orderContractVo.isSuccess()) {
@@ -388,8 +441,8 @@ public class OrderContractActivity extends AppCompatActivity {
         OkHttpUtils
                 .post()
                 .url(Config.getContStatus)
-                .addHeader("checkTokenKey", Config.loginback.getToken())
-                .addHeader("sessionKey", Config.loginback.getUserId() + "")
+                .addHeader("checkTokenKey", Config.TOKEN)
+                .addHeader("sessionKey", Config.USERID + "")
                 .build()
                 .execute(
                         new StringCallback() {
@@ -407,7 +460,6 @@ public class OrderContractActivity extends AppCompatActivity {
                                         if (getContStatu.getData().size() > 0) {
                                             quotestatus = getContStatu.getData().get(0).getCodeid();
                                             statusBt.setText(getContStatu.getData().get(0).getCodevalue());
-                                            getData();
                                         }
                                 }
                             }
@@ -450,5 +502,23 @@ public class OrderContractActivity extends AppCompatActivity {
                 pop.dismiss();
             }
         });
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            int x = (int) ev.getX();
+            int y = (int) ev.getY();
+
+            if (null != popup_menu_Layout && popup_menu_Layout.getVisibility() == View.VISIBLE) {
+                Rect hitRect = new Rect();
+                popup_menu_Layout.getGlobalVisibleRect(hitRect);
+                if (!hitRect.contains(x, y)) {
+                    popup_menu_Layout.setVisibility(View.GONE);
+                    return true;
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

@@ -12,6 +12,7 @@
         android:layout_alignParentStart="true"
         android:background="#f2f2f2"
         android:scrollbars="none"
+        android:layout_marginBottom="40dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -21,6 +22,18 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="基本信息"
+                android:drawableLeft="@mipmap/base48"
+                android:paddingLeft="8dp"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:paddingBottom="8dp"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -28,49 +41,48 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="创建时间："
+                    android:text="创建时间"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
 
                 <TextView
                     android:id="@+id/system_date_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@color/white"
+                    android:gravity="right"
                     android:padding="8dip"
-                    android:text="123123"
+                    android:text="sas"
+                    android:drawableRight="@mipmap/white_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
+                    android:textColorHint="@color/alpha30"
                     android:textColor="@color/red"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:padding="8dip"
-                    android:text="* 必填项"
-                    android:textColor="@color/red"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="客户类别："
+                    android:text="客户类别"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
+                    android:drawableRight="@mipmap/star24"
+                    android:drawablePadding="@dimen/detail_drawable_padding"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
+
 
                 <TextView
                     android:id="@+id/customer_category_tv"
@@ -78,105 +90,100 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="8dip"
+                    android:gravity="right"
                     android:text="请选择客户类别"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
                     android:textColor="@color/alpha30"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:padding="8dip"
-                    android:text=" * "
-                    android:textColor="@color/red"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="客户名称："
+                    android:text="客户名称"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
+                    android:drawableRight="@mipmap/star24"
+                    android:drawablePadding="@dimen/detail_drawable_padding"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
 
-                <EditText
+                <TextView
                     android:id="@+id/client_name_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:hint="请输入客户名称"
+                    android:gravity="right"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
                     android:padding="8dip"
                     android:textColor="@color/black_33"
                     android:textColorHint="@color/alpha30"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:padding="8dip"
-                    android:text=" * "
-                    android:textColor="@color/red"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="客户简称："
+                    android:text="客户简称"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
 
-                <EditText
-                    android:id="@+id/abbreviation_et"
+                <TextView
+                    android:id="@+id/abbreviation_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:hint="请输入客户简称"
                     android:padding="8dip"
+                    android:gravity="right"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
                     android:textColor="@color/black_33"
                     android:textColorHint="@color/alpha30"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="电话："
+                    android:text="电话"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
+                    android:drawableRight="@mipmap/star24"
+                    android:drawablePadding="@dimen/detail_drawable_padding"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
 
-                <EditText
-                    android:id="@+id/mobile_et"
+                <TextView
+                    android:id="@+id/mobile_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -185,102 +192,140 @@
                     android:inputType="numberDecimal"
                     android:maxLength="11"
                     android:padding="8dip"
+                    android:gravity="right"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
                     android:textColor="@color/black_33"
                     android:textColorHint="@color/alpha30"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:padding="8dip"
-                    android:text=" * "
-                    android:textColor="@color/red"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="传真："
+                    android:text="传真"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
 
-                <EditText
-                    android:id="@+id/fax_et"
+                <TextView
+                    android:id="@+id/fax_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:hint="请输入传真号码"
                     android:padding="8dip"
+                    android:gravity="right"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
                     android:textColor="@color/black_33"
                     android:textColorHint="@color/alpha30"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="国家："
+                    android:text="邮编"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
 
+                <TextView
+                    android:id="@+id/zip_code_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:hint="请输入邮编"
+                    android:gravity="right"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
+                    android:padding="8dip"
+                    android:textColor="@color/black_33"
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="地址信息"
+                android:drawableLeft="@mipmap/location48"
+                android:paddingLeft="8dp"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:paddingBottom="8dp"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="8dip"
+                    android:text="国家"
+                    android:textColor="@color/black_33"
+                    android:drawableRight="@mipmap/star24"
+                    android:drawablePadding="@dimen/detail_drawable_padding"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
                 <TextView
                     android:id="@+id/country_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="8dip"
+                    android:gravity="right"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
                     android:text="请选择国家"
                     android:textColor="@color/alpha30"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:padding="8dip"
-                    android:text=" * "
-                    android:textColor="@color/red"
-                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/province_Linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
                 <TextView
-                    android:layout_width="100dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="省："
+                    android:text="省份"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp"/>
+                    android:drawableRight="@mipmap/star24"
+                    android:drawablePadding="@dimen/detail_drawable_padding"
+                    android:textSize="@dimen/customer_visit_detail_text_size"/>
 
                 <TextView
                     android:id="@+id/province_tv"
@@ -289,37 +334,33 @@
                     android:layout_weight="1"
                     android:padding="8dip"
                     android:text="请选择省份"
+                    android:gravity="right"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
                     android:textColor="@color/alpha30"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/customer_visit_detail_text_size"
                     android:visibility="visible"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:padding="8dip"
-                    android:text=" * "
-                    android:textColor="@color/red"
-                    android:textSize="14sp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/city_Linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
+                android:layout_marginTop="@dimen/customer_visit_detail_diff_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
                 <TextView
-                    android:layout_width="100dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="市："
+                    android:text="城市"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp"/>
+                    android:drawableRight="@mipmap/star24"
+                    android:drawablePadding="@dimen/detail_drawable_padding"
+                    android:textSize="@dimen/customer_visit_detail_text_size"/>
 
                 <TextView
                     android:id="@+id/city_tv"
@@ -329,56 +370,57 @@
                     android:padding="8dip"
                     android:text="请选择城市"
                     android:textColor="@color/alpha30"
-                    android:textSize="14sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:padding="8dip"
-                    android:text=" * "
-                    android:textColor="@color/red"
-                    android:textSize="14sp"/>
+                    android:gravity="right"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
+                    android:textSize="@dimen/customer_visit_detail_text_size"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="详细地址："
+                    android:text="详细地址"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
+                    android:drawableRight="@mipmap/star24"
+                    android:drawablePadding="@dimen/detail_drawable_padding"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
 
-                <EditText
-                    android:id="@+id/address_et"
+                <TextView
+                    android:id="@+id/address_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:hint="请输入详细地址"
                     android:padding="8dip"
+                    android:gravity="right"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
                     android:textColor="@color/black_33"
                     android:textColorHint="@color/alpha30"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:padding="8dip"
-                    android:text=" * "
-                    android:textColor="@color/red"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
 
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="其他"
+                android:drawableLeft="@mipmap/more48"
+                android:paddingLeft="8dp"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:paddingBottom="8dp"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -387,43 +429,15 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:text="邮编："
-                    android:textColor="@color/black_33"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/zip_code_et"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:hint="请输入邮编"
-                    android:padding="8dip"
-                    android:textColor="@color/black_33"
-                    android:textColorHint="@color/alpha30"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="客户分区："
+                    android:text="客户分区"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
-
+                    android:drawableRight="@mipmap/star24"
+                    android:drawablePadding="@dimen/detail_drawable_padding"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
                 <TextView
                     android:id="@+id/taxes_tv"
                     android:layout_width="wrap_content"
@@ -431,62 +445,64 @@
                     android:layout_weight="1"
                     android:padding="8dip"
                     android:text="请选择客户分区"
+                    android:gravity="right"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
                     android:textColor="@color/alpha30"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:padding="8dip"
-                    android:text=" * "
-                    android:textColor="@color/red"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dip"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
                     android:padding="8dip"
-                    android:text="开票抬头："
+                    android:text="发票抬头"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
+                    android:drawableRight="@mipmap/star24"
+                    android:drawablePadding="@dimen/detail_drawable_padding"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
 
-                <EditText
+                <TextView
                     android:id="@+id/invoice_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:hint="请输入发票抬头"
+                    android:gravity="right"
+                    android:drawableRight="@mipmap/more_icon"
+                    android:drawablePadding="@dimen/customer_visit_detail_drawable_padding"
                     android:padding="8dip"
                     android:textColor="@color/black_33"
-                    android:textSize="14sp" />
+                    android:textColorHint="@color/alpha30"
+                    android:textSize="@dimen/customer_visit_detail_text_size" />
             </LinearLayout>
+
+            <TextView
+                android:layout_marginTop="@dimen/customer_visit_detail_label_marginTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="备注"
+                android:drawableLeft="@mipmap/note48"
+                android:paddingLeft="8dp"
+                android:drawablePadding="@dimen/detail_drawable_padding"
+                android:paddingBottom="8dp"
+                android:textSize="@dimen/text_size_12"
+                android:gravity="center_vertical"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dip"
                 android:background="@color/white"
                 android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:padding="8dip"
-                    android:text="备注："
-                    android:textColor="@color/black_33"
-                    android:textSize="14sp" />
 
                 <EditText
                     android:id="@+id/beizhu_et"
@@ -496,6 +512,7 @@
                     android:layout_marginLeft="10dip"
                     android:layout_marginRight="10dip"
                     android:background="@drawable/bg_edittext"
+                    android:hint="请输入备注"
                     android:gravity="top"
                     android:padding="10dip"
                     android:textColor="@color/black_3"
