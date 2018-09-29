@@ -141,7 +141,7 @@ public class QRCodeTestActivity extends AppCompatActivity{
                 result_Tv.setVisibility(View.VISIBLE);
                 start_test_Bt.setVisibility(View.VISIBLE);
                 result_Tv.setText(vehicleno);
-            }else if(scanResult.length() != 0 && scanResult.contains("L-") && scanResult.indexOf
+            }else if(scanResult.length() != 0 && scanResult.contains("L-") && scanResult.lastIndexOf
                     ("L") == scanResult.length() - 1 - 5){//条形码扫描的结果
                 vehicleno = scanResult;
                 warn_Tv.setVisibility(View.VISIBLE);
